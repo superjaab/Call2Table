@@ -103,7 +103,7 @@
   </style>
 </head>
 <body>
-  <h2>CalculatorMax By Super</h2>
+  <h2>2 CalculatorMax By Super</h2>
 
   <table>
     <thead>
@@ -134,14 +134,16 @@
     </tbody>
   </table>
 
+  <div class="summary">รวมเงินทุนทั้งหมด: <span id="total_investment">0</span> บาท</div>
+  <div class="summary">รวมทุนฝั่งชนะ 1: <span id="total_win12">0</span> บาท</div>
+
+  <div class="summary" id="required-win1-odds" style="color: #c43d00; font-size: 18px;"></div>
+
   <div class="button-container">
     <button onclick="resetWinBets()">เฉลี่ยกำไรให้เท่ากัน</button>
     <button onclick="maximizeWinProfit()">คำนวณกำไรสูงสุด</button>
     <button onclick="clearAll()">🧹 ล้างทั้งหมด</button>
   </div>
-
-  <div class="summary">รวมเงินทุนทั้งหมด: <span id="total_investment">0</span> บาท</div>
-  <div class="summary">รวมทุนฝั่งชนะ 1: <span id="total_win12">0</span> บาท</div>
 
   <h2>ผลการคำนวณ</h2>
   <table>
@@ -160,6 +162,7 @@
   const totalInvestment = document.getElementById("total_investment");
   const totalWin12 = document.getElementById("total_win12");
   const resultTable = document.getElementById("result-table");
+  const requiredWin1OddsDisplay = document.getElementById("required-win1-odds");
 
   function formatNumberWithComma(num) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -233,7 +236,6 @@
     let o = getDrawOdds();
     let a = parseFloat(win1Odds.value) || 0;
     if (d === 0 || o === 0 || a === 0 || a <= 1) return;
-
     let profitFromDraw = d * (o - 1);
     win1Amt.value = formatNumberWithComma(Math.round(profitFromDraw));
     calculate();
@@ -245,18 +247,20 @@
     totalInvestment.textContent = "0";
     totalWin12.textContent = "0";
     resultTable.innerHTML = "<tr><td colspan='3'>-</td></tr>";
+    requiredWin1OddsDisplay.textContent = "";
   }
 
-  function limitDecimal(input) {
-    input.addEventListener("input", () => {
-      let val = input.value;
-      if (val.includes(".")) {
-        const [intPart, decPart] = val.split(".");
-        if (decPart.length > 2) {
-          input.value = intPart + "." + decPart.slice(0, 2);
-        }
-      }
-    });
+  function suggestWin1MinimumOdds() {
+    let d = parseAmount(drawAmt);
+    let o = getDrawOdds();
+    if (d === 0 || o === 0) {
+      requiredWin1OddsDisplay.textContent = "";
+      return;
+    }
+
+    let targetReturn = d * o;
+    let minWin1Odds = targetReturn / (targetReturn - d);
+    requiredWin1OddsDisplay.textContent = `💡 ค่าน้ำชนะ 1 ควรไม่ต่ำกว่า ${minWin1Odds.toFixed(2)} เพื่อให้กำไรทั้งสองฝั่ง`;
   }
 
   const navOrder = [drawOddsMain, drawOddsDecimal, win1Odds];
@@ -279,16 +283,18 @@
   drawOddsMain.addEventListener("input", () => {
     drawOddsMain.value = drawOddsMain.value.slice(0, 1);
     if (drawOddsMain.value.length === 1) drawOddsDecimal.focus();
+    suggestWin1MinimumOdds();
   });
 
   drawOddsDecimal.addEventListener("input", () => {
     drawOddsDecimal.value = drawOddsDecimal.value.slice(0, 2);
-    if (drawOddsDecimal.value.length === 2) win1Odds.focus();
+    suggestWin1MinimumOdds();
   });
+
+  drawAmt.addEventListener("input", suggestWin1MinimumOdds);
 
   window.addEventListener("DOMContentLoaded", () => {
     calculate();
-    limitDecimal(win1Odds);
   });
 
   [drawAmt, win1Amt].forEach(i => i.addEventListener("input", calculate));
