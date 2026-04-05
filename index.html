@@ -108,10 +108,11 @@
       gap: 6px;
     }
     .usdt-hint {
-      font-size: 13px;
-      color: #666;
-      line-height: 1.2;
-      min-height: 16px;
+      font-size: 16px;
+      color: #dc3545;
+      font-weight: bold;
+      line-height: 1.3;
+      min-height: 20px;
     }
     .rate-box {
       text-align: center;
@@ -120,14 +121,23 @@
       font-weight: bold;
       color: #003366;
     }
-    .rate-box input {
+    .rate-value {
+      display: inline-block;
+      min-width: 100px;
+      color: #dc3545;
+      font-size: 18px;
+      font-weight: bold;
+      margin: 0 6px;
+    }
+    .rate-input {
       width: 120px;
-      font-size: 16px;
-      padding: 8px;
+      font-size: 18px;
+      font-weight: bold;
+      padding: 6px 8px;
       text-align: right;
       border: 1px solid #ccc;
       border-radius: 6px;
-      margin: 0 8px;
+      color: #dc3545;
     }
   </style>
 </head>
@@ -136,7 +146,8 @@
 
   <div class="rate-box">
     อัตรา 1 USDT =
-    <input type="number" id="usdt_rate" value="36" step="0.01" min="0" />
+    <span id="usdt_rate_text" class="rate-value">กำลังโหลด...</span>
+    <input type="number" id="usdt_rate_input" class="rate-input" step="0.01" min="0" style="display: none;" placeholder="กรอกค่าเงิน" />
     บาท
   </div>
 
@@ -208,9 +219,13 @@
   const totalWin12 = document.getElementById("total_win12");
   const resultTable = document.getElementById("result-table");
   const requiredWin1OddsDisplay = document.getElementById("required-win1-odds");
-  const usdtRateInput = document.getElementById("usdt_rate");
   const drawUsdtHint = document.getElementById("draw_usdt_hint");
   const win1UsdtHint = document.getElementById("win1_usdt_hint");
+  const usdtRateText = document.getElementById("usdt_rate_text");
+  const usdtRateInput = document.getElementById("usdt_rate_input");
+
+  let usdtRate = 0;
+  let isManualRate = false;
 
   function formatNumberWithComma(num) {
     const str = num.toString();
@@ -244,11 +259,11 @@
   }
 
   function getRate() {
-    const rate = parseFloat(usdtRateInput.value);
-    if (!rate || rate <= 0) {
-      return 0;
+    if (isManualRate) {
+      const manualRate = parseFloat(usdtRateInput.value) || 0;
+      return manualRate > 0 ? manualRate : 0;
     }
-    return rate;
+    return usdtRate || 0;
   }
 
   function getDrawOdds() {
@@ -257,6 +272,39 @@
     if (decimal.length === 1) decimal += "0";
     if (decimal.length === 0) decimal = "00";
     return parseFloat(`${main}.${decimal.slice(0, 2)}`);
+  }
+
+  async function loadBinanceRate() {
+    try {
+      const response = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=USDTTHB", {
+        method: "GET"
+      });
+
+      if (!response.ok) {
+        throw new Error("โหลดราคาไม่สำเร็จ");
+      }
+
+      const data = await response.json();
+      const rate = parseFloat(data.price);
+
+      if (!rate || rate <= 0) {
+        throw new Error("ราคาไม่ถูกต้อง");
+      }
+
+      usdtRate = rate;
+      isManualRate = false;
+      usdtRateText.style.display = "inline-block";
+      usdtRateInput.style.display = "none";
+      usdtRateText.textContent = formatMoneyDisplay(rate);
+      updateUsdtHints();
+    } catch (error) {
+      usdtRate = 0;
+      isManualRate = true;
+      usdtRateText.style.display = "none";
+      usdtRateInput.style.display = "inline-block";
+      usdtRateInput.value = "";
+      updateUsdtHints();
+    }
   }
 
   function updateUsdtHints() {
@@ -344,6 +392,7 @@
     requiredWin1OddsDisplay.textContent = "";
     drawUsdtHint.textContent = "";
     win1UsdtHint.textContent = "";
+    if (isManualRate) usdtRateInput.value = "";
   }
 
   function suggestWin1MinimumOdds() {
@@ -397,11 +446,10 @@
 
   usdtRateInput.addEventListener("input", () => {
     updateUsdtHints();
-    calculate();
-    suggestWin1MinimumOdds();
   });
 
   window.addEventListener("DOMContentLoaded", () => {
+    loadBinanceRate();
     updateUsdtHints();
     calculate();
   });
