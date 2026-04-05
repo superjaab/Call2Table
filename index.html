@@ -114,12 +114,28 @@
       line-height: 1.3;
       min-height: 20px;
     }
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .left-panel {
+      flex: 1 1 320px;
+      text-align: left;
+    }
+    .left-panel h2 {
+      text-align: left;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
     .rate-box {
-      text-align: center;
-      margin-bottom: 15px;
       font-size: 16px;
       font-weight: bold;
       color: #003366;
+      text-align: left;
     }
     .rate-value {
       display: inline-block;
@@ -151,7 +167,8 @@
       border: 1px solid #ccc;
       border-radius: 10px;
       padding: 15px;
-      margin-bottom: 20px;
+      flex: 0 1 360px;
+      margin-bottom: 0;
     }
     .converter-title {
       text-align: center;
@@ -172,7 +189,7 @@
       flex-direction: column;
       align-items: center;
       gap: 6px;
-      min-width: 180px;
+      min-width: 150px;
     }
     .converter-item label {
       font-size: 14px;
@@ -186,31 +203,48 @@
       min-height: 18px;
       text-align: center;
     }
+    @media (max-width: 768px) {
+      .top-row {
+        flex-direction: column;
+      }
+      .left-panel,
+      .converter-box {
+        width: 100%;
+      }
+      .left-panel h2,
+      .rate-box {
+        text-align: center;
+      }
+    }
   </style>
 </head>
 <body>
-  <h2>2 CalculatorMax By Super</h2>
+  <div class="top-row">
+    <div class="left-panel">
+      <h2>2 CalculatorMax By Super</h2>
 
-  <div class="rate-box">
-    อัตรา 1 USDT =
-    <span id="usdt_rate_text" class="rate-value">กำลังโหลด...</span>
-    <input type="number" id="usdt_rate_input" class="rate-input" step="0.01" min="0" style="display: none;" placeholder="กรอกค่าเงิน" />
-    บาท
-    <span id="rate_source" class="rate-source"></span>
-  </div>
-
-  <div class="converter-box">
-    <div class="converter-title">แปลงสกุลเงิน</div>
-    <div class="converter-grid">
-      <div class="converter-item">
-        <label for="convert_thb_input">บาท → USDT</label>
-        <input type="text" id="convert_thb_input" class="num-input money-input" />
-        <div class="converter-result" id="convert_thb_result"></div>
+      <div class="rate-box">
+        อัตรา 1 USDT =
+        <span id="usdt_rate_text" class="rate-value">กำลังโหลด...</span>
+        <input type="number" id="usdt_rate_input" class="rate-input" step="0.01" min="0" style="display: none;" placeholder="กรอกค่าเงิน" />
+        บาท
+        <span id="rate_source" class="rate-source"></span>
       </div>
-      <div class="converter-item">
-        <label for="convert_usdt_input">USDT → บาท</label>
-        <input type="text" id="convert_usdt_input" class="num-input money-input" />
-        <div class="converter-result" id="convert_usdt_result"></div>
+    </div>
+
+    <div class="converter-box">
+      <div class="converter-title">แปลงสกุลเงิน</div>
+      <div class="converter-grid">
+        <div class="converter-item">
+          <label for="convert_thb_input">บาท → USDT</label>
+          <input type="text" id="convert_thb_input" class="num-input money-input" />
+          <div class="converter-result" id="convert_thb_result"></div>
+        </div>
+        <div class="converter-item">
+          <label for="convert_usdt_input">USDT → บาท</label>
+          <input type="text" id="convert_usdt_input" class="num-input money-input" />
+          <div class="converter-result" id="convert_usdt_result"></div>
+        </div>
       </div>
     </div>
   </div>
