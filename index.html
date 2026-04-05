@@ -107,6 +107,11 @@
       justify-content: center;
       gap: 6px;
     }
+    .amount-input-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
     .usdt-hint {
       font-size: 16px;
       color: #dc3545;
@@ -195,6 +200,9 @@
       font-size: 14px;
       font-weight: bold;
       color: #444;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
     .converter-result {
       font-size: 14px;
@@ -202,6 +210,23 @@
       font-weight: bold;
       min-height: 18px;
       text-align: center;
+    }
+    .mini-btn {
+      min-width: auto;
+      padding: 5px 8px;
+      font-size: 12px;
+      line-height: 1.2;
+      background-color: #6c757d;
+      border-radius: 5px;
+    }
+    .mini-btn:hover {
+      background-color: #5a6268;
+    }
+    .mini-btn.copied {
+      background-color: #28a745;
+    }
+    .mini-btn.pasted {
+      background-color: #fd7e14;
     }
     @media (max-width: 768px) {
       .top-row {
@@ -236,12 +261,18 @@
       <div class="converter-title">แปลงสกุลเงิน</div>
       <div class="converter-grid">
         <div class="converter-item">
-          <label for="convert_thb_input">บาท → USDT</label>
+          <label for="convert_thb_input">
+            บาท → USDT
+            <button type="button" class="mini-btn" onclick="copyTextById('convert_thb_result', this)">copy</button>
+          </label>
           <input type="text" id="convert_thb_input" class="num-input money-input" />
           <div class="converter-result" id="convert_thb_result"></div>
         </div>
         <div class="converter-item">
-          <label for="convert_usdt_input">USDT → บาท</label>
+          <label for="convert_usdt_input">
+            USDT → บาท
+            <button type="button" class="mini-btn" onclick="copyTextById('convert_usdt_result', this)">copy</button>
+          </label>
           <input type="text" id="convert_usdt_input" class="num-input money-input" />
           <div class="converter-result" id="convert_usdt_result"></div>
         </div>
@@ -258,7 +289,10 @@
         <td>เสมอ / ต่อ / ต่ำ</td>
         <td>
           <div class="amount-group">
-            <input type="text" id="draw_amt" class="num-input money-input" />
+            <div class="amount-input-row">
+              <input type="text" id="draw_amt" class="num-input money-input" />
+              <button type="button" class="mini-btn" onclick="pasteToInput('draw_amt', this)">วาง</button>
+            </div>
             <div class="usdt-hint" id="draw_usdt_hint"></div>
           </div>
         </td>
@@ -274,7 +308,10 @@
         <td>ชนะ 1</td>
         <td>
           <div class="amount-group">
-            <input type="text" id="win1_amt" class="num-input money-input" />
+            <div class="amount-input-row">
+              <input type="text" id="win1_amt" class="num-input money-input" />
+              <button type="button" class="mini-btn" onclick="pasteToInput('win1_amt', this)">วาง</button>
+            </div>
             <div class="usdt-hint" id="win1_usdt_hint"></div>
           </div>
         </td>
@@ -476,6 +513,59 @@
     convertUsdtResult.textContent = usdtValue > 0
       ? `≈ ${formatMoneyDisplay(usdtValue * rate)} บาท`
       : "";
+  }
+
+  async function copyTextById(id, btn) {
+    const element = document.getElementById(id);
+    const text = (element.textContent || "").replace(/^≈\s*/, "").trim();
+    if (!text) return;
+
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (error) {
+      const temp = document.createElement("textarea");
+      temp.value = text;
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand("copy");
+      document.body.removeChild(temp);
+    }
+
+    if (btn) {
+      const oldText = btn.textContent;
+      btn.textContent = "คัดลอกแล้ว";
+      btn.classList.add("copied");
+
+      setTimeout(() => {
+        btn.textContent = oldText;
+        btn.classList.remove("copied");
+      }, 1200);
+    }
+  }
+
+  async function pasteToInput(inputId, btn) {
+    const input = document.getElementById(inputId);
+    input.focus();
+
+    try {
+      const text = await navigator.clipboard.readText();
+      const cleaned = (text || "").replace(/,/g, "").match(/\d*\.?\d{0,2}/)?.[0] || "";
+      input.value = cleaned ? formatNumberWithComma(cleaned) : "";
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+
+      if (btn) {
+        const oldText = btn.textContent;
+        btn.textContent = "วางแล้ว";
+        btn.classList.add("pasted");
+
+        setTimeout(() => {
+          btn.textContent = oldText;
+          btn.classList.remove("pasted");
+        }, 1200);
+      }
+    } catch (error) {
+      alert("เบราว์เซอร์ไม่อนุญาตให้หน้าเว็บสั่งวางแบบ Ctrl+V อัตโนมัติได้ ใช้ปุ่มนี้จะเป็นการอ่าน clipboard แทน");
+    }
   }
 
   function calculate() {
