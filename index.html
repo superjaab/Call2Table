@@ -146,6 +146,46 @@
       color: #666;
       font-weight: normal;
     }
+    .converter-box {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    .converter-title {
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      color: #003366;
+      margin-bottom: 12px;
+    }
+    .converter-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    .converter-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      min-width: 180px;
+    }
+    .converter-item label {
+      font-size: 14px;
+      font-weight: bold;
+      color: #444;
+    }
+    .converter-result {
+      font-size: 14px;
+      color: #dc3545;
+      font-weight: bold;
+      min-height: 18px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -157,6 +197,22 @@
     <input type="number" id="usdt_rate_input" class="rate-input" step="0.01" min="0" style="display: none;" placeholder="กรอกค่าเงิน" />
     บาท
     <span id="rate_source" class="rate-source"></span>
+  </div>
+
+  <div class="converter-box">
+    <div class="converter-title">แปลงสกุลเงิน</div>
+    <div class="converter-grid">
+      <div class="converter-item">
+        <label for="convert_thb_input">บาท → USDT</label>
+        <input type="text" id="convert_thb_input" class="num-input money-input" />
+        <div class="converter-result" id="convert_thb_result"></div>
+      </div>
+      <div class="converter-item">
+        <label for="convert_usdt_input">USDT → บาท</label>
+        <input type="text" id="convert_usdt_input" class="num-input money-input" />
+        <div class="converter-result" id="convert_usdt_result"></div>
+      </div>
+    </div>
   </div>
 
   <table>
@@ -232,6 +288,10 @@
   const usdtRateText = document.getElementById("usdt_rate_text");
   const usdtRateInput = document.getElementById("usdt_rate_input");
   const rateSource = document.getElementById("rate_source");
+  const convertThbInput = document.getElementById("convert_thb_input");
+  const convertUsdtInput = document.getElementById("convert_usdt_input");
+  const convertThbResult = document.getElementById("convert_thb_result");
+  const convertUsdtResult = document.getElementById("convert_usdt_result");
 
   let usdtRate = 0;
   let isManualRate = false;
@@ -315,6 +375,7 @@
       usdtRateText.textContent = formatMoneyDisplay(rate);
       rateSource.textContent = "อ้างอิง: Binance";
       updateUsdtHints();
+      updateConverterResults();
       return;
     } catch (e) {}
 
@@ -327,6 +388,7 @@
       usdtRateText.textContent = formatMoneyDisplay(rate);
       rateSource.textContent = "อ้างอิง: CoinGecko";
       updateUsdtHints();
+      updateConverterResults();
       return;
     } catch (e) {}
 
@@ -337,6 +399,7 @@
     usdtRateInput.value = "";
     rateSource.textContent = "กรอกค่าเงินเอง";
     updateUsdtHints();
+    updateConverterResults();
   }
 
   function updateUsdtHints() {
@@ -357,6 +420,27 @@
 
     win1UsdtHint.textContent = win1Value > 0
       ? `≈ ${formatMoneyDisplay(win1Value / rate)} USDT`
+      : "";
+  }
+
+  function updateConverterResults() {
+    const rate = getRate();
+
+    if (!rate) {
+      convertThbResult.textContent = "";
+      convertUsdtResult.textContent = "";
+      return;
+    }
+
+    const thbValue = parseAmount(convertThbInput);
+    const usdtValue = parseAmount(convertUsdtInput);
+
+    convertThbResult.textContent = thbValue > 0
+      ? `≈ ${formatMoneyDisplay(thbValue / rate)} USDT`
+      : "";
+
+    convertUsdtResult.textContent = usdtValue > 0
+      ? `≈ ${formatMoneyDisplay(usdtValue * rate)} บาท`
       : "";
   }
 
@@ -417,13 +501,15 @@
 
   function clearAll() {
     if (!confirm("คุณแน่ใจหรือไม่ว่าต้องการล้างทั้งหมด?")) return;
-    [drawAmt, win1Amt, drawOddsMain, drawOddsDecimal, win1Odds].forEach(el => el.value = "");
+    [drawAmt, win1Amt, drawOddsMain, drawOddsDecimal, win1Odds, convertThbInput, convertUsdtInput].forEach(el => el.value = "");
     totalInvestment.textContent = "0";
     totalWin12.textContent = "0";
     resultTable.innerHTML = "<tr><td colspan='3'>-</td></tr>";
     requiredWin1OddsDisplay.textContent = "";
     drawUsdtHint.textContent = "";
     win1UsdtHint.textContent = "";
+    convertThbResult.textContent = "";
+    convertUsdtResult.textContent = "";
     if (isManualRate) usdtRateInput.value = "";
   }
 
@@ -476,11 +562,18 @@
 
   win1Amt.addEventListener("input", updateUsdtHints);
 
-  usdtRateInput.addEventListener("input", updateUsdtHints);
+  usdtRateInput.addEventListener("input", () => {
+    updateUsdtHints();
+    updateConverterResults();
+  });
+
+  convertThbInput.addEventListener("input", updateConverterResults);
+  convertUsdtInput.addEventListener("input", updateConverterResults);
 
   window.addEventListener("DOMContentLoaded", () => {
     loadRate();
     updateUsdtHints();
+    updateConverterResults();
     calculate();
   });
 
