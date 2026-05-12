@@ -1,1030 +1,1476 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="th" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
-  <title>2Table CalculatorMax</title>
+  <title>2Table CalculatorMax Update 13.5.69 </title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
+    /* ── Themes ── */
+    [data-theme="dark"] {
+      --bg: #0d1018;
+      --surface: #1c2133;
+      --surface2: #252d45;
+      --border: #3d4d70;
+      --border-light: #546080;
+      --accent: #6b9fff;
+      --accent2: #a07aff;
+      --gold: #ffd060;
+      --green: #3de07a;
+      --red: #ff6080;
+      --text: #ffffff;
+      --text-muted: #b8c8e8;
+      --text-dim: #6a7a9a;
+      --thb-color: #70baff;
+      --usdt-color: #ffd060;
+      --shadow: rgba(0,0,0,0.5);
+    }
+    [data-theme="light"] {
+      --bg: #f0f2f8;
+      --surface: #ffffff;
+      --surface2: #f5f7fc;
+      --border: #d5dae8;
+      --border-light: #b8c0d8;
+      --accent: #3b6af0;
+      --accent2: #6b44f0;
+      --gold: #c8860a;
+      --green: #16a34a;
+      --red: #e11d48;
+      --text: #1a2040;
+      --text-muted: #5a6484;
+      --text-dim: #8a96b4;
+      --thb-color: #2a7adf;
+      --usdt-color: #c8860a;
+      --shadow: rgba(0,0,0,0.12);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      font-family: 'Segoe UI', sans-serif;
-      padding: 20px;
-      max-width: 960px;
-      margin: auto;
-      background-color: #f4f6f9;
-      color: #222;
+      font-family: 'Kanit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 20px 16px 60px;
+      transition: background 0.3s, color 0.3s;
     }
 
-    h2 {
-      text-align: center;
-      color: #0066cc;
-      font-size: 28px;
-      margin-bottom: 15px;
-    }
-
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin-bottom: 20px;
-      background-color: #fff;
-    }
-
-    th, td {
-      border: 1px solid #ccc;
-      padding: 14px;
-      text-align: center;
-      font-size: 18px;
-    }
-
-    th {
-      background-color: #e6f0ff;
-      color: #003366;
-      font-weight: bold;
-    }
-
-    .num-input {
-      width: 110px;
-      font-size: 18px;
-      padding: 8px;
-      text-align: right;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-
-    .button-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      justify-content: center;
-      margin-bottom: 25px;
-    }
-
-    button {
-      padding: 14px 22px;
-      font-size: 18px;
-      border-radius: 6px;
-      border: none;
-      background-color: #007bff;
-      color: white;
-      cursor: pointer;
-      transition: 0.3s;
-      min-width: 200px;
-    }
-
-    button:hover {
-      background-color: #005bb5;
-    }
-
-    .summary {
-      font-size: 20px;
-      font-weight: bold;
-      margin: 10px 0;
-      text-align: center;
-    }
-
-    .summary span {
-      color: #003366;
-    }
-
-    .odds-group {
+    /* ── Header ── */
+    .app-header {
       display: flex;
       align-items: center;
-      gap: 5px;
-      justify-content: center;
-    }
-
-    .danger-btn {
-      background-color: #dc3545;
-      color: white;
-      border: none;
-      padding: 6px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-      min-width: auto;
-    }
-
-    .danger-btn:hover {
-      background-color: #c82333;
-    }
-
-    .amount-group {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .amount-dual-row {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .amount-field {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3px;
-    }
-
-    .amount-field label {
-      font-size: 11px;
-      font-weight: bold;
-      color: #555;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .input-thb {
-      border: 2px solid #007bff !important;
-      background: #f0f7ff;
-    }
-
-    .input-thb:focus {
-      border-color: #0056b3 !important;
-      outline: none;
-      background: #e0efff;
-    }
-
-    .input-usdt {
-      border: 2px solid #f0a500 !important;
-      background: #fffbf0;
-    }
-
-    .input-usdt:focus {
-      border-color: #d48c00 !important;
-      outline: none;
-      background: #fff3d0;
-    }
-
-    .divider-label {
-      font-size: 16px;
-      color: #888;
-      font-weight: bold;
-      padding: 0 2px;
-      margin-top: 14px;
-    }
-
-    .paste-btn-row {
-      display: flex;
-      gap: 4px;
-    }
-
-    .mini-btn {
-      min-width: auto;
-      padding: 5px 8px;
-      font-size: 12px;
-      line-height: 1.2;
-      background-color: #6c757d;
-      border-radius: 5px;
-    }
-
-    .mini-btn:hover {
-      background-color: #5a6268;
-    }
-
-    .mini-btn.copied {
-      background-color: #28a745;
-    }
-
-    .mini-btn.pasted {
-      background-color: #fd7e14;
-    }
-
-    .top-row {
-      display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      gap: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
       margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .app-title {
+      font-size: 20px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 0.3px;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
-    .left-panel {
-      flex: 1 1 320px;
-      text-align: left;
-    }
-
-    .left-panel h2 {
-      text-align: left;
-      margin-top: 0;
-      margin-bottom: 10px;
-    }
-
-    .rate-box {
-      font-size: 16px;
-      font-weight: bold;
-      color: #003366;
-      text-align: left;
-    }
-
-    .rate-value {
-      display: inline-block;
-      min-width: 120px;
-      color: #dc3545;
-      font-size: 18px;
-      font-weight: bold;
-      margin: 0 6px;
-    }
-
-    .rate-input {
-      width: 140px;
-      font-size: 18px;
-      font-weight: bold;
-      padding: 6px 8px;
-      text-align: right;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      color: #dc3545;
-    }
-
-    .rate-source {
-      display: block;
-      margin-top: 6px;
+    /* Theme toggle */
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 5px 14px;
+      cursor: pointer;
       font-size: 13px;
-      color: #666;
-      font-weight: normal;
+      font-family: 'Kanit', sans-serif;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: all 0.2s;
+      user-select: none;
     }
+    .theme-toggle:hover { border-color: var(--border-light); color: var(--text); }
+    .theme-icon { font-size: 15px; }
 
-    .converter-box {
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      padding: 15px;
-      flex: 0 1 360px;
-      margin-bottom: 0;
-    }
-
-    .converter-title {
-      text-align: center;
-      font-size: 18px;
-      font-weight: bold;
-      color: #003366;
-      margin-bottom: 12px;
-    }
-
-    .converter-grid {
+    .rate-pill {
       display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 5px 14px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .rate-pill .rate-val {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--gold);
+    }
+    .rate-input-inline {
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--gold);
+      width: 90px;
+      text-align: right;
+    }
+    .rate-source { font-size: 11px; color: var(--text-dim); margin-left: 2px; }
+
+    /* ── Total investment bar ── */
+    .total-bar {
+      display: flex;
+      align-items: center;
       justify-content: center;
-      align-items: flex-start;
-    }
-
-    .converter-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      min-width: 150px;
-    }
-
-    .converter-item label {
+      gap: 10px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 20px;
+      margin-bottom: 14px;
       font-size: 14px;
-      font-weight: bold;
-      color: #444;
+      color: var(--text-muted);
+    }
+    .total-bar .total-val {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .total-bar .total-label { font-weight: 600; }
+
+    /* ── Main Card ── */
+    .card {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .card-header {
+      background: var(--surface2);
+      border-bottom: 2px solid var(--border);
+      display: grid;
+      grid-template-columns: 80px 1fr 200px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    /* vertical dividers in header too */
+    .card-header > span {
+      padding: 10px 14px;
+      border-right: 1px solid var(--border);
+    }
+    .card-header > span:last-child { border-right: none; text-align: center; }
+
+    /* ── Bet Row ── */
+    .bet-row {
+      display: grid;
+      grid-template-columns: 80px 1fr 200px;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      align-items: stretch;
+      transition: background 0.15s;
+    }
+    .bet-row:last-child { border-bottom: none; }
+    .bet-row:hover { background: rgba(91,138,255,0.04); }
+
+    /* vertical dividers between columns */
+    .bet-row > * {
+      border-right: 1px solid var(--border);
+      padding: 12px 12px;
+    }
+    .bet-row > *:last-child { border-right: none; }
+
+    /* web name col */
+    .web-name-col {
       display: flex;
       align-items: center;
-      gap: 6px;
+      justify-content: center;
     }
-
-    .converter-result {
-      font-size: 14px;
-      color: #dc3545;
-      font-weight: bold;
-      min-height: 18px;
+    .web-name-input {
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-family: 'Kanit', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 4px 2px;
+      width: 100%;
+      outline: none;
       text-align: center;
     }
+    .web-name-input:focus { color: var(--accent); }
+    .web-name-input::placeholder { color: var(--text-dim); font-size: 13px; font-weight: 400; text-align: center; }
 
-    .required-hint {
-      color: #c43d00;
-      font-size: 18px;
+    /* Dual amount */
+    .dual-amount { display: flex; gap: 8px; align-items: stretch; }
+    .amount-half { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+    .amount-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.8px;
+      text-transform: uppercase; display: flex; align-items: center; gap: 4px;
+      height: 18px;
+    }
+    .amount-label.thb-label { color: var(--thb-color); }
+    .amount-label.usdt-label { color: var(--usdt-color); }
+
+    /* Currency logos — now sit INSIDE input on the left */
+    .currency-logo {
+      width: 20px; height: 20px; border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 800; flex-shrink: 0;
+    }
+    .logo-thb { background: linear-gradient(135deg, #2a7adf, #4f9fff); color: #fff; }
+    .logo-usdt { background: linear-gradient(135deg, #26a17b, #3fcba0); color: #fff; }
+
+    /* Logo sits absolutely inside input on left */
+    .amount-input-wrap {
+      position: relative; flex: 1; display: flex; flex-direction: column;
+    }
+    .input-logo {
+      position: absolute; left: 7px; top: 50%; transform: translateY(-50%);
+      z-index: 1; pointer-events: none;
+    }
+    .amount-input {
+      background: var(--surface2);
+      border-radius: 8px; color: var(--text);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px; font-weight: 600;
+      padding: 9px 32px 9px 34px;  /* left space for logo, right for copy btn */
+      width: 100%; flex: 1; outline: none; text-align: right;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .amount-input.thb-input { border: 1.5px solid rgba(96,170,255,0.45); }
+    .amount-input.thb-input:focus { border-color: var(--thb-color); box-shadow: 0 0 0 3px rgba(96,170,255,0.18); }
+    .amount-input.usdt-input { border: 1.5px solid rgba(245,192,64,0.4); }
+    .amount-input.usdt-input:focus { border-color: var(--usdt-color); box-shadow: 0 0 0 3px rgba(245,192,64,0.15); }
+    .amount-input::placeholder { color: var(--text-dim); }
+
+    /* copy button */
+    .copy-btn-inline {
+      position: absolute; right: 3px; top: 50%; transform: translateY(-50%);
+      background: var(--surface); border: 1px solid var(--border);
+      cursor: pointer; color: var(--text-muted); font-size: 14px;
+      padding: 4px 6px; border-radius: 5px; transition: all 0.15s; line-height: 1;
+      display: flex; align-items: center; justify-content: center;
+      width: 24px; height: 24px;
+    }
+    .copy-btn-inline:hover { color: var(--accent); border-color: var(--accent); background: rgba(91,138,255,0.12); }
+    .copy-btn-inline.copied { color: var(--green); border-color: var(--green); }
+
+    .dual-sep {
+      display: flex; align-items: center; justify-content: center;
+      padding-top: 22px; color: var(--text-dim); font-size: 16px;
+      font-weight: 300; flex-shrink: 0;
     }
 
-    @media (max-width: 768px) {
-      .top-row {
-        flex-direction: column;
-      }
+    /* Odds col */
+    .odds-col {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 22px;
+    }
+    .odds-group {
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+    }
 
-      .left-panel,
-      .converter-box {
-        width: 100%;
-      }
+    /* ── Floating dropdown (fixed to viewport) ── */
+    .float-dropdown {
+      position: fixed;
+      z-index: 9999;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.5);
+      padding: 4px 0;
+      display: none;
+      width: 140px;
+      max-height: 280px;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      overscroll-behavior: contain;
+    }
+    .float-dropdown.open { display: block; }
+    .float-dropdown::-webkit-scrollbar { width: 5px; }
+    .float-dropdown::-webkit-scrollbar-track { background: transparent; }
+    .float-dropdown::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
-      .left-panel h2,
-      .rate-box {
-        text-align: center;
-      }
+    /* Option rows — full-width list items */
+    .odds-option {
+      display: block;
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      cursor: pointer;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 9px 14px;
+      text-align: center;
+      transition: background 0.1s, color 0.1s;
+      white-space: nowrap;
+      user-select: none;
+      flex-shrink: 0;
+    }
+    .odds-option:last-child { border-bottom: none; }
+    .odds-option:hover { background: var(--accent2); color: #fff; }
+    .odds-option.exact { color: var(--gold); font-weight: 800; background: rgba(255,208,96,0.08); }
 
-      .num-input {
-        width: 90px;
-        font-size: 16px;
-      }
+    /* Picker toggle btn */
+    .odds-picker-btn {
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 13px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 700;
+      padding: 8px 9px;
+      transition: all 0.18s;
+      line-height: 1;
+    }
+    .odds-picker-btn:hover, .odds-picker-btn.active {
+      border-color: var(--accent2); color: var(--accent2);
+      background: rgba(160,122,255,0.12);
+    }
+    /* hide spin buttons on decimal input */
+    #draw_odds_decimal::-webkit-inner-spin-button,
+    #draw_odds_decimal::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    #draw_odds_decimal { -moz-appearance: textfield; }
+
+    .odds-input {
+      background: var(--surface2); border: 1.5px solid var(--border); border-radius: 8px;
+      color: var(--text); font-family: 'IBM Plex Mono', monospace;
+      font-size: 15px; font-weight: 700; padding: 10px 6px;
+      outline: none; text-align: center; transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .odds-input:focus { border-color: var(--accent2); box-shadow: 0 0 0 3px rgba(142,111,255,0.2); }
+    .odds-dot { color: var(--text-muted); font-size: 18px; font-weight: 700; }
+    .clear-btn {
+      background: rgba(255,77,106,0.12); border: 1px solid rgba(255,77,106,0.35);
+      border-radius: 6px; color: var(--red); cursor: pointer;
+      font-size: 12px; font-family: 'Kanit', sans-serif; padding: 8px 10px;
+      transition: all 0.2s; white-space: nowrap;
+    }
+    .clear-btn:hover { background: rgba(255,77,106,0.24); border-color: var(--red); }
+
+    /* ── Hint box ── */
+    .hint-box {
+      text-align: center;
+      font-size: 14px;
+      color: var(--text-muted);
+      background: rgba(240,180,41,0.08);
+      border: 1px solid rgba(240,180,41,0.2);
+      border-radius: 8px;
+      padding: 10px 16px;
+      margin-bottom: 14px;
+      display: none;
+    }
+    .hint-box .hint-odds-val {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--gold);
+      background: rgba(240,180,41,0.15);
+      border: 1px solid rgba(240,180,41,0.35);
+      border-radius: 6px;
+      padding: 1px 10px;
+      display: inline-block;
+      letter-spacing: 1px;
+    }
+
+    /* ── Buttons ── */
+    .btn-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 20px; }
+    .btn {
+      padding: 11px 18px; font-size: 14px;
+      font-family: 'Kanit', sans-serif; font-weight: 600;
+      border-radius: 8px; border: none; cursor: pointer;
+      transition: all 0.2s; min-width: 150px; letter-spacing: 0.3px;
+    }
+    .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; box-shadow: 0 4px 14px rgba(79,124,255,0.3); }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(79,124,255,0.4); }
+    .btn-green { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; box-shadow: 0 4px 14px rgba(34,197,94,0.3); }
+    .btn-green:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(34,197,94,0.4); }
+    .btn-save { background: linear-gradient(135deg, var(--gold), #c8860a); color: #111; box-shadow: 0 4px 14px rgba(240,180,41,0.3); }
+    .btn-save:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(240,180,41,0.4); }
+    .btn-purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: #fff; box-shadow: 0 4px 14px rgba(139,92,246,0.3); }
+    .btn-purple:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(139,92,246,0.4); }
+    .btn-danger { background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.3); color: var(--red); }
+    .btn-danger:hover { background: rgba(244,63,94,0.2); }
+
+    /* ── Result ── */
+    .section-title {
+      font-size: 14px; font-weight: 700; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 10px;
+    }
+    .result-card {
+      background: var(--surface); border: 2px solid var(--border);
+      border-radius: 12px; overflow: hidden; margin-bottom: 20px;
+    }
+    .result-header {
+      display: grid; grid-template-columns: 2fr 1.5fr 1.5fr;
+      background: var(--surface2); border-bottom: 2px solid var(--border);
+      font-size: 11px; font-weight: 600;
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;
+    }
+    .result-header span {
+      padding: 10px 16px;
+      border-right: 1px solid var(--border);
+    }
+    .result-header span:last-child { border-right: none; text-align: right; }
+    .result-header span:nth-child(2) { text-align: right; }
+
+    .result-row {
+      display: grid; grid-template-columns: 2fr 1.5fr 1.5fr;
+      border-bottom: 1px solid var(--border);
+      font-size: 16px; align-items: stretch;
+    }
+    .result-row > span {
+      padding: 15px 16px;
+      border-right: 1px solid var(--border);
+      display: flex; align-items: center;
+    }
+    .result-row > span:last-child { border-right: none; justify-content: flex-end; }
+    .result-row > span:nth-child(2) { justify-content: flex-end; }
+    .result-row:last-child { border-bottom: none; }
+    .result-row .case-name { font-weight: 500; color: var(--text); }
+    .result-row .sum-val { font-family: 'IBM Plex Mono', monospace; font-weight: 600; color: var(--text); font-size: 17px; }
+    .result-row .profit-val { font-family: 'IBM Plex Mono', monospace; font-weight: 800; font-size: 18px; }
+    .profit-pos { color: var(--green); }
+    .profit-neg { color: var(--red); }
+    .result-empty { text-align: center; padding: 28px; color: var(--text-dim); font-size: 14px; }
+
+    /* Total row inside result card */
+    .result-total-row {
+      display: flex; align-items: center; justify-content: flex-end; gap: 10px;
+      padding: 10px 16px; background: rgba(79,124,255,0.05);
+      border-top: 2px solid var(--border);
+    }
+    .result-total-label { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+    .result-total-val {
+      font-family: 'IBM Plex Mono', monospace; font-size: 18px;
+      font-weight: 800; color: var(--accent);
+    }
+    .result-total-unit { font-size: 12px; color: var(--text-dim); }
+
+    /* ── Daily Summary Modal ── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 1000; display: none;
+      align-items: center; justify-content: center;
+      padding: 16px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      width: 100%; max-width: 680px;
+      max-height: 85vh;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      box-shadow: 0 20px 60px var(--shadow);
+    }
+    .modal-header {
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .modal-title { font-size: 17px; font-weight: 700; color: var(--text); }
+    .modal-close {
+      background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.3);
+      border-radius: 8px; color: var(--red); cursor: pointer;
+      font-size: 14px; font-family: 'Kanit', sans-serif;
+      padding: 6px 12px; transition: all 0.2s;
+    }
+    .modal-close:hover { background: rgba(244,63,94,0.2); }
+    .modal-body { padding: 16px 20px; overflow-y: auto; flex: 1; }
+    .modal-footer {
+      background: var(--surface2);
+      border-top: 1px solid var(--border);
+      padding: 14px 20px;
+    }
+    .daily-sum-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 14px;
+      display: flex; gap: 30px; flex-wrap: wrap; justify-content: center;
+    }
+    .daily-sum-item { text-align: center; }
+    .daily-sum-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
+    .daily-sum-val { font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 700; }
+    .daily-check-list { display: flex; flex-direction: column; gap: 8px; }
+    .daily-check-item {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 10px 14px; cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .daily-check-item:hover { border-color: var(--border-light); }
+    .daily-check-item.selected { border-color: var(--accent); background: rgba(79,124,255,0.07); }
+    .daily-checkbox { width: 18px; height: 18px; flex-shrink: 0; accent-color: var(--accent); cursor: pointer; }
+    .daily-item-ts { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--gold); flex-shrink: 0; }
+    .daily-item-rows { flex: 1; font-size: 13px; color: var(--text); }
+    .daily-item-profit { font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+
+    /* ── History ── */
+    .history-section { margin-top: 6px; }
+    .history-toggle {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 13px 18px;
+      cursor: pointer; user-select: none; transition: border-color 0.2s;
+    }
+    .history-toggle:hover { border-color: var(--border-light); }
+    .history-toggle.open { border-radius: 12px 12px 0 0; }
+    .history-icon { font-size: 16px; }
+    .history-title { font-size: 15px; font-weight: 600; color: var(--text); flex: 1; }
+    .history-count {
+      background: var(--accent); color: #fff;
+      font-size: 11px; font-weight: 700;
+      border-radius: 20px; padding: 2px 10px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .chevron { color: var(--text-muted); font-size: 13px; transition: transform 0.2s; }
+    .chevron.open { transform: rotate(180deg); }
+    .history-body {
+      background: var(--surface); border: 1px solid var(--border);
+      border-top: none; border-radius: 0 0 12px 12px;
+      padding: 14px; display: none;
+    }
+    .history-body.open { display: block; }
+    .history-empty { text-align: center; color: var(--text-dim); padding: 20px 0; font-size: 14px; }
+
+    .record-card {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 8px; margin-bottom: 10px; overflow: hidden;
+    }
+    .record-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 9px 12px; border-bottom: 1px solid var(--border);
+      flex-wrap: wrap; gap: 6px;
+    }
+    .record-ts {
+      font-size: 12px; font-family: 'IBM Plex Mono', monospace;
+      color: var(--gold); display: flex; align-items: center; gap: 5px;
+    }
+    .record-total {
+      font-size: 12px; color: var(--text-muted);
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .record-total span { color: var(--accent); font-weight: 600; }
+    .rec-del-btn {
+      background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.3);
+      border-radius: 6px; color: var(--red); cursor: pointer;
+      font-size: 11px; font-family: 'Kanit', sans-serif;
+      padding: 4px 8px; transition: all 0.2s;
+    }
+    .rec-del-btn:hover { background: rgba(244,63,94,0.2); }
+    .record-table-wrap { overflow-x: auto; padding: 10px 12px; }
+    .rec-table {
+      border-collapse: collapse; width: 100%;
+      min-width: 440px; font-size: 13px;
+    }
+    .rec-table th {
+      background: rgba(79,124,255,0.08); color: var(--text-muted);
+      font-size: 10px; font-weight: 700; letter-spacing: 0.8px;
+      text-transform: uppercase; padding: 7px 10px; text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .rec-table td {
+      padding: 8px 10px; text-align: center; color: var(--text);
+      border-bottom: 1px solid rgba(42,48,72,0.4);
+      font-family: 'IBM Plex Mono', monospace; font-size: 12px;
+    }
+    .rec-table td.label-cell {
+      font-family: 'Kanit', sans-serif; font-weight: 500;
+      font-size: 13px; color: var(--accent); text-align: left;
+    }
+    .rec-table tr:last-child td { border-bottom: none; }
+
+    .history-footer { display: flex; justify-content: flex-end; padding-top: 6px; }
+    .del-all-btn {
+      background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.3);
+      border-radius: 6px; color: var(--red); cursor: pointer;
+      font-size: 12px; font-family: 'Kanit', sans-serif;
+      padding: 6px 12px; transition: all 0.2s;
+    }
+    .del-all-btn:hover { background: rgba(244,63,94,0.2); }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .card-header { grid-template-columns: 60px 1fr 160px; font-size: 10px; }
+      .bet-row { grid-template-columns: 60px 1fr 160px; }
+      .dual-amount { gap: 4px; }
+      .odds-input { font-size: 13px; padding: 8px 4px; }
+      .amount-input { font-size: 12px; padding: 8px 30px 8px 6px; }
+      .amount-label { font-size: 10px; }
+      .btn { min-width: 130px; font-size: 13px; padding: 10px 12px; }
+      .app-title { font-size: 16px; }
     }
   </style>
 </head>
-
 <body>
-  <div class="top-row">
-    <div class="left-panel">
-      <h2>2 CalculatorMax By Super Update 13.5.69</h2>
 
-      <div class="rate-box">
-        อัตรา 1 USDT =
-        <span id="usdt_rate_text" class="rate-value">กำลังโหลด...</span>
-        <input
-          type="number"
-          id="usdt_rate_input"
-          class="rate-input"
-          step="0.01"
-          min="0"
-          style="display:none;"
-          placeholder="กรอกค่าเงิน"
-        />
-        บาท
-        <span id="rate_source" class="rate-source"></span>
+<!-- Header -->
+<div class="app-header">
+  <div class="app-title">⚡ 2 CalculatorMax By Super</div>
+  <div class="header-right">
+    <button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()">
+      <span class="theme-icon" id="theme-icon">☀️</span>
+      <span id="theme-label">สว่าง</span>
+    </button>
+    <div class="rate-pill">
+      <span>1 USDT =</span>
+      <span id="usdt_rate_text" class="rate-val">กำลังโหลด...</span>
+      <input type="number" id="usdt_rate_input" class="rate-input-inline" step="0.01" min="0" style="display:none;" placeholder="กรอกอัตรา" />
+      <span style="color:var(--text-muted);">฿</span>
+      <span id="rate_source" class="rate-source"></span>
+    </div>
+  </div>
+</div>
+
+<!-- Bet Input Card -->
+<div class="card">
+  <div class="card-header">
+    <span>เว็บ / ฝั่ง</span>
+    <span>เงินทุน</span>
+    <span>ค่าน้ำ</span>
+  </div>
+
+  <!-- Row: Draw -->
+  <div class="bet-row">
+    <div class="web-name-col">
+      <input type="text" id="draw_web_name" class="web-name-input" placeholder="1" maxlength="20" />
+    </div>
+    <div class="dual-amount">
+      <div class="amount-half">
+        <div class="amount-label thb-label">บาท</div>
+        <div class="amount-input-wrap">
+          <span class="input-logo"><span class="currency-logo logo-thb">฿</span></span>
+          <input type="text" id="draw_amt_thb" class="amount-input thb-input money-input" placeholder="0" inputmode="decimal" />
+          <button class="copy-btn-inline" onclick="copyVal('draw_amt_thb',this)" title="คัดลอก">⎘</button>
+        </div>
+      </div>
+      <div class="dual-sep">/</div>
+      <div class="amount-half">
+        <div class="amount-label usdt-label">USDT</div>
+        <div class="amount-input-wrap">
+          <span class="input-logo"><span class="currency-logo logo-usdt">₮</span></span>
+          <input type="text" id="draw_amt_usdt" class="amount-input usdt-input money-input" placeholder="0" inputmode="decimal" />
+          <button class="copy-btn-inline" onclick="copyVal('draw_amt_usdt',this)" title="คัดลอก">⎘</button>
+        </div>
       </div>
     </div>
-
-    <div class="converter-box">
-      <div class="converter-title">แปลงสกุลเงิน</div>
-
-      <div class="converter-grid">
-        <div class="converter-item">
-          <label for="convert_thb_input">
-            บาท → USDT
-            <button type="button" class="mini-btn" onclick="copyTextById('convert_thb_result', this)">copy</button>
-          </label>
-
-          <input type="text" id="convert_thb_input" class="num-input money-input" />
-          <div class="converter-result" id="convert_thb_result"></div>
-        </div>
-
-        <div class="converter-item">
-          <label for="convert_usdt_input">
-            USDT → บาท
-            <button type="button" class="mini-btn" onclick="copyTextById('convert_usdt_result', this)">copy</button>
-          </label>
-
-          <input type="text" id="convert_usdt_input" class="num-input money-input" />
-          <div class="converter-result" id="convert_usdt_result"></div>
-        </div>
+    <div class="odds-col">
+      <div class="odds-group">
+        <input type="number" id="draw_odds_main" class="odds-input" min="0" style="width:50px;" />
+        <span class="odds-dot">.</span>
+        <input type="number" id="draw_odds_decimal" class="odds-input" min="0" max="99" style="width:50px;" />
+        <button class="odds-picker-btn" id="dec-picker-btn" onclick="toggleDecPicker(event)" title="เลือกทศนิยม">▾</button>
+        <button class="clear-btn" onclick="draw_odds_main.value='';draw_odds_decimal.value='';forceAutoWin1Amount();suggestWin1MinimumOdds();closeAll();">✕</button>
       </div>
     </div>
   </div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>เว็บ</th>
-
-        <th>
-          เงินทุน
-          <div style="font-size:12px; font-weight:normal; color:#555; margin-top:4px;">
-            <span style="color:#0056b3;">■</span> บาท &nbsp;|&nbsp;
-            <span style="color:#d48c00;">■</span> USDT (แปลงอัตโนมัติ)
-          </div>
-        </th>
-
-        <th>ค่าน้ำ</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr>
-        <td>เสมอ / ต่อ / ต่ำ</td>
-
-        <td>
-          <div class="amount-group">
-            <div class="amount-dual-row">
-              <div class="amount-field">
-                <label>บาท</label>
-                <input type="text" id="draw_amt_thb" class="num-input money-input input-thb" placeholder="0" />
-              </div>
-
-              <div class="divider-label">/</div>
-
-              <div class="amount-field">
-                <label>USDT</label>
-                <input type="text" id="draw_amt_usdt" class="num-input money-input input-usdt" placeholder="0" />
-              </div>
-            </div>
-
-            <div class="paste-btn-row">
-              <button type="button" class="mini-btn" onclick="pasteToInput('draw_amt_thb', this, 'thb')">วางบาท</button>
-              <button type="button" class="mini-btn" onclick="pasteToInput('draw_amt_usdt', this, 'usdt')">วาง USDT</button>
-            </div>
-          </div>
-        </td>
-
-        <td>
-          <div class="odds-group">
-            <input type="number" id="draw_odds_main" class="num-input" min="0" style="width:70px;" />
-            .
-            <input type="number" id="draw_odds_decimal" class="num-input" min="0" max="99" style="width:70px;" />
-
-            <button
-              class="danger-btn"
-              onclick="draw_odds_main.value=''; draw_odds_decimal.value=''; forceAutoWin1Amount(); suggestWin1MinimumOdds();"
-            >
-              ล้าง
-            </button>
-          </div>
-        </td>
-      </tr>
-
-      <tr>
-        <td>ชนะ 1</td>
-
-        <td>
-          <div class="amount-group">
-            <div class="amount-dual-row">
-              <div class="amount-field">
-                <label>บาท</label>
-                <input type="text" id="win1_amt_thb" class="num-input money-input input-thb" placeholder="0" />
-              </div>
-
-              <div class="divider-label">/</div>
-
-              <div class="amount-field">
-                <label>USDT</label>
-                <input type="text" id="win1_amt_usdt" class="num-input money-input input-usdt" placeholder="0" />
-              </div>
-            </div>
-
-            <div class="paste-btn-row">
-              <button type="button" class="mini-btn" onclick="pasteToInput('win1_amt_thb', this, 'thb')">วางบาท</button>
-              <button type="button" class="mini-btn" onclick="pasteToInput('win1_amt_usdt', this, 'usdt')">วาง USDT</button>
-            </div>
-          </div>
-        </td>
-
-        <td>
-          <div class="odds-group">
-            <input type="text" id="win1_odds" class="num-input" placeholder="0.00" inputmode="decimal" />
-
-            <button
-              class="danger-btn"
-              onclick="win1_odds.value=''; win1_amt_thb.value=''; win1_amt_usdt.value=''; calculate();"
-            >
-              ล้าง
-            </button>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div class="summary">รวมเงินทุนทั้งหมด: <span id="total_investment">0</span> บาท</div>
-  <div class="summary">รวมทุนฝั่งชนะ 1: <span id="total_win12">0</span> บาท</div>
-  <div class="summary required-hint" id="required-win1-odds"></div>
-
-  <div class="button-container">
-    <button onclick="forceAutoWin1Amount()">เฉลี่ยกำไรให้เท่ากัน</button>
-    <button onclick="maximizeWinProfit()">คำนวณกำไรสูงสุด</button>
-    <button onclick="clearAll()">🧹 ล้างทั้งหมด</button>
+  <!-- Row: Win1 -->
+  <div class="bet-row">
+    <div class="web-name-col">
+      <input type="text" id="win1_web_name" class="web-name-input" placeholder="2" maxlength="20" />
+    </div>
+    <div class="dual-amount">
+      <div class="amount-half">
+        <div class="amount-label thb-label">บาท</div>
+        <div class="amount-input-wrap">
+          <span class="input-logo"><span class="currency-logo logo-thb">฿</span></span>
+          <input type="text" id="win1_amt_thb" class="amount-input thb-input money-input" placeholder="0" inputmode="decimal" />
+          <button class="copy-btn-inline" onclick="copyVal('win1_amt_thb',this)" title="คัดลอก">⎘</button>
+        </div>
+      </div>
+      <div class="dual-sep">/</div>
+      <div class="amount-half">
+        <div class="amount-label usdt-label">USDT</div>
+        <div class="amount-input-wrap">
+          <span class="input-logo"><span class="currency-logo logo-usdt">₮</span></span>
+          <input type="text" id="win1_amt_usdt" class="amount-input usdt-input money-input" placeholder="0" inputmode="decimal" />
+          <button class="copy-btn-inline" onclick="copyVal('win1_amt_usdt',this)" title="คัดลอก">⎘</button>
+        </div>
+      </div>
+    </div>
+    <div class="odds-col">
+      <div class="odds-group">
+        <input type="text" id="win1_odds" class="odds-input" inputmode="decimal" style="width:88px;" />
+        <button class="odds-picker-btn" id="odds-picker-btn" onclick="toggleOddsPicker(event)" title="เลือกค่าน้ำ">▾</button>
+        <button class="clear-btn" onclick="win1_odds.value='';win1_amt_thb.value='';win1_amt_usdt.value='';calculate();closeAll();">✕</button>
+      </div>
+    </div>
   </div>
+</div>
 
-  <h2>ผลการคำนวณ</h2>
+<!-- Hint -->
+<div id="required-win1-odds" class="hint-box"></div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>กรณี</th>
-        <th>ยอดรวม</th>
-        <th>กำไร</th>
-      </tr>
-    </thead>
+<!-- Buttons -->
+<div class="btn-row">
+  <button class="btn btn-primary" onclick="forceAutoWin1Amount()">⚖️ เฉลี่ยกำไรให้เท่ากัน</button>
+  <button class="btn btn-green" onclick="maximizeWinProfit()">📈 คำนวณกำไรสูงสุด</button>
+  <button class="btn btn-save" onclick="saveRecord(event)">💾 บันทึกข้อมูล</button>
+  <button class="btn btn-purple" onclick="openDailySummary()">📊 สรุปผลรายวัน</button>
+  <button class="btn btn-danger" onclick="clearAll()">🧹 ล้างทั้งหมด</button>
+</div>
 
-    <tbody id="result-table">
-      <tr><td colspan="3">-</td></tr>
-    </tbody>
-  </table>
+<!-- Result -->
+<div class="section-title">ผลการคำนวณ</div>
+<div class="result-card">
+  <div class="result-header">
+    <span>กรณี</span>
+    <span>ยอดรวม (฿)</span>
+    <span>กำไร (฿)</span>
+  </div>
+  <div id="result-table">
+    <div class="result-empty">กรุณากรอกข้อมูลให้ครบ</div>
+  </div>
+  <div class="result-total-row">
+    <span class="result-total-label">💰 ทุนรวม</span>
+    <span class="result-total-val" id="total_investment">0</span>
+    <span class="result-total-unit">บาท</span>
+  </div>
+</div>
 
-  <script>
-    const drawAmtThb = document.getElementById("draw_amt_thb");
-    const drawAmtUsdt = document.getElementById("draw_amt_usdt");
-    const win1AmtThb = document.getElementById("win1_amt_thb");
-    const win1AmtUsdt = document.getElementById("win1_amt_usdt");
+<!-- History -->
+<div class="history-section">
+  <div class="history-toggle" id="history-toggle" onclick="toggleHistory()">
+    <span class="history-icon">📁</span>
+    <span class="history-title">ข้อมูลที่บันทึกไว้</span>
+    <span class="history-count" id="history-count">0</span>
+    <span class="chevron" id="chevron-icon">▼</span>
+  </div>
+  <div class="history-body" id="history-body">
+    <div id="history-list"></div>
+  </div>
+</div>
 
-    const drawOddsMain = document.getElementById("draw_odds_main");
-    const drawOddsDecimal = document.getElementById("draw_odds_decimal");
-    const win1Odds = document.getElementById("win1_odds");
+<!-- Daily Summary Modal -->
+<div class="modal-overlay" id="daily-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">📊 สรุปผลรายวัน</div>
+      <button class="modal-close" onclick="closeDailySummary()">✕ ปิด</button>
+    </div>
+    <div class="modal-body">
+      <div class="daily-sum-box" id="daily-sum-box">
+        <div class="daily-sum-item">
+          <div class="daily-sum-label">เลือกแล้ว</div>
+          <div class="daily-sum-val" id="ds-count" style="color:var(--accent)">0</div>
+          <div style="font-size:11px;color:var(--text-dim);">รอบ</div>
+        </div>
+        <div class="daily-sum-item">
+          <div class="daily-sum-label">กำไรรวม (ถ้าออกฝั่ง 1)</div>
+          <div class="daily-sum-val" id="ds-profit1" style="color:var(--green)">0</div>
+        </div>
+        <div class="daily-sum-item">
+          <div class="daily-sum-label">กำไรรวม (ถ้าออกฝั่ง 2)</div>
+          <div class="daily-sum-val" id="ds-profit2" style="color:var(--green)">0</div>
+        </div>
+        <div class="daily-sum-item">
+          <div class="daily-sum-label">ทุนรวมทั้งหมด</div>
+          <div class="daily-sum-val" id="ds-total" style="color:var(--text)">0</div>
+        </div>
+      </div>
+      <div id="daily-check-list" class="daily-check-list"></div>
+    </div>
+    <div class="modal-footer">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-primary" style="min-width:120px;padding:9px 14px;font-size:13px;" onclick="selectAllDaily()">✅ เลือกทั้งหมด</button>
+        <button class="btn btn-danger" style="min-width:120px;padding:9px 14px;font-size:13px;" onclick="clearDailySelection()">☐ ยกเลิกทั้งหมด</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-    const totalInvestment = document.getElementById("total_investment");
-    const totalWin12 = document.getElementById("total_win12");
-    const resultTable = document.getElementById("result-table");
-    const requiredWin1OddsDisplay = document.getElementById("required-win1-odds");
+<!-- Fixed floating dropdowns — must be before <script> so getElementById works -->
+<div class="float-dropdown" id="odds-dropdown"></div>
+<div class="float-dropdown" id="dec-dropdown"></div>
 
-    const usdtRateText = document.getElementById("usdt_rate_text");
-    const usdtRateInput = document.getElementById("usdt_rate_input");
-    const rateSource = document.getElementById("rate_source");
+<script>
+  // ─── Refs ─────────────────────────────────────────────────────────
+  const drawAmtThb     = document.getElementById("draw_amt_thb");
+  const drawAmtUsdt    = document.getElementById("draw_amt_usdt");
+  const win1AmtThb     = document.getElementById("win1_amt_thb");
+  const win1AmtUsdt    = document.getElementById("win1_amt_usdt");
+  const drawOddsMain   = document.getElementById("draw_odds_main");
+  const drawOddsDecimal= document.getElementById("draw_odds_decimal");
+  const win1Odds       = document.getElementById("win1_odds");
+  const drawWebName    = document.getElementById("draw_web_name");
+  const win1WebName    = document.getElementById("win1_web_name");
+  const totalInvestment= document.getElementById("total_investment");
+  const resultTable    = document.getElementById("result-table");
+  const hintBox        = document.getElementById("required-win1-odds");
+  const usdtRateText   = document.getElementById("usdt_rate_text");
+  const usdtRateInput  = document.getElementById("usdt_rate_input");
+  const rateSource     = document.getElementById("rate_source");
 
-    const convertThbInput = document.getElementById("convert_thb_input");
-    const convertUsdtInput = document.getElementById("convert_usdt_input");
-    const convertThbResult = document.getElementById("convert_thb_result");
-    const convertUsdtResult = document.getElementById("convert_usdt_result");
+  let usdtRate = 0, isManualRate = false;
+  let dailySelected = new Set();
 
-    let usdtRate = 0;
-    let isManualRate = false;
-
-    function unformatComma(value) {
-      return String(value || "").replace(/,/g, "");
+  // ─── Theme ────────────────────────────────────────────────────────
+  function toggleTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute("data-theme") === "dark";
+    html.setAttribute("data-theme", isDark ? "light" : "dark");
+    document.getElementById("theme-icon").textContent = isDark ? "🌙" : "☀️";
+    document.getElementById("theme-label").textContent = isDark ? "มืด" : "สว่าง";
+    localStorage.setItem("calcmax_theme", isDark ? "light" : "dark");
+  }
+  (function initTheme() {
+    const saved = localStorage.getItem("calcmax_theme") || "dark";
+    document.documentElement.setAttribute("data-theme", saved);
+    if (saved === "light") {
+      document.getElementById("theme-icon").textContent = "🌙";
+      document.getElementById("theme-label").textContent = "มืด";
     }
+  })();
 
-    function formatNumberWithComma(value) {
-      const parts = String(value).split(".");
-      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      return parts.join(".");
+  // ─── Copy ─────────────────────────────────────────────────────────
+  function copyVal(id, btn) {
+    const el = document.getElementById(id);
+    const val = unformatComma(el.value);
+    if (!val) return;
+    navigator.clipboard.writeText(val).catch(()=>{});
+    btn.textContent = "✓";
+    btn.classList.add("copied");
+    setTimeout(() => { btn.textContent = "⎘"; btn.classList.remove("copied"); }, 1200);
+  }
+
+  // ─── Helpers ──────────────────────────────────────────────────────
+  function unformatComma(v) { return String(v||"").replace(/,/g,""); }
+  function formatComma(v) {
+    const p = String(v).split(".");
+    p[0] = p[0].replace(/\B(?=(\d{3})+(?!\d))/g,",");
+    return p.join(".");
+  }
+  function parseMoney(input) { return parseFloat(unformatComma(input.value))||0; }
+  function fmt(n) { return Math.round(n).toLocaleString("th"); }
+  function fmtMoney(n) { return formatComma(Number(n).toFixed(2)); }
+  function getRate() {
+    if (isManualRate) { const r=parseFloat(usdtRateInput.value)||0; return r>0?r:0; }
+    return usdtRate||0;
+  }
+
+  function cleanMoneyInput(el) {
+    let v = unformatComma(el.value).replace(/[^\d.]/g,"");
+    const p=v.split(".");
+    if (p.length>2) v=p[0]+"."+p.slice(1).join("");
+    const sp=v.split(".");
+    if (sp[1]!==undefined) v=sp[0]+"."+sp[1].slice(0,2);
+    el.value = v===""?"":formatComma(v);
+  }
+  function cleanOdds(el) {
+    let v=el.value.replace(/[^\d.]/g,"");
+    const p=v.split(".");
+    if (p.length>2) v=p[0]+"."+p.slice(1).join("");
+    el.value=v;
+  }
+
+  // ─── Odds ─────────────────────────────────────────────────────────
+  function getDrawOdds() {
+    const m=drawOddsMain.value.trim();
+    if (!m) return 0;
+    let d=drawOddsDecimal.value.trim();
+    if (d.length===0) d="00"; else if (d.length===1) d=d+"0";
+    return parseFloat(`${parseInt(m,10)}.${d.slice(0,2)}`)||0;
+  }
+  function getWin1Odds() { return parseFloat(win1Odds.value)||0; }
+
+  // ─── Sync dual ────────────────────────────────────────────────────
+  function syncFromThb(thbEl, usdtEl) {
+    const r=getRate(), t=parseMoney(thbEl);
+    usdtEl.value = (r>0&&t>0)?fmtMoney(t/r):"";
+  }
+  function syncFromUsdt(usdtEl, thbEl) {
+    const r=getRate(), u=parseMoney(usdtEl);
+    thbEl.value = (r>0&&u>0)?formatComma(Math.round(u*r).toString()):"";
+  }
+
+  // ─── Calculate ────────────────────────────────────────────────────
+  function forceAutoWin1Amount() {
+    const d=parseMoney(drawAmtThb), o=getDrawOdds(), a=getWin1Odds();
+    if (!d||!o||!a) { calculate(); return; }
+    const w=Math.round((d*o)/a);
+    win1AmtThb.value=formatComma(w.toString());
+    const r=getRate(); win1AmtUsdt.value=r>0?fmtMoney(w/r):"";
+    calculate();
+  }
+
+  function calculate() {
+    const d=parseMoney(drawAmtThb), o=getDrawOdds(), a=getWin1Odds(), x=parseMoney(win1AmtThb);
+    const total=d+x;
+    totalInvestment.textContent=total>0?fmt(total):"0";
+    if (!d||!o||!a||!x) {
+      resultTable.innerHTML='<div class="result-empty">กรุณากรอกข้อมูลให้ครบ</div>';
+      return;
     }
-
-    function parseAmount(input) {
-      return parseFloat(unformatComma(input.value)) || 0;
-    }
-
-    function format(num) {
-      return Math.round(num).toLocaleString();
-    }
-
-    function formatMoneyDisplay(num) {
-      return formatNumberWithComma(Number(num).toFixed(2));
-    }
-
-    function getRate() {
-      if (isManualRate) {
-        const manualRate = parseFloat(usdtRateInput.value) || 0;
-        return manualRate > 0 ? manualRate : 0;
-      }
-
-      return usdtRate || 0;
-    }
-
-    function cleanMoneyInput(input) {
-      let value = unformatComma(input.value);
-      value = value.replace(/[^\d.]/g, "");
-
-      const parts = value.split(".");
-
-      if (parts.length > 2) {
-        value = parts[0] + "." + parts.slice(1).join("");
-      }
-
-      const splitValue = value.split(".");
-
-      if (splitValue[1] !== undefined) {
-        value = splitValue[0] + "." + splitValue[1].slice(0, 2);
-      }
-
-      input.value = value === "" ? "" : formatNumberWithComma(value);
-    }
-
-    function cleanWin1Odds() {
-      let value = win1Odds.value.replace(/[^\d.]/g, "");
-      const parts = value.split(".");
-
-      if (parts.length > 2) {
-        value = parts[0] + "." + parts.slice(1).join("");
-      }
-
-      win1Odds.value = value;
-    }
-
-    function getDrawOdds() {
-      const main = drawOddsMain.value.trim();
-      let decimal = drawOddsDecimal.value.trim();
-
-      if (main === "") return 0;
-
-      if (decimal.length === 0) {
-        decimal = "00";
-      }
-
-      if (decimal.length === 1) {
-        decimal = decimal + "0";
-      }
-
-      return parseFloat(`${parseInt(main, 10)}.${decimal.slice(0, 2)}`) || 0;
-    }
-
-    function getWin1Odds() {
-      return parseFloat(win1Odds.value) || 0;
-    }
-
-    function syncDrawFromThb() {
-      const rate = getRate();
-      const thb = parseAmount(drawAmtThb);
-
-      if (rate > 0 && thb > 0) {
-        drawAmtUsdt.value = formatMoneyDisplay(thb / rate);
-      } else {
-        drawAmtUsdt.value = "";
-      }
-    }
-
-    function syncDrawFromUsdt() {
-      const rate = getRate();
-      const usdt = parseAmount(drawAmtUsdt);
-
-      if (rate > 0 && usdt > 0) {
-        drawAmtThb.value = formatNumberWithComma(Math.round(usdt * rate).toString());
-      } else {
-        drawAmtThb.value = "";
-      }
-    }
-
-    function syncWin1FromThb() {
-      const rate = getRate();
-      const thb = parseAmount(win1AmtThb);
-
-      if (rate > 0 && thb > 0) {
-        win1AmtUsdt.value = formatMoneyDisplay(thb / rate);
-      } else {
-        win1AmtUsdt.value = "";
-      }
-    }
-
-    function syncWin1FromUsdt() {
-      const rate = getRate();
-      const usdt = parseAmount(win1AmtUsdt);
-
-      if (rate > 0 && usdt > 0) {
-        win1AmtThb.value = formatNumberWithComma(Math.round(usdt * rate).toString());
-      } else {
-        win1AmtThb.value = "";
-      }
-    }
-
-    function forceAutoWin1Amount() {
-      const drawThb = parseAmount(drawAmtThb);
-      const drawOdds = getDrawOdds();
-      const winOdds = getWin1Odds();
-
-      if (!drawThb || !drawOdds || !winOdds) {
-        calculate();
-        return;
-      }
-
-      const win1Thb = Math.round((drawThb * drawOdds) / winOdds);
-
-      win1AmtThb.value = formatNumberWithComma(win1Thb.toString());
-
-      const rate = getRate();
-
-      if (rate > 0) {
-        win1AmtUsdt.value = formatMoneyDisplay(win1Thb / rate);
-      } else {
-        win1AmtUsdt.value = "";
-      }
-
-      calculate();
-    }
-
-    function calculate() {
-      const drawThb = parseAmount(drawAmtThb);
-      const drawOdds = getDrawOdds();
-      const winOdds = getWin1Odds();
-      const win1Thb = parseAmount(win1AmtThb);
-
-      if (!drawThb || !drawOdds || !winOdds || !win1Thb) {
-        resultTable.innerHTML = "<tr><td colspan='3'>กรุณากรอกข้อมูลให้ครบ</td></tr>";
-        totalInvestment.textContent = "0";
-        totalWin12.textContent = "0";
-        return;
-      }
-
-      const total = drawThb + win1Thb;
-
-      const win1Return = win1Thb * winOdds;
-      const drawReturn = drawThb * drawOdds;
-
-      const win1Profit = win1Return - total;
-      const drawProfit = drawReturn - total;
-
-      totalInvestment.textContent = format(total);
-      totalWin12.textContent = format(win1Thb);
-
-      resultTable.innerHTML = `
-        <tr>
-          <td>ออกชนะ 1</td>
-          <td>${format(win1Return)}</td>
-          <td>${format(win1Profit)}</td>
-        </tr>
-
-        <tr>
-          <td>ออกเสมอ / ต่อ</td>
-          <td>${format(drawReturn)}</td>
-          <td>${format(drawProfit)}</td>
-        </tr>
-      `;
-    }
-
-    function maximizeWinProfit() {
-      const drawThb = parseAmount(drawAmtThb);
-      const drawOdds = getDrawOdds();
-
-      if (!drawThb || !drawOdds || drawOdds <= 1) {
-        calculate();
-        return;
-      }
-
-      const win1Thb = Math.round(drawThb * (drawOdds - 1));
-
-      win1AmtThb.value = formatNumberWithComma(win1Thb.toString());
-
-      const rate = getRate();
-
-      if (rate > 0) {
-        win1AmtUsdt.value = formatMoneyDisplay(win1Thb / rate);
-      } else {
-        win1AmtUsdt.value = "";
-      }
-
-      calculate();
-    }
-
-    function suggestWin1MinimumOdds() {
-      const drawThb = parseAmount(drawAmtThb);
-      const drawOdds = getDrawOdds();
-
-      if (!drawThb || !drawOdds || drawOdds <= 1) {
-        requiredWin1OddsDisplay.textContent = "";
-        return;
-      }
-
-      const minOdds = (drawThb * drawOdds) / (drawThb * drawOdds - drawThb);
-
-      requiredWin1OddsDisplay.textContent =
-        `💡 ค่าน้ำชนะ 1 ควรไม่ต่ำกว่า ${minOdds.toFixed(2)} เพื่อให้กำไรทั้งสองฝั่ง`;
-    }
-
-    function clearAll() {
-      if (!confirm("คุณแน่ใจหรือไม่ว่าต้องการล้างทั้งหมด?")) return;
-
-      drawAmtThb.value = "";
-      drawAmtUsdt.value = "";
-      win1AmtThb.value = "";
-      win1AmtUsdt.value = "";
-
-      drawOddsMain.value = "";
-      drawOddsDecimal.value = "";
-      win1Odds.value = "";
-
-      convertThbInput.value = "";
-      convertUsdtInput.value = "";
-      convertThbResult.textContent = "";
-      convertUsdtResult.textContent = "";
-
-      totalInvestment.textContent = "0";
-      totalWin12.textContent = "0";
-      requiredWin1OddsDisplay.textContent = "";
-      resultTable.innerHTML = "<tr><td colspan='3'>-</td></tr>";
-
-      if (isManualRate) {
-        usdtRateInput.value = "";
-      }
-    }
-
-    function updateConverterResults() {
-      const rate = getRate();
-
-      if (!rate) {
-        convertThbResult.textContent = "";
-        convertUsdtResult.textContent = "";
-        return;
-      }
-
-      const thb = parseAmount(convertThbInput);
-      const usdt = parseAmount(convertUsdtInput);
-
-      convertThbResult.textContent = thb > 0 ? `≈ ${formatMoneyDisplay(thb / rate)} USDT` : "";
-      convertUsdtResult.textContent = usdt > 0 ? `≈ ${formatMoneyDisplay(usdt * rate)} บาท` : "";
-    }
-
-    async function copyTextById(id, btn) {
-      const el = document.getElementById(id);
-      const text = (el.textContent || "").replace(/^≈\s*/, "").trim();
-
-      if (!text) return;
-
-      try {
-        await navigator.clipboard.writeText(text);
-      } catch {
-        const tmp = document.createElement("textarea");
-        tmp.value = text;
-        document.body.appendChild(tmp);
-        tmp.select();
-        document.execCommand("copy");
-        document.body.removeChild(tmp);
-      }
-
-      if (btn) {
-        const old = btn.textContent;
-        btn.textContent = "คัดลอกแล้ว";
-        btn.classList.add("copied");
-
-        setTimeout(() => {
-          btn.textContent = old;
-          btn.classList.remove("copied");
-        }, 1200);
-      }
-    }
-
-    async function pasteToInput(inputId, btn, type) {
-      const input = document.getElementById(inputId);
-      input.focus();
-
-      try {
-        const text = await navigator.clipboard.readText();
-        const cleaned = (text || "").replace(/,/g, "").match(/\d*\.?\d{0,2}/)?.[0] || "";
-
-        input.value = cleaned ? formatNumberWithComma(cleaned) : "";
-
-        if (inputId === "draw_amt_thb") {
-          syncDrawFromThb();
-          forceAutoWin1Amount();
-        }
-
-        if (inputId === "draw_amt_usdt") {
-          syncDrawFromUsdt();
-          forceAutoWin1Amount();
-        }
-
-        if (inputId === "win1_amt_thb") {
-          syncWin1FromThb();
-          calculate();
-        }
-
-        if (inputId === "win1_amt_usdt") {
-          syncWin1FromUsdt();
-          calculate();
-        }
-
-        if (btn) {
-          const old = btn.textContent;
-          btn.textContent = "วางแล้ว";
-          btn.classList.add("pasted");
-
-          setTimeout(() => {
-            btn.textContent = old;
-            btn.classList.remove("pasted");
-          }, 1200);
-        }
-      } catch {
-        alert("เบราว์เซอร์ไม่อนุญาตให้อ่าน clipboard อัตโนมัติ");
-      }
-    }
-
-    async function fetchBinanceRate() {
-      const res = await fetch("https://api.binance.com/api/v3/ticker/price?symbol=USDTTHB");
-
-      if (!res.ok) throw new Error("Binance failed");
-
-      const data = await res.json();
-      const rate = parseFloat(data.price);
-
-      if (!rate || rate <= 0) throw new Error("Binance invalid");
-
-      return rate;
-    }
-
-    async function fetchCoinGeckoRate() {
-      const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=thb");
-
-      if (!res.ok) throw new Error("CoinGecko failed");
-
-      const data = await res.json();
-      const rate = parseFloat(data?.tether?.thb);
-
-      if (!rate || rate <= 0) throw new Error("CoinGecko invalid");
-
-      return rate;
-    }
-
-    async function loadRate() {
-      for (const [fn, label] of [[fetchBinanceRate, "Binance"], [fetchCoinGeckoRate, "CoinGecko"]]) {
-        try {
-          const rate = await fn();
-
-          usdtRate = rate;
-          isManualRate = false;
-
-          usdtRateText.style.display = "inline-block";
-          usdtRateInput.style.display = "none";
-          usdtRateText.textContent = formatMoneyDisplay(rate);
-          rateSource.textContent = `อ้างอิง: ${label}`;
-
-          updateConverterResults();
-          forceAutoWin1Amount();
-
-          return;
-        } catch (e) {}
-      }
-
-      usdtRate = 0;
-      isManualRate = true;
-
-      usdtRateText.style.display = "none";
-      usdtRateInput.style.display = "inline-block";
-      usdtRateInput.value = "";
-      rateSource.textContent = "กรอกค่าเงินเอง";
-
-      updateConverterResults();
-      forceAutoWin1Amount();
-    }
-
-    drawAmtThb.addEventListener("input", () => {
-      cleanMoneyInput(drawAmtThb);
-      syncDrawFromThb();
-      forceAutoWin1Amount();
-    });
-
-    drawAmtUsdt.addEventListener("input", () => {
-      cleanMoneyInput(drawAmtUsdt);
-      syncDrawFromUsdt();
-      forceAutoWin1Amount();
-    });
-
-    win1AmtThb.addEventListener("input", () => {
-      cleanMoneyInput(win1AmtThb);
-      syncWin1FromThb();
-      calculate();
-    });
-
-    win1AmtUsdt.addEventListener("input", () => {
-      cleanMoneyInput(win1AmtUsdt);
-      syncWin1FromUsdt();
-      calculate();
-    });
-
-    drawOddsMain.addEventListener("input", () => {
-      drawOddsMain.value = drawOddsMain.value.replace(/[^\d]/g, "").slice(0, 1);
-
-      if (drawOddsMain.value.length === 1) {
-        drawOddsDecimal.focus();
-      }
-
-      suggestWin1MinimumOdds();
-      forceAutoWin1Amount();
-    });
-
-    drawOddsDecimal.addEventListener("input", () => {
-      drawOddsDecimal.value = drawOddsDecimal.value.replace(/[^\d]/g, "").slice(0, 2);
-
-      suggestWin1MinimumOdds();
-      forceAutoWin1Amount();
-    });
-
-    win1Odds.addEventListener("input", () => {
-      cleanWin1Odds();
-      forceAutoWin1Amount();
-    });
-
-    usdtRateInput.addEventListener("input", () => {
-      updateConverterResults();
-
-      if (parseAmount(drawAmtThb) > 0) {
-        syncDrawFromThb();
-      }
-
-      forceAutoWin1Amount();
-    });
-
-    convertThbInput.addEventListener("input", () => {
-      cleanMoneyInput(convertThbInput);
-      updateConverterResults();
-    });
-
-    convertUsdtInput.addEventListener("input", () => {
-      cleanMoneyInput(convertUsdtInput);
-      updateConverterResults();
-    });
-
-    const navOrder = [
-      drawAmtThb,
-      drawOddsMain,
-      drawOddsDecimal,
-      win1Odds
+    const w1ret=x*a, dret=d*o;
+    const drawName = drawWebName.value.trim() || "1";
+    const win1Name = win1WebName.value.trim() || "2";
+    const rows = [
+      { name:`ออก ${drawName}`,  sum:dret,  profit:dret-total  },
+      { name:`ออก ${win1Name}`,  sum:w1ret, profit:w1ret-total }
     ];
+    resultTable.innerHTML = rows.map(r=>{
+      const profitRounded = Math.round(r.profit) || 0; // fix -0
+      const cls = profitRounded>=0?"profit-pos":"profit-neg";
+      const sign= profitRounded>0?"+":"";
+      return `<div class="result-row">
+        <span class="case-name">${r.name}</span>
+        <span class="sum-val">${fmt(r.sum)}</span>
+        <span class="profit-val ${cls}">${sign}${fmt(profitRounded)}</span>
+      </div>`;
+    }).join("");
+  }
 
-    navOrder.forEach((input, index) => {
-      input.addEventListener("keydown", e => {
-        if (e.key === "Enter") {
-          e.preventDefault();
+  function maximizeWinProfit() {
+    const d=parseMoney(drawAmtThb), o=getDrawOdds();
+    if (!d||!o||o<=1) { calculate(); return; }
+    const w=Math.round(d*(o-1));
+    win1AmtThb.value=formatComma(w.toString());
+    const r=getRate(); win1AmtUsdt.value=r>0?fmtMoney(w/r):"";
+    calculate();
+  }
 
-          if (index + 1 < navOrder.length) {
-            navOrder[index + 1].focus();
-          }
-        }
+  function suggestWin1MinimumOdds() {
+    const d=parseMoney(drawAmtThb), o=getDrawOdds();
+    if (!d||!o||o<=1) { hintBox.style.display="none"; hintBox.innerHTML=""; return; }
+    const min=((d*o)/(d*o-d)).toFixed(2);
+    const w1name = win1WebName.value.trim() || "2";
+    hintBox.innerHTML=`💡 ค่าน้ำ<strong style="color:var(--accent)">${w1name}</strong> ควรไม่ต่ำกว่า <span class="hint-odds-val">${min}</span> เพื่อให้กำไรทั้งสองฝั่ง`;
+    hintBox.style.display="block";
+  }
+
+  function clearAll() {
+    if (!confirm("คุณแน่ใจหรือไม่ว่าต้องการล้างทั้งหมด?")) return;
+    [drawAmtThb,drawAmtUsdt,win1AmtThb,win1AmtUsdt,
+     drawOddsMain,drawOddsDecimal,win1Odds].forEach(e=>e.value="");
+    totalInvestment.textContent="0";
+    resultTable.innerHTML='<div class="result-empty">กรุณากรอกข้อมูลให้ครบ</div>';
+    hintBox.style.display="none"; hintBox.innerHTML="";
+    if (isManualRate) usdtRateInput.value="";
+  }
+
+  // ─── Rate ─────────────────────────────────────────────────────────
+  async function fetchBinance() {
+    const r=await fetch("https://api.binance.com/api/v3/ticker/price?symbol=USDTTHB");
+    if (!r.ok) throw 0; const d=await r.json();
+    const rate=parseFloat(d.price); if (!rate||rate<=0) throw 0; return rate;
+  }
+  async function fetchCoinGecko() {
+    const r=await fetch("https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=thb");
+    if (!r.ok) throw 0; const d=await r.json();
+    const rate=parseFloat(d?.tether?.thb); if (!rate||rate<=0) throw 0; return rate;
+  }
+  async function loadRate() {
+    for (const [fn,lbl] of [[fetchBinance,"Binance"],[fetchCoinGecko,"CoinGecko"]]) {
+      try {
+        const rate=await fn(); usdtRate=rate; isManualRate=false;
+        usdtRateText.style.display=""; usdtRateInput.style.display="none";
+        usdtRateText.textContent=fmtMoney(rate);
+        rateSource.textContent=`(${lbl})`;
+        forceAutoWin1Amount(); return;
+      } catch(e){}
+    }
+    usdtRate=0; isManualRate=true;
+    usdtRateText.style.display="none"; usdtRateInput.style.display="";
+    usdtRateInput.value=""; rateSource.textContent="(กรอกเอง)";
+    forceAutoWin1Amount();
+  }
+
+  // ─── History ──────────────────────────────────────────────────────
+  const HKEY="calcmax_v2";
+  function loadRecs() { try{ return JSON.parse(localStorage.getItem(HKEY))||[]; }catch{ return []; } }
+  function saveRecs(r) { localStorage.setItem(HKEY,JSON.stringify(r)); updateHistoryCount(); }
+
+  function updateHistoryCount() {
+    document.getElementById("history-count").textContent=loadRecs().length;
+  }
+
+  function toggleHistory() {
+    const body=document.getElementById("history-body");
+    const toggle=document.getElementById("history-toggle");
+    const chev=document.getElementById("chevron-icon");
+    const open=body.classList.toggle("open");
+    toggle.classList.toggle("open",open);
+    chev.classList.toggle("open",open);
+    if (open) renderHistory();
+  }
+
+  function thaiDT(ts) {
+    const d=new Date(ts);
+    const dd=String(d.getDate()).padStart(2,"0");
+    const mm=String(d.getMonth()+1).padStart(2,"0");
+    const yy=d.getFullYear()+543;
+    const hh=String(d.getHours()).padStart(2,"0");
+    const mi=String(d.getMinutes()).padStart(2,"0");
+    const ss=String(d.getSeconds()).padStart(2,"0");
+    return `${dd}/${mm}/${yy} ${hh}:${mi}:${ss}`;
+  }
+
+  function saveRecord(evt) {
+    const d=parseMoney(drawAmtThb), o=getDrawOdds(), a=getWin1Odds(), x=parseMoney(win1AmtThb);
+    if (!d||!o||!a||!x) { alert("กรุณากรอกข้อมูลให้ครบก่อนบันทึก"); return; }
+    const total=d+x;
+    const rec={
+      id:Date.now(), timestamp:Date.now(),
+      rows:[
+        { label: win1WebName.value.trim()||"ชนะ 1",      thb:x, odds:a, ret:x*a,  profit:x*a-total  },
+        { label: drawWebName.value.trim()||"เสมอ / ต่อ", thb:d, odds:o, ret:d*o,  profit:d*o-total  }
+      ],
+      total
+    };
+    const recs=loadRecs(); recs.unshift(rec); saveRecs(recs);
+    const body=document.getElementById("history-body");
+    const toggle=document.getElementById("history-toggle");
+    const chev=document.getElementById("chevron-icon");
+    body.classList.add("open"); toggle.classList.add("open"); chev.classList.add("open");
+    renderHistory();
+    const btn=evt.currentTarget;
+    const old=btn.textContent;
+    btn.textContent="✅ บันทึกแล้ว!"; btn.style.opacity="0.85";
+    setTimeout(()=>{ btn.textContent=old; btn.style.opacity=""; },1500);
+  }
+
+  function deleteRecord(id) {
+    if (!confirm("ลบรายการนี้?")) return;
+    saveRecs(loadRecs().filter(r=>r.id!==id)); renderHistory();
+  }
+  function deleteAllRecords() {
+    if (!confirm("ลบข้อมูลที่บันทึกทั้งหมด?")) return;
+    saveRecs([]); renderHistory();
+  }
+
+  function renderHistory() {
+    const recs=loadRecs();
+    const container=document.getElementById("history-list");
+    updateHistoryCount();
+    if (recs.length===0) { container.innerHTML='<div class="history-empty">ยังไม่มีข้อมูลที่บันทึก</div>'; return; }
+    container.innerHTML=recs.map(rec=>{
+      const rows=rec.rows.map(row=>{
+        const profitCls = row.profit>=0 ? "profit-pos" : "profit-neg";
+        const sign=row.profit>=0?"+":"";
+        return `<tr>
+          <td class="label-cell">${row.label}</td>
+          <td>${fmt(row.thb)}</td>
+          <td>${row.odds}</td>
+          <td>${fmt(row.ret)}</td>
+          <td class="${profitCls}" style="font-weight:700;">${sign}${fmt(row.profit)}</td>
+          <td style="color:var(--text-dim);">—</td>
+        </tr>`;
+      }).join("");
+      return `<div class="record-card">
+        <div class="record-header">
+          <span class="record-ts">📌 ${thaiDT(rec.timestamp)}</span>
+          <span class="record-total">ทุนรวม: <span>${fmt(rec.total||0)} ฿</span></span>
+          <button class="rec-del-btn" onclick="deleteRecord(${rec.id})">🗑 ลบ</button>
+        </div>
+        <div class="record-table-wrap">
+          <table class="rec-table">
+            <thead><tr><th>ฝั่ง</th><th>ทุน (฿)</th><th>ค่าน้ำ</th><th>หลังแทง</th><th>กำไร</th><th>เฉลี่ย</th></tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      </div>`;
+    }).join("")+`<div class="history-footer"><button class="del-all-btn" onclick="deleteAllRecords()">🗑 ลบทั้งหมด</button></div>`;
+  }
+
+  // ─── Daily Summary ────────────────────────────────────────────────
+  function openDailySummary() {
+    dailySelected.clear();
+    renderDailyModal();
+    document.getElementById("daily-modal").classList.add("open");
+  }
+  function closeDailySummary() {
+    document.getElementById("daily-modal").classList.remove("open");
+  }
+  document.getElementById("daily-modal").addEventListener("click", function(e){
+    if (e.target===this) closeDailySummary();
+  });
+
+  function toggleDailyItem(id) {
+    if (dailySelected.has(id)) dailySelected.delete(id);
+    else dailySelected.add(id);
+    updateDailySummary();
+    // update item style
+    document.querySelectorAll(".daily-check-item").forEach(el=>{
+      const elId = parseInt(el.dataset.id);
+      el.classList.toggle("selected", dailySelected.has(elId));
+      el.querySelector(".daily-checkbox").checked = dailySelected.has(elId);
+    });
+  }
+
+  function selectAllDaily() {
+    loadRecs().forEach(r => dailySelected.add(r.id));
+    renderDailyModal();
+  }
+  function clearDailySelection() {
+    dailySelected.clear();
+    renderDailyModal();
+  }
+
+  function updateDailySummary() {
+    const recs = loadRecs();
+    const sel = recs.filter(r => dailySelected.has(r.id));
+    let p1=0, p2=0, tot=0;
+    sel.forEach(r => {
+      if (r.rows[0]) p1 += r.rows[0].profit||0;
+      if (r.rows[1]) p2 += r.rows[1].profit||0;
+      tot += r.total||0;
+    });
+    document.getElementById("ds-count").textContent = sel.length;
+    const p1El = document.getElementById("ds-profit1");
+    const p2El = document.getElementById("ds-profit2");
+    p1El.textContent = (p1>=0?"+":"")+fmt(p1);
+    p1El.style.color = p1>=0?"var(--green)":"var(--red)";
+    p2El.textContent = (p2>=0?"+":"")+fmt(p2);
+    p2El.style.color = p2>=0?"var(--green)":"var(--red)";
+    document.getElementById("ds-total").textContent = fmt(tot);
+  }
+
+  function renderDailyModal() {
+    const recs = loadRecs();
+    const list = document.getElementById("daily-check-list");
+    if (recs.length===0) {
+      list.innerHTML='<div style="text-align:center;color:var(--text-dim);padding:20px;">ยังไม่มีข้อมูลที่บันทึก</div>';
+      updateDailySummary(); return;
+    }
+    list.innerHTML = recs.map(rec => {
+      const checked = dailySelected.has(rec.id);
+      const p0 = rec.rows[0]?.profit||0;
+      const p1 = rec.rows[1]?.profit||0;
+      const profitDisplay = `${rec.rows[0]?.label||'ฝั่ง1'}: ${p0>=0?'+':''}${fmt(p0)} / ${rec.rows[1]?.label||'ฝั่ง2'}: ${p1>=0?'+':''}${fmt(p1)}`;
+      const cls0 = p0>=0?"profit-pos":"profit-neg";
+      return `<div class="daily-check-item ${checked?'selected':''}" data-id="${rec.id}" onclick="toggleDailyItem(${rec.id})">
+        <input type="checkbox" class="daily-checkbox" ${checked?"checked":""} onclick="event.stopPropagation();toggleDailyItem(${rec.id})"/>
+        <div style="flex:1;">
+          <div class="daily-item-ts">📌 ${thaiDT(rec.timestamp)}</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">${profitDisplay}</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:11px;color:var(--text-dim);">ทุนรวม</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:var(--accent);">${fmt(rec.total||0)} ฿</div>
+        </div>
+      </div>`;
+    }).join("");
+    updateDailySummary();
+  }
+
+  // ─── Events ───────────────────────────────────────────────────────
+  drawAmtThb.addEventListener("input",()=>{ cleanMoneyInput(drawAmtThb); syncFromThb(drawAmtThb,drawAmtUsdt); forceAutoWin1Amount(); });
+  drawAmtUsdt.addEventListener("input",()=>{ cleanMoneyInput(drawAmtUsdt); syncFromUsdt(drawAmtUsdt,drawAmtThb); forceAutoWin1Amount(); });
+  win1AmtThb.addEventListener("input",()=>{ cleanMoneyInput(win1AmtThb); syncFromThb(win1AmtThb,win1AmtUsdt); calculate(); });
+  win1AmtUsdt.addEventListener("input",()=>{ cleanMoneyInput(win1AmtUsdt); syncFromUsdt(win1AmtUsdt,win1AmtThb); calculate(); });
+
+  drawOddsMain.addEventListener("input",()=>{
+    drawOddsMain.value=drawOddsMain.value.replace(/[^\d]/g,"").slice(0,1);
+    if (drawOddsMain.value.length===1) drawOddsDecimal.focus();
+    suggestWin1MinimumOdds(); forceAutoWin1Amount();
+  });
+  drawOddsDecimal.addEventListener("input",()=>{
+    drawOddsDecimal.value=drawOddsDecimal.value.replace(/[^\d]/g,"").slice(0,2);
+    suggestWin1MinimumOdds(); forceAutoWin1Amount();
+  });
+
+  drawWebName.addEventListener("input", calculate);
+  win1WebName.addEventListener("input", ()=>{ calculate(); suggestWin1MinimumOdds(); });
+
+  usdtRateInput.addEventListener("input",()=>{
+    if (parseMoney(drawAmtThb)>0) syncFromThb(drawAmtThb,drawAmtUsdt);
+    forceAutoWin1Amount();
+  });
+
+  const navOrder=[drawAmtThb,drawOddsMain,drawOddsDecimal,win1Odds];
+  navOrder.forEach((el,i)=>{
+    el.addEventListener("keydown",e=>{
+      if (e.key==="Enter") { e.preventDefault(); if (i+1<navOrder.length) navOrder[i+1].focus(); }
+    });
+  });
+
+  // ─── Odds Picker (win1 full odds) ────────────────────────────────
+  const ODDS_LIST = [
+    1.00,1.01,1.02,1.03,1.04,1.05,1.06,1.07,1.08,1.09,1.10,1.11,1.12,1.13,1.14,
+    1.15,1.16,1.17,1.18,1.19,1.20,1.21,1.22,1.23,1.24,1.25,1.26,1.27,1.28,1.29,
+    1.30,1.31,1.32,1.33,1.34,1.35,1.36,1.37,1.38,1.39,1.40,1.41,1.42,1.43,1.44,
+    1.45,1.46,1.47,1.48,1.49,1.50,1.51,1.52,1.53,1.54,1.55,1.56,1.57,1.58,1.59,
+    1.60,1.61,1.62,1.63,1.64,1.65,1.66,1.67,1.68,1.69,1.70,1.71,1.72,1.73,1.74,
+    1.75,1.76,1.77,1.78,1.79,1.80,1.81,1.82,1.83,1.84,1.85,1.86,1.87,1.88,1.89,
+    1.90,1.91,1.92,1.93,1.94,1.95,1.96,1.97,1.98,1.99,
+    2.00,2.01,2.02,2.03,2.04,2.05,2.06,2.08,2.09,2.10,2.11,2.12,2.14,2.15,2.16,
+    2.18,2.19,2.20,2.22,2.23,2.25,2.27,2.28,2.30,2.32,2.33,2.35,2.37,2.39,2.41,
+    2.43,2.45,2.47,2.49,2.52,2.54,2.56,2.59,2.61,2.64,2.67,2.69,2.72,2.75,2.79,
+    2.82,2.85,2.89,2.92,2.96,3.00,3.04,3.08,3.13,3.17,3.22,3.27,3.33,3.38,3.44,
+    3.50,3.56,3.63,3.70,3.78,3.86,3.94,4.12,4.22,4.33,4.44,4.57,4.70,4.84,5.00,
+    5.16,5.34,5.54,5.76,6.00,6.26,6.55,6.88,7.25,7.66,8.14,8.69,9.33,10.09,11.00,
+    12.11,13.50
+  ];
+
+  const oddsDropdown   = document.getElementById("odds-dropdown");
+  const oddsPickerBtn  = document.getElementById("odds-picker-btn");
+  const decDropdown    = document.getElementById("dec-dropdown");
+  const decPickerBtn   = document.getElementById("dec-picker-btn");
+
+  let activeDropdown = null; // track which is open
+
+  function positionDropdown(dd, anchorBtn) {
+    const r = anchorBtn.getBoundingClientRect();
+    // align left edge of dropdown with left edge of anchor
+    let left = r.left;
+    const ddW = 140;
+    if (left + ddW > window.innerWidth - 4) left = window.innerWidth - ddW - 4;
+    if (left < 4) left = 4;
+    let top = r.bottom + 4;
+    const ddH = 280;
+    if (top + ddH > window.innerHeight - 4) top = r.top - ddH - 4;
+    dd.style.top  = top  + "px";
+    dd.style.left = left + "px";
+  }
+
+  function closeAll() {
+    oddsDropdown.classList.remove("open");
+    decDropdown.classList.remove("open");
+    oddsPickerBtn.classList.remove("active");
+    decPickerBtn.classList.remove("active");
+    activeDropdown = null;
+    oddsKeyBuffer = ""; decKeyBuffer = "";
+  }
+
+  // ── Win1 full-odds picker — show ALL, scroll to nearest ──
+  function buildOddsOptions() {
+    const val = parseFloat(win1Odds.value) || 0;
+    oddsDropdown.innerHTML = ODDS_LIST.map((o, i) => {
+      const label = o.toFixed(2);
+      const exact = val && Math.abs(o - val) < 0.005;
+      return `<button class="odds-option${exact?' exact':''}" data-idx="${i}" onmousedown="event.preventDefault();pickOdds(${label})">${label}</button>`;
+    }).join("");
+  }
+
+  function scrollDropdownTo(container, btn) {
+    if (!btn) return;
+    // offsetTop is relative to offsetParent — need position relative to container
+    const btnTop = btn.offsetTop;
+    const btnH   = btn.offsetHeight;
+    const cH     = container.clientHeight;
+    container.scrollTop = btnTop - (cH / 2) + (btnH / 2);
+  }
+
+  function scrollOddsToVal() {
+    const val = parseFloat(win1Odds.value) || 0;
+    if (!val) { oddsDropdown.scrollTop = 0; return; }
+    let bestBtn = null, bestD = Infinity;
+    oddsDropdown.querySelectorAll(".odds-option").forEach(btn => {
+      const d = Math.abs(parseFloat(btn.textContent) - val);
+      if (d < bestD) { bestD = d; bestBtn = btn; }
+    });
+    scrollDropdownTo(oddsDropdown, bestBtn);
+  }
+
+  function scrollDecToVal() {
+    const raw = drawOddsDecimal.value.trim();
+    const val = parseInt(raw, 10);
+    if (!raw || isNaN(val)) { decDropdown.scrollTop = 0; return; }
+    const n = Math.min(Math.max(val, 1), 99);
+    const btn = decDropdown.querySelector(`[data-n="${n}"]`);
+    scrollDropdownTo(decDropdown, btn);
+  }
+
+  function pickOdds(val) {
+    win1Odds.value = val.toFixed(2);
+    forceAutoWin1Amount();
+    closeAll();
+  }
+
+  function toggleOddsPicker(e) {
+    e.stopPropagation();
+    if (oddsDropdown.classList.contains("open")) { closeAll(); return; }
+    closeAll();
+    buildOddsOptions();
+    positionDropdown(oddsDropdown, oddsPickerBtn);
+    oddsDropdown.classList.add("open");
+    oddsPickerBtn.classList.add("active");
+    activeDropdown = "odds";
+    requestAnimationFrame(() => requestAnimationFrame(scrollOddsToVal));
+  }
+
+  win1Odds.addEventListener("input", () => {
+    cleanOdds(win1Odds);
+    forceAutoWin1Amount();
+    if (oddsDropdown.classList.contains("open")) {
+      const val = parseFloat(win1Odds.value) || 0;
+      oddsDropdown.querySelectorAll(".odds-option").forEach(btn => {
+        const o = parseFloat(btn.textContent);
+        btn.classList.toggle("exact", val && Math.abs(o - val) < 0.005);
       });
-    });
+      requestAnimationFrame(() => requestAnimationFrame(scrollOddsToVal));
+    }
+  });
 
-    window.addEventListener("DOMContentLoaded", () => {
-      loadRate();
-      calculate();
+  drawOddsDecimal.addEventListener("input", () => {
+    drawOddsDecimal.value = drawOddsDecimal.value.replace(/[^\d]/g,"").slice(0,2);
+    suggestWin1MinimumOdds(); forceAutoWin1Amount();
+    if (decDropdown.classList.contains("open")) {
+      highlightDecVal();
+      requestAnimationFrame(scrollDecToVal);
+    }
+  });
+
+  // ── Keyboard search while dropdown open ──
+  let oddsKeyBuffer = "";
+  let oddsKeyTimer  = null;
+  let decKeyBuffer  = "";
+  let decKeyTimer   = null;
+
+  document.addEventListener("keydown", (e) => {
+    // Only handle when a dropdown is open and key is a digit or dot or backspace
+    if (!activeDropdown) return;
+    if (e.target === win1Odds || e.target === drawOddsDecimal) return; // let normal input handle it
+
+    if (activeDropdown === "odds") {
+      if (e.key === "Escape") { closeAll(); return; }
+      if (!/^[\d.]$/.test(e.key) && e.key !== "Backspace") return;
+      e.preventDefault();
+      if (e.key === "Backspace") {
+        oddsKeyBuffer = oddsKeyBuffer.slice(0, -1);
+      } else {
+        oddsKeyBuffer += e.key;
+        // keep valid: only one dot, max 5 chars
+        oddsKeyBuffer = oddsKeyBuffer.replace(/[^\d.]/g,"");
+        const parts = oddsKeyBuffer.split(".");
+        if (parts.length > 2) oddsKeyBuffer = parts[0] + "." + parts.slice(1).join("");
+      }
+      // scroll to closest match
+      const searchVal = parseFloat(oddsKeyBuffer) || 0;
+      if (searchVal) {
+        let bestBtn = null, bestD = Infinity;
+        oddsDropdown.querySelectorAll(".odds-option").forEach(btn => {
+          const d = Math.abs(parseFloat(btn.textContent) - searchVal);
+          if (d < bestD) { bestD = d; bestBtn = btn; }
+        });
+        oddsDropdown.querySelectorAll(".odds-option").forEach(btn => btn.classList.remove("exact"));
+        if (bestBtn) {
+          bestBtn.classList.add("exact");
+          scrollDropdownTo(oddsDropdown, bestBtn);
+        }
+      }
+      // clear buffer after 1.5s of no typing
+      clearTimeout(oddsKeyTimer);
+      oddsKeyTimer = setTimeout(() => { oddsKeyBuffer = ""; }, 1500);
+
+    } else if (activeDropdown === "dec") {
+      if (e.key === "Escape") { closeAll(); return; }
+      if (!/^\d$/.test(e.key) && e.key !== "Backspace") return;
+      e.preventDefault();
+      if (e.key === "Backspace") {
+        decKeyBuffer = decKeyBuffer.slice(0, -1);
+      } else {
+        decKeyBuffer = (decKeyBuffer + e.key).slice(-2); // max 2 digits
+      }
+      const searchVal = parseInt(decKeyBuffer, 10);
+      if (!isNaN(searchVal) && searchVal >= 1 && searchVal <= 99) {
+        const n = searchVal;
+        decDropdown.querySelectorAll(".odds-option").forEach(btn => btn.classList.remove("exact"));
+        const btn = decDropdown.querySelector(`[data-n="${n}"]`);
+        if (btn) {
+          btn.classList.add("exact");
+          scrollDropdownTo(decDropdown, btn);
+        }
+      }
+      clearTimeout(decKeyTimer);
+      decKeyTimer = setTimeout(() => { decKeyBuffer = ""; }, 1500);
+    }
+  });
+  document.addEventListener("mousedown", (e) => {
+    if (!oddsDropdown.contains(e.target) && e.target !== oddsPickerBtn &&
+        !decDropdown.contains(e.target) && e.target !== decPickerBtn) {
+      closeAll();
+    }
+  });
+  window.addEventListener("scroll", (e) => {
+    if (activeDropdown && e.target !== oddsDropdown && e.target !== decDropdown) closeAll();
+  }, true);
+  window.addEventListener("resize", () => { if (activeDropdown) closeAll(); });
+
+  // ── Draw decimal picker — show ALL 01-99, scroll to nearest ──
+  function buildDecOptions() {
+    decDropdown.innerHTML = Array.from({length:99}, (_,i) => {
+      const n   = i + 1;
+      const lbl = String(n).padStart(2, '0');
+      return `<button class="odds-option" data-n="${n}" onmousedown="event.preventDefault();pickDec('${lbl}')">${lbl}</button>`;
+    }).join("");
+  }
+
+  function highlightDecVal() {
+    const raw = drawOddsDecimal.value.trim();
+    const val = parseInt(raw, 10);
+    decDropdown.querySelectorAll(".odds-option").forEach(btn => {
+      btn.classList.toggle("exact", !isNaN(val) && parseInt(btn.dataset.n, 10) === val);
     });
-  </script>
+  }
+
+  function pickDec(lbl) {
+    drawOddsDecimal.value = lbl;
+    suggestWin1MinimumOdds();
+    forceAutoWin1Amount();
+    closeAll();
+  }
+
+  function toggleDecPicker(e) {
+    e.stopPropagation();
+    if (decDropdown.classList.contains("open")) { closeAll(); return; }
+    closeAll();
+    buildDecOptions();
+    positionDropdown(decDropdown, decPickerBtn);
+    decDropdown.classList.add("open");
+    decPickerBtn.classList.add("active");
+    activeDropdown = "dec";
+    requestAnimationFrame(() => requestAnimationFrame(() => { highlightDecVal(); scrollDecToVal(); }));
+  }
+
+  drawOddsDecimal.addEventListener("input", () => {
+    drawOddsDecimal.value = drawOddsDecimal.value.replace(/[^\d]/g,"").slice(0,2);
+    suggestWin1MinimumOdds(); forceAutoWin1Amount();
+    if (decDropdown.classList.contains("open")) {
+      highlightDecVal();
+      requestAnimationFrame(() => requestAnimationFrame(scrollDecToVal));
+    }
+  });
+
+  // ─── Init ─────────────────────────────────────────────────────────
+  window.addEventListener("DOMContentLoaded",()=>{
+    loadRate(); calculate(); updateHistoryCount();
+  });
+</script>
+
 </body>
 </html>
