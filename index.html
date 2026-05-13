@@ -841,7 +841,29 @@
       transform: translate(-50%, -50%) scale(1);
     }
 
-    /* ── Header calculator icon button ── */
+    /* ── Floating nav buttons top-right ── */
+    #float-nav {
+      position: fixed; top: 20px; right: 20px;
+      z-index: 10000;
+      display: flex; gap: 6px;
+    }
+    .float-nav-btn {
+      background: #2b2b2b; color: #e2e8f0;
+      border: 1px solid #444; border-radius: 24px;
+      padding: 7px 14px;
+      font-size: 16px; font-family: 'Kanit', sans-serif;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.5);
+      transition: background 0.15s, opacity 0.15s;
+      user-select: none; line-height: 1;
+    }
+    .float-nav-btn:hover:not(:disabled) { background: #3a3a3a; }
+    .float-nav-btn:disabled { opacity: 0.32; cursor: default; pointer-events: none; }
+    [data-theme="light"] .float-nav-btn {
+      background: #2b2b2b; color: #e2e8f0; border-color: #444;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.35);
+    }
+    [data-theme="light"] .float-nav-btn:hover:not(:disabled) { background: #3a3a3a; }
     .win-calc-header-btn {
       background: #27272a;
       border: 1px solid #3f3f46;
@@ -1067,7 +1089,7 @@
 
 <!-- Header -->
 <div class="app-header">
-  <div class="app-title">⚡ 2 CalculatorMax By Super</div>
+  <div class="app-title">⚡ 2 CalculatorMax By Super 13.5.69</div>
   <div class="header-right">
     <button class="win-calc-header-btn" onclick="winCalcOpen()" title="Calculator">🧮</button>
     <button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()">
@@ -1332,6 +1354,22 @@
     el.value=v;
   }
 
+  function cleanWin1Odds(el) {
+    // Allow only xx.xx format: max 2 digits before dot, max 2 after
+    let v = el.value.replace(/[^\d.]/g,"");
+    const parts = v.split(".");
+    if (parts.length > 2) v = parts[0] + "." + parts.slice(1).join(""); // remove extra dots
+    const sp = v.split(".");
+    let intPart = (sp[0] || "").slice(0, 2);   // max 2 digits before dot
+    if (sp.length > 1) {
+      const decPart = sp[1].slice(0, 2);        // max 2 digits after dot
+      v = intPart + "." + decPart;
+    } else {
+      v = intPart;
+    }
+    el.value = v;
+  }
+
   // ─── Odds ─────────────────────────────────────────────────────────
   function getDrawOdds() {
     const m=drawOddsMain.value.trim();
@@ -1408,13 +1446,13 @@
   }
 
   function clearAll() {
-    if (!confirm("คุณแน่ใจหรือไม่ว่าต้องการล้างทั้งหมด?")) return;
     [drawAmtThb,drawAmtUsdt,win1AmtThb,win1AmtUsdt,
      drawOddsMain,drawOddsDecimal,win1Odds].forEach(e=>e.value="");
     totalInvestment.textContent="0";
     resultTable.innerHTML='<div class="result-empty">กรุณากรอกข้อมูลให้ครบ</div>';
     hintBox.style.display="none"; hintBox.innerHTML="";
     if (isManualRate) usdtRateInput.value="";
+    calcPushSnapshot(); calcUpdateNavBtns();
   }
 
   // ─── Rate ─────────────────────────────────────────────────────────
@@ -1693,6 +1731,9 @@
     updateDailySummary();
   }
 
+  // lastEditedSide: "draw" = ช่องบน, "win1" = ช่องล่าง
+  let lastEditedSide = "draw";
+
   function forceAutoDrawAmount() {
     const x=parseMoney(win1AmtThb), o=getDrawOdds(), a=getWin1Odds();
     if (!x||!o||!a) { calculate(); return; }
@@ -1703,19 +1744,33 @@
   }
 
   // ─── Events ───────────────────────────────────────────────────────
-  drawAmtThb.addEventListener("input",()=>{ cleanMoneyInput(drawAmtThb); syncFromThb(drawAmtThb,drawAmtUsdt); forceAutoWin1Amount(); });
-  drawAmtUsdt.addEventListener("input",()=>{ cleanMoneyInput(drawAmtUsdt); syncFromUsdt(drawAmtUsdt,drawAmtThb); forceAutoWin1Amount(); });
-  win1AmtThb.addEventListener("input",()=>{ winCalcQuickMode=false; cleanMoneyInput(win1AmtThb); syncFromThb(win1AmtThb,win1AmtUsdt); forceAutoDrawAmount(); });
-  win1AmtUsdt.addEventListener("input",()=>{ winCalcQuickMode=false; cleanMoneyInput(win1AmtUsdt); syncFromUsdt(win1AmtUsdt,win1AmtThb); forceAutoDrawAmount(); });
+  drawAmtThb.addEventListener("input",()=>{
+    lastEditedSide="draw";
+    cleanMoneyInput(drawAmtThb); syncFromThb(drawAmtThb,drawAmtUsdt); forceAutoWin1Amount();
+  });
+  drawAmtUsdt.addEventListener("input",()=>{
+    lastEditedSide="draw";
+    cleanMoneyInput(drawAmtUsdt); syncFromUsdt(drawAmtUsdt,drawAmtThb); forceAutoWin1Amount();
+  });
+  win1AmtThb.addEventListener("input",()=>{
+    lastEditedSide="win1"; winCalcQuickMode=false;
+    cleanMoneyInput(win1AmtThb); syncFromThb(win1AmtThb,win1AmtUsdt); forceAutoDrawAmount();
+  });
+  win1AmtUsdt.addEventListener("input",()=>{
+    lastEditedSide="win1"; winCalcQuickMode=false;
+    cleanMoneyInput(win1AmtUsdt); syncFromUsdt(win1AmtUsdt,win1AmtThb); forceAutoDrawAmount();
+  });
 
   drawOddsMain.addEventListener("input",()=>{
     drawOddsMain.value=drawOddsMain.value.replace(/[^\d]/g,"").slice(0,1);
     if (drawOddsMain.value.length===1) drawOddsDecimal.focus();
-    suggestWin1MinimumOdds(); forceAutoWin1Amount();
+    suggestWin1MinimumOdds();
+    if (lastEditedSide==="win1") forceAutoDrawAmount(); else forceAutoWin1Amount();
   });
   drawOddsDecimal.addEventListener("input",()=>{
     drawOddsDecimal.value=drawOddsDecimal.value.replace(/[^\d]/g,"").slice(0,2);
-    suggestWin1MinimumOdds(); forceAutoWin1Amount();
+    suggestWin1MinimumOdds();
+    if (lastEditedSide==="win1") forceAutoDrawAmount(); else forceAutoWin1Amount();
   });
 
   drawWebName.addEventListener("input", calculate);
@@ -1822,7 +1877,7 @@
 
   function pickOdds(val) {
     win1Odds.value = val.toFixed(2);
-    forceAutoWin1Amount();
+    if (lastEditedSide==="win1") forceAutoDrawAmount(); else forceAutoWin1Amount();
     closeAll();
   }
 
@@ -1839,8 +1894,8 @@
   }
 
   win1Odds.addEventListener("input", () => {
-    cleanOdds(win1Odds);
-    forceAutoWin1Amount();
+    cleanWin1Odds(win1Odds);
+    if (lastEditedSide==="win1") forceAutoDrawAmount(); else forceAutoWin1Amount();
     if (oddsDropdown.classList.contains("open")) {
       const val = parseFloat(win1Odds.value) || 0;
       oddsDropdown.querySelectorAll(".odds-option").forEach(btn => {
@@ -1853,7 +1908,8 @@
 
   drawOddsDecimal.addEventListener("input", () => {
     drawOddsDecimal.value = drawOddsDecimal.value.replace(/[^\d]/g,"").slice(0,2);
-    suggestWin1MinimumOdds(); forceAutoWin1Amount();
+    suggestWin1MinimumOdds();
+    if (lastEditedSide==="win1") forceAutoDrawAmount(); else forceAutoWin1Amount();
     if (decDropdown.classList.contains("open")) {
       highlightDecVal();
       requestAnimationFrame(scrollDecToVal);
@@ -2595,9 +2651,95 @@
     calculate();
   }
 
+  // ─── Undo / Redo ─────────────────────────────────────────────────
+  const CALC_UNDO_STACK = [];   // past snapshots
+  const CALC_REDO_STACK = [];   // future snapshots (after undo)
+  let   calcSnapshotTimer = null;
+  let   calcIsRestoring   = false; // prevent snapshot during restore
+
+  function calcSnapshot() {
+    return {
+      drawWebName:   drawWebName.value,
+      win1WebName:   win1WebName.value,
+      drawAmtThb:    drawAmtThb.value,
+      drawAmtUsdt:   drawAmtUsdt.value,
+      win1AmtThb:    win1AmtThb.value,
+      win1AmtUsdt:   win1AmtUsdt.value,
+      drawOddsMain:  drawOddsMain.value,
+      drawOddsDecimal: drawOddsDecimal.value,
+      win1Odds:      win1Odds.value
+    };
+  }
+
+  function calcSnapshotsEqual(a, b) {
+    return JSON.stringify(a) === JSON.stringify(b);
+  }
+
+  function calcPushSnapshot() {
+    if (calcIsRestoring) return;
+    const snap = calcSnapshot();
+    const last = CALC_UNDO_STACK[CALC_UNDO_STACK.length - 1];
+    if (last && calcSnapshotsEqual(last, snap)) return; // no change
+    CALC_UNDO_STACK.push(snap);
+    if (CALC_UNDO_STACK.length > 80) CALC_UNDO_STACK.shift();
+    CALC_REDO_STACK.length = 0; // clear redo on new action
+    calcUpdateNavBtns();
+  }
+
+  function calcDebouncedPush() {
+    clearTimeout(calcSnapshotTimer);
+    calcSnapshotTimer = setTimeout(calcPushSnapshot, 600);
+  }
+
+  function calcRestoreSnapshot(snap) {
+    calcIsRestoring = true;
+    drawWebName.value      = snap.drawWebName;
+    win1WebName.value      = snap.win1WebName;
+    drawAmtThb.value       = snap.drawAmtThb;
+    drawAmtUsdt.value      = snap.drawAmtUsdt;
+    win1AmtThb.value       = snap.win1AmtThb;
+    win1AmtUsdt.value      = snap.win1AmtUsdt;
+    drawOddsMain.value     = snap.drawOddsMain;
+    drawOddsDecimal.value  = snap.drawOddsDecimal;
+    win1Odds.value         = snap.win1Odds;
+    calcIsRestoring = false;
+    suggestWin1MinimumOdds();
+    calculate();
+  }
+
+  function calcUndo() {
+    if (CALC_UNDO_STACK.length < 2) return;
+    const current = CALC_UNDO_STACK.pop();
+    CALC_REDO_STACK.push(current);
+    const prev = CALC_UNDO_STACK[CALC_UNDO_STACK.length - 1];
+    calcRestoreSnapshot(prev);
+    calcUpdateNavBtns();
+  }
+
+  function calcRedo() {
+    if (CALC_REDO_STACK.length === 0) return;
+    const next = CALC_REDO_STACK.pop();
+    CALC_UNDO_STACK.push(next);
+    calcRestoreSnapshot(next);
+    calcUpdateNavBtns();
+  }
+
+  function calcUpdateNavBtns() {
+    const undoBtn = document.getElementById("calc-undo-btn");
+    const redoBtn = document.getElementById("calc-redo-btn");
+    if (undoBtn) undoBtn.disabled = CALC_UNDO_STACK.length < 2;
+    if (redoBtn) redoBtn.disabled = CALC_REDO_STACK.length === 0;
+  }
+
+  // Hook debounced snapshot into every calc-relevant input
+  [drawWebName, win1WebName, drawAmtThb, drawAmtUsdt,
+   win1AmtThb, win1AmtUsdt, drawOddsMain, drawOddsDecimal, win1Odds
+  ].forEach(el => el.addEventListener("input", calcDebouncedPush));
+
   // ─── Init ─────────────────────────────────────────────────────────
   window.addEventListener("DOMContentLoaded",()=>{
     loadRate(); calculate(); updateHistoryCount();
+    calcPushSnapshot(); calcUpdateNavBtns();
   });
 </script>
 <!-- Attachment Modal -->
@@ -2739,6 +2881,11 @@
 <!-- Floating calculator button — always visible -->
 <div id="win-calc-mini" onclick="winCalcOpen()" title="Calculator">🧮 Calculator</div>
 <!-- ──────────────────────────────────────────────────────────────── -->
+<!-- Floating Undo/Redo buttons top-right -->
+<div id="float-nav">
+  <button class="float-nav-btn" id="calc-undo-btn" onclick="calcUndo()" title="Undo">↩︎</button>
+  <button class="float-nav-btn" id="calc-redo-btn" onclick="calcRedo()" title="Redo">↪︎</button>
+</div>
 
 </body>
 </html>
