@@ -1174,6 +1174,71 @@
     }
     #win-calc-mini:hover { background:#3a3a3a; }
     /* ───────────────────────────────────────────────────────────────── */
+    /* ── Currency Converter popup ── */
+    #fx-popup {
+      position: fixed;
+      top: 68px; right: 20px;
+      z-index: 12000;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px 20px 18px;
+      width: 300px;
+      box-shadow: 0 16px 56px var(--shadow);
+      display: none;
+      flex-direction: column;
+      gap: 14px;
+      animation: fxFadeIn 0.18s ease;
+    }
+    #fx-popup.open { display: flex; }
+    @keyframes fxFadeIn {
+      from { opacity:0; transform:translateY(-8px) scale(0.97); }
+      to   { opacity:1; transform:translateY(0)    scale(1);    }
+    }
+    .fx-title {
+      font-size: 15px; font-weight: 700; color: var(--text);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .fx-close {
+      background: none; border: none; color: var(--text-dim);
+      cursor: pointer; font-size: 16px; line-height: 1;
+      padding: 2px 6px; border-radius: 6px; transition: all 0.15s;
+    }
+    .fx-close:hover { background: rgba(255,77,109,0.12); color: var(--red); }
+    .fx-section {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .fx-label {
+      font-size: 11px; font-weight: 700; color: var(--text-dim);
+      text-transform: uppercase; letter-spacing: 0.9px;
+    }
+    .fx-row { display: flex; align-items: center; gap: 8px; }
+    .fx-input {
+      flex: 1; background: var(--surface);
+      border: 1.5px solid var(--border); border-radius: 10px;
+      color: var(--text); font-family: 'IBM Plex Mono', monospace;
+      font-size: 16px; font-weight: 600;
+      padding: 9px 12px; outline: none; text-align: right;
+      transition: border-color 0.2s, box-shadow 0.2s; min-width: 0;
+    }
+    .fx-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--glow-accent); }
+    .fx-currency-badge {
+      font-size: 12px; font-weight: 700; color: var(--text-muted);
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 6px 10px; white-space: nowrap; flex-shrink: 0;
+    }
+    .fx-result-row {
+      display: flex; align-items: center; justify-content: space-between; padding-top: 2px;
+    }
+    .fx-result-label { font-size: 12px; color: var(--text-dim); }
+    .fx-result-val { font-family: 'IBM Plex Mono', monospace; font-size: 18px; font-weight: 700; color: var(--accent); }
+    .fx-rate-note { font-size: 11px; color: var(--text-dim); text-align: center; }
+    .fx-rate-note b { color: var(--gold); font-weight: 700; }
+
   </style>
 </head>
 <body>
@@ -1183,6 +1248,7 @@
   <div class="app-title">⚡ 2 CalculatorMax By Super</div>
   <div class="header-right">
     <button class="win-calc-header-btn" onclick="winCalcOpen()" title="Calculator">🧮</button>
+    <button class="win-calc-header-btn" onclick="fxOpen()" title="แปลงสกุลเงิน" id="fx-btn">💱</button>
     <button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()">
       <span class="theme-icon" id="theme-icon">☀️</span>
       <span id="theme-label">สว่าง</span>
@@ -2835,6 +2901,46 @@
    win1AmtThb, win1AmtUsdt, drawOddsMain, drawOddsDecimal, win1Odds
   ].forEach(el => el.addEventListener("input", calcDebouncedPush));
 
+  // ─── Currency Converter ───────────────────────────────────────────
+  function fxOpen() {
+    const popup = document.getElementById("fx-popup");
+    if (popup.classList.contains("open")) { fxClose(); return; }
+    fxUpdateRateDisplay();
+    popup.classList.add("open");
+    document.getElementById("fx-thb-in").focus();
+  }
+  function fxClose() {
+    document.getElementById("fx-popup").classList.remove("open");
+  }
+  function fxUpdateRateDisplay() {
+    const r = getRate();
+    const el = document.getElementById("fx-rate-display");
+    if (el) el.textContent = r > 0 ? fmtMoney(r) : "ไม่ทราบ";
+  }
+  function fxCalcThbToUsdt() {
+    const r = getRate();
+    const val = parseFloat(document.getElementById("fx-thb-in").value) || 0;
+    const out = document.getElementById("fx-thb-out");
+    if (!r || !val) { out.textContent = "—"; return; }
+    out.textContent = fmtMoney(val / r);
+  }
+  function fxCalcUsdtToThb() {
+    const r = getRate();
+    const val = parseFloat(document.getElementById("fx-usdt-in").value) || 0;
+    const out = document.getElementById("fx-usdt-out");
+    if (!r || !val) { out.textContent = "—"; return; }
+    out.textContent = Math.round(val * r).toLocaleString("th");
+  }
+  // Close popup when clicking outside
+  document.addEventListener("click", function(e) {
+    const popup = document.getElementById("fx-popup");
+    const btn   = document.getElementById("fx-btn");
+    if (popup && popup.classList.contains("open") &&
+        !popup.contains(e.target) && e.target !== btn) {
+      fxClose();
+    }
+  });
+
   // ─── Init ─────────────────────────────────────────────────────────
   window.addEventListener("DOMContentLoaded",()=>{
     loadRate(); calculate(); updateHistoryCount();
@@ -2980,6 +3086,44 @@
 <!-- Floating calculator button — always visible -->
 <div id="win-calc-mini" onclick="winCalcOpen()" title="Calculator">🧮 Calculator</div>
 <!-- ──────────────────────────────────────────────────────────────── -->
+<!-- Currency Converter Popup -->
+<div id="fx-popup">
+  <div class="fx-title">
+    <span>💱 แปลงสกุลเงิน</span>
+    <button class="fx-close" onclick="fxClose()">✕</button>
+  </div>
+
+  <!-- THB → USDT -->
+  <div class="fx-section">
+    <div class="fx-label">฿ บาท → USDT</div>
+    <div class="fx-row">
+      <input class="fx-input" id="fx-thb-in" type="number" placeholder="0" inputmode="decimal"
+             oninput="fxCalcThbToUsdt()" onfocus="this.select()" />
+      <span class="fx-currency-badge">THB</span>
+    </div>
+    <div class="fx-result-row">
+      <span class="fx-result-label">= USDT</span>
+      <span class="fx-result-val" id="fx-thb-out">—</span>
+    </div>
+  </div>
+
+  <!-- USDT → THB -->
+  <div class="fx-section">
+    <div class="fx-label">₮ USDT → บาท</div>
+    <div class="fx-row">
+      <input class="fx-input" id="fx-usdt-in" type="number" placeholder="0" inputmode="decimal"
+             oninput="fxCalcUsdtToThb()" onfocus="this.select()" />
+      <span class="fx-currency-badge">USDT</span>
+    </div>
+    <div class="fx-result-row">
+      <span class="fx-result-label">= THB</span>
+      <span class="fx-result-val" id="fx-usdt-out">—</span>
+    </div>
+  </div>
+
+  <div class="fx-rate-note">อัตรา: 1 USDT = <b id="fx-rate-display">...</b> ฿</div>
+</div>
+
 <!-- Floating Undo/Redo buttons top-right -->
 <div id="float-nav">
   <button class="float-nav-btn" id="calc-undo-btn" onclick="calcUndo()" title="Undo">↩︎</button>
