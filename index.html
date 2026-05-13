@@ -1089,7 +1089,7 @@
 
 <!-- Header -->
 <div class="app-header">
-  <div class="app-title">⚡ 2 CalculatorMax By Super 13.5.69</div>
+  <div class="app-title">⚡ 2 CalculatorMax By Super</div>
   <div class="header-right">
     <button class="win-calc-header-btn" onclick="winCalcOpen()" title="Calculator">🧮</button>
     <button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()">
@@ -2651,7 +2651,10 @@
     calculate();
   }
 
-  // ─── Undo / Redo ─────────────────────────────────────────────────
+  // ─── Select all on focus for odds inputs ─────────────────────────
+  [drawOddsMain, drawOddsDecimal, win1Odds].forEach(el => {
+    el.addEventListener("focus", () => el.select());
+  });
   const CALC_UNDO_STACK = [];   // past snapshots
   const CALC_REDO_STACK = [];   // future snapshots (after undo)
   let   calcSnapshotTimer = null;
