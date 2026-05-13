@@ -2,9 +2,11 @@
 <html lang="th" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
-  <title>2Table CalculatorMax Update 13.5.69 </title>
+  <title>2Table CalculatorMax</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/file-saver/dist/FileSaver.min.js"></script>
   <style>
     /* ── Themes ── */
     [data-theme="dark"] {
@@ -375,6 +377,91 @@
     }
     .clear-btn:hover { background: rgba(255,77,106,0.24); border-color: var(--red); }
 
+    /* ── Save group with attach ── */
+    .save-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .save-group > .btn-save { width: 100%; }
+
+    .attach-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+    }
+    .attach-area-hidden { display: none; }
+    .attach-area.drag-over {
+      outline: 2px dashed var(--accent);
+      background: rgba(91,138,255,0.08);
+      border-radius: 8px;
+    }
+    .btn-attach {
+      padding: 8px 14px; font-size: 14px;
+      font-family: 'Kanit', sans-serif; font-weight: 600;
+      border-radius: 8px; border: 1.5px dashed var(--border);
+      cursor: pointer; transition: all 0.2s;
+      background: var(--surface2); color: var(--text-muted);
+      width: 100%; min-width: 150px;
+    }
+    .btn-attach:hover { border-color: var(--accent); color: var(--accent); background: rgba(91,138,255,0.08); }
+    .attach-preview {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      justify-content: center;
+      width: 100%;
+    }
+    .attach-thumb-wrap {
+      position: relative; width: 56px; height: 56px;
+    }
+    .attach-thumb {
+      width: 56px; height: 56px; object-fit: cover;
+      border-radius: 6px; border: 1.5px solid var(--border);
+      cursor: pointer; transition: border-color 0.15s;
+    }
+    .attach-thumb:hover { border-color: var(--accent); }
+    .attach-remove {
+      position: absolute; top: -5px; right: -5px;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: var(--red); color: #fff;
+      font-size: 9px; font-weight: 800;
+      border: none; cursor: pointer; line-height: 16px; text-align: center;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* image in history */
+    .rec-images {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      padding: 8px 12px 10px;
+    }
+    .rec-img {
+      width: 72px; height: 72px; object-fit: cover;
+      border-radius: 6px; border: 1px solid var(--border);
+      cursor: pointer; transition: transform 0.15s;
+    }
+    .rec-img:hover { transform: scale(1.05); }
+
+    /* lightbox */
+    .lightbox {
+      position: fixed; inset: 0; z-index: 10000;
+      background: rgba(0,0,0,0.88);
+      display: none; align-items: center; justify-content: center;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img {
+      max-width: 92vw; max-height: 88vh;
+      border-radius: 10px; box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+    }
+    .lightbox-close {
+      position: absolute; top: 16px; right: 20px;
+      background: rgba(255,255,255,0.12); border: none;
+      color: #fff; font-size: 28px; cursor: pointer;
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+
     /* ── Hint box ── */
     .hint-box {
       text-align: center;
@@ -550,6 +637,14 @@
     .history-toggle.open { border-radius: 12px 12px 0 0; }
     .history-icon { font-size: 16px; }
     .history-title { font-size: 15px; font-weight: 600; color: var(--text); flex: 1; }
+    .history-summary-btn {
+      background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+      border: none; border-radius: 8px; color: #fff;
+      cursor: pointer; font-size: 12px; font-family: 'Kanit', sans-serif;
+      font-weight: 600; padding: 5px 12px; transition: all 0.2s;
+      white-space: nowrap; box-shadow: 0 2px 8px rgba(139,92,246,0.3);
+    }
+    .history-summary-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(139,92,246,0.45); }
     .history-count {
       background: var(--accent); color: #fff;
       font-size: 11px; font-weight: 700;
@@ -591,6 +686,33 @@
       padding: 4px 8px; transition: all 0.2s;
     }
     .rec-del-btn:hover { background: rgba(244,63,94,0.2); }
+
+    .rec-edit-btn {
+      background: rgba(79,124,255,0.12);
+      border: 1px solid rgba(79,124,255,0.35);
+      border-radius: 6px; color: var(--accent); cursor: pointer;
+      font-size: 11px; font-family: 'Kanit', sans-serif;
+      padding: 4px 8px; transition: all 0.2s;
+    }
+    .rec-edit-btn:hover { background: rgba(79,124,255,0.22); border-color: var(--accent); }
+    .record-actions { display: flex; gap: 6px; align-items: center; }
+
+    .edit-record-box { display: flex; flex-direction: column; gap: 12px; }
+    .edit-row-box {
+      border: 1px solid var(--border); border-radius: 10px;
+      padding: 12px; background: var(--surface2);
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px 10px;
+    }
+    .edit-row-title { grid-column: 1 / -1; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+    .edit-row-box label, .edit-record-box > label { font-size: 12px; color: var(--text-muted); }
+    .edit-input {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; color: var(--text); padding: 8px 10px;
+      font-family: 'IBM Plex Mono', monospace; font-size: 13px; outline: none;
+      width: 100%;
+    }
+    .edit-input:focus { border-color: var(--accent); }
     .record-table-wrap { overflow-x: auto; padding: 10px 12px; }
     .rec-table {
       border-collapse: collapse; width: 100%;
@@ -633,6 +755,312 @@
       .btn { min-width: 130px; font-size: 13px; padding: 10px 12px; }
       .app-title { font-size: 16px; }
     }
+    /* ── Attach Modal ── */
+    .attach-modal-box { max-width: 620px; }
+    .attach-drop-zone {
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      background: var(--surface2);
+      transition: all 0.2s;
+      margin-bottom: 14px;
+    }
+    .attach-drop-zone.drag-over {
+      border-color: var(--accent);
+      background: rgba(91,138,255,0.12);
+    }
+    .attach-drop-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .attach-drop-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+
+    /* Task 4: stronger profit color override for history table */
+    .rec-table td.profit-pos { color: var(--green) !important; }
+    .rec-table td.profit-neg { color: var(--red) !important; }
+
+    /* ── Loading spinner ── */
+    .btn-loading { opacity: 0.75; pointer-events: none; }
+    .spinner-inline {
+      display: inline-block; width: 13px; height: 13px;
+      border: 2px solid rgba(255,255,255,0.45); border-top-color: #fff;
+      border-radius: 50%; animation: spin 0.8s linear infinite;
+      vertical-align: -2px; margin-right: 6px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Daily Summary note ── */
+    .daily-item-note {
+      margin-top: 6px;
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.55;
+      word-break: break-word;
+      font-weight: 500;
+    }
+    .daily-item-note-label {
+      color: var(--accent);
+      font-size: 15px;
+      font-weight: 800;
+      margin-right: 4px;
+    }
+
+    /* ── History record note ── */
+    .record-note {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.5;
+      background: rgba(79,124,255,0.04);
+    }
+    .record-note-label {
+      color: var(--accent);
+      font-weight: 700;
+      margin-right: 4px;
+    }
+
+    /* ── Center toast ── */
+    .center-toast {
+      position: fixed;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%) scale(0.96);
+      z-index: 20000;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border-light);
+      box-shadow: 0 18px 60px var(--shadow);
+      border-radius: 14px;
+      padding: 16px 24px;
+      font-size: 16px;
+      font-weight: 700;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    .center-toast.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    /* ── Header calculator icon button ── */
+    .win-calc-header-btn {
+      background: #27272a;
+      border: 1px solid #3f3f46;
+      border-radius: 10px;
+      color: #fff;
+      cursor: pointer;
+      font-size: 20px;
+      width: 38px; height: 38px;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+      line-height: 1;
+    }
+    [data-theme="light"] .win-calc-header-btn {
+      background: #e4e4e7; border-color: #d4d4d8; color: #18181b;
+    }
+    .win-calc-header-btn:hover {
+      background: #3f3f46; transform: scale(1.08);
+    }
+    [data-theme="light"] .win-calc-header-btn:hover { background: #d4d4d8; }
+
+    /* ── Always-visible floating calculator button ── */
+    #win-calc-mini {
+      position: fixed; bottom: 20px; right: 20px;
+      z-index: 11000;
+      background: #2b2b2b;
+      color: #e2e8f0;
+      border: 1px solid #444;
+      border-radius: 24px;
+      padding: 8px 18px;
+      font-size: 14px; font-family: 'Kanit', sans-serif;
+      cursor: pointer;
+      display: flex !important;
+      align-items: center; gap: 6px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.5);
+      transition: background 0.15s;
+    }
+    #win-calc-mini:hover { background: #3a3a3a; }
+
+    /* card-header เงินทุน center */
+    .card-header > span:nth-child(2) { text-align: center; }
+
+    #win-calc-overlay {
+      position:fixed; inset:0;
+      background:rgba(0,0,0,0.45);
+      z-index:11000;
+      display:none; align-items:center; justify-content:center;
+    }
+    #win-calc-overlay.open { display:flex; }
+
+    /* main window — single column */
+    #win-calc-modal {
+      background:#1c1c1c;
+      border:1px solid #3a3a3a;
+      border-radius:8px;
+      width:320px;
+      max-height:92vh;
+      overflow:hidden;
+      display:flex; flex-direction:column;
+      box-shadow:0 24px 64px rgba(0,0,0,0.8);
+      user-select:none;
+    }
+
+    /* title bar */
+    #win-calc-titlebar {
+      display:flex; align-items:center;
+      background:#202020; padding:6px 8px 6px 14px; gap:8px;
+      flex-shrink:0;
+    }
+    .win-calc-title { font-size:13px; color:#ccc; font-family:'Segoe UI',sans-serif; flex:1; }
+    .win-calc-tb-btns { display:flex; gap:2px; }
+    .win-calc-tb-btn {
+      background:transparent; border:none; color:#bbb;
+      width:34px; height:28px; border-radius:4px; cursor:pointer;
+      font-size:14px; display:flex; align-items:center; justify-content:center;
+      transition:background 0.15s;
+    }
+    .win-calc-tb-btn:hover { background:#444; }
+    .win-calc-tb-btn.win-calc-close:hover { background:#e81123; color:#fff; }
+
+    /* Standard label */
+    #win-calc-subheader {
+      padding:8px 14px 2px; background:#1c1c1c; flex-shrink:0;
+    }
+    #win-calc-subheader .win-calc-mode {
+      font-size:20px; font-weight:600; color:#fff; font-family:'Segoe UI',sans-serif;
+    }
+
+    /* display */
+    #win-calc-display {
+      padding:6px 16px 8px; background:#1c1c1c; flex-shrink:0;
+      min-height:80px;
+      display:flex; flex-direction:column; align-items:flex-end; justify-content:flex-end; gap:2px;
+    }
+    #win-calc-expr {
+      font-size:13px; color:#777; font-family:'Segoe UI',Consolas,monospace;
+      min-height:18px; text-align:right; word-break:break-all; width:100%;
+    }
+    #win-calc-result {
+      font-size:42px; font-weight:300; color:#fff;
+      font-family:'Segoe UI',Consolas,monospace;
+      text-align:right; word-break:break-all; line-height:1.1; width:100%;
+    }
+
+    /* button grid — Windows layout:
+       Row1: %   CE   C   ⌫
+       Row2: ¹/x x²  ²√x  ÷
+       Row3: 7   8    9   ×
+       Row4: 4   5    6   −
+       Row5: 1   2    3   +
+       Row6: +/− 0    .   =   (= spans row 6+7 vertically is NOT how Win does it)
+       Windows actually: last row is [+/−][0][.][=] — 0 does NOT span
+       But = IS the same height as other buttons (no span).
+       The Windows layout keeps 0 as single cell. */
+    #win-calc-btns {
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:1px; background:#111; padding:1px; flex-shrink:0;
+    }
+    .win-calc-btn {
+      background:#2b2b2b; border:none; color:#fff;
+      font-size:16px; font-family:'Segoe UI',sans-serif;
+      height:54px; cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      transition:background 0.1s; border-radius:0;
+    }
+    .win-calc-btn:hover  { background:#3a3a3a; }
+    .win-calc-btn:active { background:#4d4d4d; }
+    .win-calc-btn.win-calc-op  { background:#333; color:#87cefa; font-size:18px; }
+    .win-calc-btn.win-calc-op:hover  { background:#404040; }
+    .win-calc-btn.win-calc-fn  { background:#252525; color:#ccc; font-size:14px; }
+    .win-calc-btn.win-calc-fn:hover  { background:#363636; }
+    .win-calc-btn.win-calc-eq  { background:#0067c0; color:#fff; font-size:22px; font-weight:300; }
+    .win-calc-btn.win-calc-eq:hover  { background:#0078d4; }
+    .win-calc-btn.win-calc-eq:active { background:#005a9e; }
+
+    /* ── Collapsible History panel (below buttons) ── */
+    #win-calc-hist-panel {
+      background:#1c1c1c;
+      border-top:1px solid #2e2e2e;
+      display:flex; flex-direction:column;
+      flex-shrink:0;
+      transition:max-height 0.25s ease;
+      max-height:0; overflow:hidden;
+    }
+    #win-calc-hist-panel.open { max-height:260px; }
+
+    #win-calc-hist-inner {
+      display:flex; flex-direction:column;
+      height:240px;
+    }
+
+    #win-calc-hist-list {
+      flex:1; overflow-y:auto; padding:6px 0;
+    }
+    #win-calc-hist-list::-webkit-scrollbar { width:4px; }
+    #win-calc-hist-list::-webkit-scrollbar-thumb { background:#444; border-radius:2px; }
+
+    #win-calc-hist-bar {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:6px 12px; border-top:1px solid #2e2e2e; flex-shrink:0;
+    }
+    .win-calc-hist-tab {
+      font-size:13px; font-weight:700; color:#fff;
+      font-family:'Segoe UI',sans-serif;
+      background:transparent; border:none; cursor:default;
+      border-bottom:2px solid #0078d4; padding:2px 4px;
+    }
+    #win-calc-hist-clear {
+      background:transparent; border:none; color:#888;
+      cursor:pointer; font-size:16px;
+      width:28px; height:28px;
+      display:flex; align-items:center; justify-content:center;
+      border-radius:4px; transition:all 0.15s;
+    }
+    #win-calc-hist-clear:hover { background:#333; color:#f87171; }
+
+    #win-calc-hist-empty {
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      height:100%; color:#555;
+      font-size:12px; font-family:'Segoe UI',sans-serif;
+      gap:6px; padding:20px; text-align:center;
+    }
+    .win-calc-hist-item {
+      padding:8px 14px; cursor:pointer;
+      border-radius:4px; margin:0 4px 2px;
+      transition:background 0.12s; text-align:right;
+    }
+    .win-calc-hist-item:hover { background:#2a2a2a; }
+    .win-calc-hist-expr { font-size:11px; color:#666; font-family:'Segoe UI',Consolas,monospace; word-break:break-all; }
+    .win-calc-hist-val  { font-size:20px; font-weight:300; color:#fff; font-family:'Segoe UI',Consolas,monospace; }
+
+    /* toggle history button row */
+    #win-calc-hist-toggle-row {
+      display:flex; align-items:center; justify-content:space-between;
+      background:#1c1c1c; padding:4px 12px;
+      border-top:1px solid #2a2a2a; flex-shrink:0;
+    }
+    #win-calc-hist-toggle-btn {
+      background:transparent; border:none; color:#666;
+      font-size:12px; font-family:'Segoe UI',sans-serif;
+      cursor:pointer; display:flex; align-items:center; gap:4px;
+      padding:4px 6px; border-radius:4px; transition:all 0.15s;
+    }
+    #win-calc-hist-toggle-btn:hover { background:#2a2a2a; color:#aaa; }
+    #win-calc-hist-chevron { transition:transform 0.2s; font-size:10px; }
+    #win-calc-hist-chevron.open { transform:rotate(180deg); }
+
+    /* minimized floating bar */
+    #win-calc-mini {
+      position:fixed; bottom:20px; right:20px; z-index:11000;
+      background:#2b2b2b; color:#e2e8f0; border:1px solid #444;
+      border-radius:24px; padding:8px 18px;
+      font-size:14px; font-family:'Kanit',sans-serif;
+      cursor:pointer; display:none;
+      box-shadow:0 4px 18px rgba(0,0,0,0.5); transition:background 0.15s;
+    }
+    #win-calc-mini:hover { background:#3a3a3a; }
+    /* ───────────────────────────────────────────────────────────────── */
   </style>
 </head>
 <body>
@@ -641,6 +1069,7 @@
 <div class="app-header">
   <div class="app-title">⚡ 2 CalculatorMax By Super</div>
   <div class="header-right">
+    <button class="win-calc-header-btn" onclick="winCalcOpen()" title="Calculator">🧮</button>
     <button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()">
       <span class="theme-icon" id="theme-icon">☀️</span>
       <span id="theme-label">สว่าง</span>
@@ -738,9 +1167,11 @@
 <!-- Buttons -->
 <div class="btn-row">
   <button class="btn btn-primary" onclick="forceAutoWin1Amount()">⚖️ เฉลี่ยกำไรให้เท่ากัน</button>
+  <button class="btn btn-purple" onclick="quickSetWin1Amount10000()">⚡ คำนวณด่วน</button>
   <button class="btn btn-green" onclick="maximizeWinProfit()">📈 คำนวณกำไรสูงสุด</button>
-  <button class="btn btn-save" onclick="saveRecord(event)">💾 บันทึกข้อมูล</button>
-  <button class="btn btn-purple" onclick="openDailySummary()">📊 สรุปผลรายวัน</button>
+  <div class="save-group">
+    <button class="btn btn-save" onclick="saveRecord(event)">💾 บันทึกข้อมูล</button>
+  </div>
   <button class="btn btn-danger" onclick="clearAll()">🧹 ล้างทั้งหมด</button>
 </div>
 
@@ -767,6 +1198,7 @@
   <div class="history-toggle" id="history-toggle" onclick="toggleHistory()">
     <span class="history-icon">📁</span>
     <span class="history-title">ข้อมูลที่บันทึกไว้</span>
+    <button class="history-summary-btn" onclick="event.stopPropagation(); openDailySummary()">📊 สรุปผลรายวัน</button>
     <span class="history-count" id="history-count">0</span>
     <span class="chevron" id="chevron-icon">▼</span>
   </div>
@@ -790,16 +1222,12 @@
           <div style="font-size:11px;color:var(--text-dim);">รอบ</div>
         </div>
         <div class="daily-sum-item">
-          <div class="daily-sum-label">กำไรรวม (ถ้าออกฝั่ง 1)</div>
-          <div class="daily-sum-val" id="ds-profit1" style="color:var(--green)">0</div>
-        </div>
-        <div class="daily-sum-item">
-          <div class="daily-sum-label">กำไรรวม (ถ้าออกฝั่ง 2)</div>
-          <div class="daily-sum-val" id="ds-profit2" style="color:var(--green)">0</div>
-        </div>
-        <div class="daily-sum-item">
           <div class="daily-sum-label">ทุนรวมทั้งหมด</div>
           <div class="daily-sum-val" id="ds-total" style="color:var(--text)">0</div>
+        </div>
+        <div class="daily-sum-item">
+          <div class="daily-sum-label">กำไรทั้งหมด</div>
+          <div class="daily-sum-val" id="ds-max-profit" style="color:var(--green)">0</div>
         </div>
       </div>
       <div id="daily-check-list" class="daily-check-list"></div>
@@ -808,6 +1236,8 @@
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <button class="btn btn-primary" style="min-width:120px;padding:9px 14px;font-size:13px;" onclick="selectAllDaily()">✅ เลือกทั้งหมด</button>
         <button class="btn btn-danger" style="min-width:120px;padding:9px 14px;font-size:13px;" onclick="clearDailySelection()">☐ ยกเลิกทั้งหมด</button>
+        <button id="google-sheet-export-btn" class="btn btn-green" style="min-width:120px;padding:9px 14px;font-size:13px;" onclick="exportAllHistoryToGoogleSheet()">📤 บันทึกลง Google Sheet</button>
+        <button id="excel-export-btn" class="btn btn-primary" style="min-width:120px;padding:9px 14px;font-size:13px;" onclick="exportAllHistoryToExcel()">📥 Export Excel</button>
       </div>
     </div>
   </div>
@@ -837,6 +1267,11 @@
 
   let usdtRate = 0, isManualRate = false;
   let dailySelected = new Set();
+  let pendingSaveRecord = null;
+  let isExportingGoogleSheet = false;
+  let isExportingExcel = false;
+
+  const GOOGLE_SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycby4pWFn0bGl176W4pPH0LDwrjBzDizs45rmJXbrf7m-ZI5YWzHcuWYkI0bGa6vwkKlT/exec";
 
   // ─── Theme ────────────────────────────────────────────────────────
   function toggleTheme() {
@@ -1009,6 +1444,32 @@
     forceAutoWin1Amount();
   }
 
+  // ─── Image Attach ──────────────────────────────────────────────────
+  let pendingImages = []; // array of { dataUrl, name }
+
+  function renderAttachPreview() {
+    const wrap = document.getElementById("attach-preview");
+    wrap.innerHTML = pendingImages.map((img, i) => `
+      <div class="attach-thumb-wrap">
+        <img class="attach-thumb" src="${img.dataUrl}" onclick="openLightbox('${img.dataUrl}')" title="${img.name}" />
+        <button class="attach-remove" onclick="removePending(${i})">✕</button>
+      </div>`).join("");
+  }
+
+  function removePending(i) {
+    pendingImages.splice(i, 1);
+    renderAttachPreview();
+  }
+
+  function openLightbox(src) {
+    document.getElementById("lightbox-img").src = src;
+    document.getElementById("lightbox").classList.add("open");
+  }
+  function closeLightbox() {
+    document.getElementById("lightbox").classList.remove("open");
+    document.getElementById("lightbox-img").src = "";
+  }
+
   // ─── History ──────────────────────────────────────────────────────
   const HKEY="calcmax_v2";
   function loadRecs() { try{ return JSON.parse(localStorage.getItem(HKEY))||[]; }catch{ return []; } }
@@ -1043,24 +1504,55 @@
     const d=parseMoney(drawAmtThb), o=getDrawOdds(), a=getWin1Odds(), x=parseMoney(win1AmtThb);
     if (!d||!o||!a||!x) { alert("กรุณากรอกข้อมูลให้ครบก่อนบันทึก"); return; }
     const total=d+x;
-    const rec={
-      id:Date.now(), timestamp:Date.now(),
-      rows:[
-        { label: win1WebName.value.trim()||"ชนะ 1",      thb:x, odds:a, ret:x*a,  profit:x*a-total  },
-        { label: drawWebName.value.trim()||"เสมอ / ต่อ", thb:d, odds:o, ret:d*o,  profit:d*o-total  }
+    pendingSaveRecord = {
+      id: Date.now(),
+      timestamp: Date.now(),
+      rows: [
+        { label: drawWebName.value.trim()||"1", thb:d, odds:o, ret:d*o, profit:d*o-total },
+        { label: win1WebName.value.trim()||"2", thb:x, odds:a, ret:x*a, profit:x*a-total }
       ],
-      total
+      total,
+      maxProfit: Math.max(d*o-total, x*a-total),
+      images: []
     };
-    const recs=loadRecs(); recs.unshift(rec); saveRecs(recs);
+    pendingImages = [];
+    renderAttachPreview();
+    const noteEl = document.getElementById("save-note-input");
+    if (noteEl) noteEl.value = "";
+    openAttachModal();
+  }
+
+  function openAttachModal() {
+    document.getElementById("attach-modal").classList.add("open");
+  }
+
+  function closeAttachModal() {
+    document.getElementById("attach-modal").classList.remove("open");
+  }
+
+  function confirmSaveRecord() {
+    if (!pendingSaveRecord) return;
+    const noteEl = document.getElementById("save-note-input");
+    pendingSaveRecord.note = noteEl ? noteEl.value.trim() : "";
+    pendingSaveRecord.images = pendingImages.map(img => ({ dataUrl: img.dataUrl, name: img.name || "image" }));
+    const recs=loadRecs(); recs.unshift(pendingSaveRecord); saveRecs(recs);
+    pendingSaveRecord = null;
+    pendingImages = [];
+    renderAttachPreview();
+    closeAttachModal();
     const body=document.getElementById("history-body");
     const toggle=document.getElementById("history-toggle");
     const chev=document.getElementById("chevron-icon");
     body.classList.add("open"); toggle.classList.add("open"); chev.classList.add("open");
     renderHistory();
-    const btn=evt.currentTarget;
-    const old=btn.textContent;
-    btn.textContent="✅ บันทึกแล้ว!"; btn.style.opacity="0.85";
-    setTimeout(()=>{ btn.textContent=old; btn.style.opacity=""; },1500);
+    showCenterToast("บันทึกข้อมูลสำเร็จ");
+  }
+
+  function cancelAttachSave() {
+    pendingSaveRecord = null;
+    pendingImages = [];
+    renderAttachPreview();
+    closeAttachModal();
   }
 
   function deleteRecord(id) {
@@ -1078,30 +1570,44 @@
     updateHistoryCount();
     if (recs.length===0) { container.innerHTML='<div class="history-empty">ยังไม่มีข้อมูลที่บันทึก</div>'; return; }
     container.innerHTML=recs.map(rec=>{
-      const rows=rec.rows.map(row=>{
+      const calculatedMaxProfit = Math.max(...(rec.rows || []).map(r => Number(r.profit) || 0));
+      const maxProfit = (rec.maxProfit !== undefined && rec.maxProfit !== null)
+        ? Number(rec.maxProfit) || 0
+        : calculatedMaxProfit;
+      const maxProfitCls = maxProfit >= 0 ? "profit-pos" : "profit-neg";
+      const maxProfitSign = maxProfit >= 0 ? "+" : "";
+      const rows=rec.rows.map((row, rowIndex)=>{
         const profitCls = row.profit>=0 ? "profit-pos" : "profit-neg";
         const sign=row.profit>=0?"+":"";
+        const totalProfitCell = rowIndex === 0
+          ? `<td class="${maxProfitCls}" style="font-weight:700;">${maxProfitSign}${fmt(maxProfit)}</td>`
+          : `<td style="color:var(--text-dim);">—</td>`;
         return `<tr>
           <td class="label-cell">${row.label}</td>
           <td>${fmt(row.thb)}</td>
           <td>${row.odds}</td>
           <td>${fmt(row.ret)}</td>
           <td class="${profitCls}" style="font-weight:700;">${sign}${fmt(row.profit)}</td>
-          <td style="color:var(--text-dim);">—</td>
+          ${totalProfitCell}
         </tr>`;
       }).join("");
       return `<div class="record-card">
         <div class="record-header">
           <span class="record-ts">📌 ${thaiDT(rec.timestamp)}</span>
           <span class="record-total">ทุนรวม: <span>${fmt(rec.total||0)} ฿</span></span>
-          <button class="rec-del-btn" onclick="deleteRecord(${rec.id})">🗑 ลบ</button>
+          <div class="record-actions">
+            <button class="rec-edit-btn" onclick="event.stopPropagation(); editRecord(${rec.id})">✏️ แก้ไข</button>
+            <button class="rec-del-btn" onclick="deleteRecord(${rec.id})">🗑 ลบ</button>
+          </div>
         </div>
+        ${rec.note ? `<div class="record-note"><span class="record-note-label">หมายเหตุ:</span><span>${escapeHtml(rec.note)}</span></div>` : ""}
         <div class="record-table-wrap">
           <table class="rec-table">
-            <thead><tr><th>ฝั่ง</th><th>ทุน (฿)</th><th>ค่าน้ำ</th><th>หลังแทง</th><th>กำไร</th><th>เฉลี่ย</th></tr></thead>
+            <thead><tr><th>ฝั่ง</th><th>ทุน (฿)</th><th>ค่าน้ำ</th><th>หลังแทง</th><th>กำไร</th><th>กำไรทั้งหมด</th></tr></thead>
             <tbody>${rows}</tbody>
           </table>
         </div>
+        ${rec.images && rec.images.length ? `<div class="rec-images">${rec.images.map(img=>{ const imageSrc = typeof img === "string" ? img : img.dataUrl; return `<img class="rec-img" src="${imageSrc}" onclick="openLightbox('${imageSrc}')" />`; }).join("")}</div>` : ""}
       </div>`;
     }).join("")+`<div class="history-footer"><button class="del-all-btn" onclick="deleteAllRecords()">🗑 ลบทั้งหมด</button></div>`;
   }
@@ -1143,20 +1649,20 @@
   function updateDailySummary() {
     const recs = loadRecs();
     const sel = recs.filter(r => dailySelected.has(r.id));
-    let p1=0, p2=0, tot=0;
+    let tot = 0, maxProfitTotal = 0;
     sel.forEach(r => {
-      if (r.rows[0]) p1 += r.rows[0].profit||0;
-      if (r.rows[1]) p2 += r.rows[1].profit||0;
-      tot += r.total||0;
+      tot += r.total || 0;
+      const calculatedMaxProfit = Math.max(...(r.rows || []).map(row => Number(row.profit) || 0));
+      const mp = (r.maxProfit !== undefined && r.maxProfit !== null) ? Number(r.maxProfit) || 0 : calculatedMaxProfit;
+      maxProfitTotal += mp;
     });
     document.getElementById("ds-count").textContent = sel.length;
-    const p1El = document.getElementById("ds-profit1");
-    const p2El = document.getElementById("ds-profit2");
-    p1El.textContent = (p1>=0?"+":"")+fmt(p1);
-    p1El.style.color = p1>=0?"var(--green)":"var(--red)";
-    p2El.textContent = (p2>=0?"+":"")+fmt(p2);
-    p2El.style.color = p2>=0?"var(--green)":"var(--red)";
     document.getElementById("ds-total").textContent = fmt(tot);
+    const mpEl = document.getElementById("ds-max-profit");
+    if (mpEl) {
+      mpEl.textContent = (maxProfitTotal >= 0 ? "+" : "") + fmt(maxProfitTotal);
+      mpEl.style.color = maxProfitTotal >= 0 ? "var(--green)" : "var(--red)";
+    }
   }
 
   function renderDailyModal() {
@@ -1168,30 +1674,39 @@
     }
     list.innerHTML = recs.map(rec => {
       const checked = dailySelected.has(rec.id);
-      const p0 = rec.rows[0]?.profit||0;
-      const p1 = rec.rows[1]?.profit||0;
-      const profitDisplay = `${rec.rows[0]?.label||'ฝั่ง1'}: ${p0>=0?'+':''}${fmt(p0)} / ${rec.rows[1]?.label||'ฝั่ง2'}: ${p1>=0?'+':''}${fmt(p1)}`;
-      const cls0 = p0>=0?"profit-pos":"profit-neg";
+      const calculatedMaxProfit = Math.max(...(rec.rows || []).map(row => Number(row.profit) || 0));
+      const maxProfit = (rec.maxProfit !== undefined && rec.maxProfit !== null) ? Number(rec.maxProfit) || 0 : calculatedMaxProfit;
+      const maxProfitCls = maxProfit >= 0 ? "profit-pos" : "profit-neg";
+      const maxProfitSign = maxProfit >= 0 ? "+" : "";
       return `<div class="daily-check-item ${checked?'selected':''}" data-id="${rec.id}" onclick="toggleDailyItem(${rec.id})">
         <input type="checkbox" class="daily-checkbox" ${checked?"checked":""} onclick="event.stopPropagation();toggleDailyItem(${rec.id})"/>
         <div style="flex:1;">
           <div class="daily-item-ts">📌 ${thaiDT(rec.timestamp)}</div>
-          <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">${profitDisplay}</div>
+          ${rec.note ? `<div class="daily-item-note"><span class="daily-item-note-label">หมายเหตุ:</span>${escapeHtml(rec.note)}</div>` : ""}
         </div>
         <div style="text-align:right;">
-          <div style="font-size:11px;color:var(--text-dim);">ทุนรวม</div>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:var(--accent);">${fmt(rec.total||0)} ฿</div>
+          <div style="font-size:11px;color:var(--text-dim);">กำไรทั้งหมด</div>
+          <div class="${maxProfitCls}" style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:800;">${maxProfitSign}${fmt(maxProfit)} ฿</div>
         </div>
       </div>`;
     }).join("");
     updateDailySummary();
   }
 
+  function forceAutoDrawAmount() {
+    const x=parseMoney(win1AmtThb), o=getDrawOdds(), a=getWin1Odds();
+    if (!x||!o||!a) { calculate(); return; }
+    const draw=Math.round((x*a)/o);
+    drawAmtThb.value=formatComma(draw.toString());
+    const r=getRate(); drawAmtUsdt.value=r>0?fmtMoney(draw/r):"";
+    calculate();
+  }
+
   // ─── Events ───────────────────────────────────────────────────────
   drawAmtThb.addEventListener("input",()=>{ cleanMoneyInput(drawAmtThb); syncFromThb(drawAmtThb,drawAmtUsdt); forceAutoWin1Amount(); });
   drawAmtUsdt.addEventListener("input",()=>{ cleanMoneyInput(drawAmtUsdt); syncFromUsdt(drawAmtUsdt,drawAmtThb); forceAutoWin1Amount(); });
-  win1AmtThb.addEventListener("input",()=>{ cleanMoneyInput(win1AmtThb); syncFromThb(win1AmtThb,win1AmtUsdt); calculate(); });
-  win1AmtUsdt.addEventListener("input",()=>{ cleanMoneyInput(win1AmtUsdt); syncFromUsdt(win1AmtUsdt,win1AmtThb); calculate(); });
+  win1AmtThb.addEventListener("input",()=>{ winCalcQuickMode=false; cleanMoneyInput(win1AmtThb); syncFromThb(win1AmtThb,win1AmtUsdt); forceAutoDrawAmount(); });
+  win1AmtUsdt.addEventListener("input",()=>{ winCalcQuickMode=false; cleanMoneyInput(win1AmtUsdt); syncFromUsdt(win1AmtUsdt,win1AmtThb); forceAutoDrawAmount(); });
 
   drawOddsMain.addEventListener("input",()=>{
     drawOddsMain.value=drawOddsMain.value.replace(/[^\d]/g,"").slice(0,1);
@@ -1466,11 +1981,764 @@
     }
   });
 
+  // ─── Attach helpers ────────────────────────────────────────────────
+  function addImageFiles(files) {
+    Array.from(files).forEach(file => {
+      if (!file.type || !file.type.startsWith("image/")) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        pendingImages.push({ dataUrl: ev.target.result, name: file.name || "image" });
+        renderAttachPreview();
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function onAttachChange(e) {
+    addImageFiles(e.target.files);
+    e.target.value = "";
+  }
+
+  // Drag & drop on attach-drop-zone
+  document.addEventListener("DOMContentLoaded", () => {
+    const zone = document.getElementById("attach-drop-zone");
+    if (!zone) return;
+    zone.addEventListener("dragover", e => {
+      e.preventDefault();
+      zone.classList.add("drag-over");
+    });
+    zone.addEventListener("dragleave", () => {
+      zone.classList.remove("drag-over");
+    });
+    zone.addEventListener("drop", e => {
+      e.preventDefault();
+      zone.classList.remove("drag-over");
+      if (e.dataTransfer.files && e.dataTransfer.files.length) addImageFiles(e.dataTransfer.files);
+    });
+  });
+
+  // Clipboard paste — only when attach-modal is open
+  document.addEventListener("paste", e => {
+    const modal = document.getElementById("attach-modal");
+    if (!modal || !modal.classList.contains("open")) return;
+    const active = document.activeElement;
+    const tag = active && active.tagName ? active.tagName.toLowerCase() : "";
+    if (tag === "input" || tag === "textarea") return;
+    const items = Array.from(e.clipboardData?.items || []);
+    const imageItems = items.filter(item => item.type && item.type.startsWith("image/"));
+    if (!imageItems.length) return;
+    imageItems.forEach(item => {
+      const file = item.getAsFile();
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        pendingImages.push({ dataUrl: ev.target.result, name: "clipboard-image.png" });
+        renderAttachPreview();
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+
+  // ─── Google Sheet Export ───────────────────────────────────────────
+  async function exportAllHistoryToGoogleSheet() {
+    if (isExportingGoogleSheet) return;
+    const allRecs = loadRecs();
+    if (!allRecs.length) { alert("ยังไม่มีข้อมูลที่บันทึกไว้"); return; }
+    const recs = allRecs.filter(r => dailySelected.has(r.id));
+    if (!recs.length) { alert("กรุณาเลือกรายการที่ต้องการบันทึกลง Google Sheet ก่อน"); return; }
+    if (!GOOGLE_SHEET_WEBAPP_URL) { alert("ยังไม่ได้ตั้งค่า Google Sheet Web App URL"); return; }
+
+    const btn = document.getElementById("google-sheet-export-btn");
+    const oldHtml = btn ? btn.innerHTML : "";
+
+    try {
+      isExportingGoogleSheet = true;
+      if (btn) {
+        btn.disabled = true;
+        btn.classList.add("btn-loading");
+        btn.innerHTML = '<span class="spinner-inline"></span>กำลังส่ง...';
+      }
+
+      const payload = {
+        exportedAt: new Date().toISOString(),
+        records: recs.map(rec => {
+          const calculatedMaxProfit = Math.max(...(rec.rows || []).map(r => Number(r.profit) || 0));
+          const maxProfit = (rec.maxProfit !== undefined && rec.maxProfit !== null)
+            ? Number(rec.maxProfit) || 0
+            : calculatedMaxProfit;
+          return {
+            id: rec.id,
+            timestamp: rec.timestamp,
+            displayTime: thaiDT(rec.timestamp),
+            total: rec.total || 0,
+            maxProfit,
+            note: rec.note || "",
+            imageCount: (rec.images || []).length,
+            imageNote: (rec.images || []).length ? `มีรูปแนบ ${(rec.images || []).length} รูป` : "ไม่มีรูปแนบ",
+            rows: (rec.rows || []).map(row => ({
+              label: row.label || "",
+              thb: row.thb || 0,
+              odds: row.odds || "",
+              ret: row.ret || 0,
+              profit: row.profit || 0
+            }))
+          };
+        })
+      };
+
+      await fetch(GOOGLE_SHEET_WEBAPP_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+
+      alert(`ส่งข้อมูลไป Google Sheet แล้ว — ${recs.length} รายการ`);
+    } catch (err) {
+      alert("ส่งข้อมูลไป Google Sheet ไม่สำเร็จ");
+    } finally {
+      isExportingGoogleSheet = false;
+      if (btn) {
+        btn.disabled = false;
+        btn.classList.remove("btn-loading");
+        btn.innerHTML = oldHtml || "📤 บันทึกลง Google Sheet";
+      }
+    }
+  }
+
+  // ─── Excel Export (ExcelJS with embedded images) ───────────────────
+  function dataUrlToExcelImageInfo(dataUrl) {
+    if (!dataUrl || !dataUrl.startsWith("data:")) return null;
+    const parts = dataUrl.split(",");
+    const meta = parts[0];
+    const base64 = parts[1];
+    const mimeMatch = meta.match(/data:image\/(png|jpeg|jpg|webp|gif);base64/);
+    let extension = "png";
+    if (mimeMatch && mimeMatch[1]) {
+      extension = mimeMatch[1] === "jpg" ? "jpeg" : mimeMatch[1];
+    }
+    return { base64, extension };
+  }
+
+  async function exportAllHistoryToExcel() {
+    if (isExportingExcel) return;
+
+    if (typeof ExcelJS === "undefined" || typeof saveAs === "undefined") {
+      alert("ไม่สามารถ Export Excel ได้ กรุณาตรวจสอบการโหลดไลบรารี");
+      return;
+    }
+
+    const allRecs = loadRecs();
+    if (!allRecs.length) { alert("ยังไม่มีข้อมูลที่บันทึกไว้"); return; }
+    const recs = allRecs.filter(r => dailySelected.has(r.id));
+    if (!recs.length) { alert("กรุณาเลือกรายการที่ต้องการ Export Excel ก่อน"); return; }
+
+    const btn = document.getElementById("excel-export-btn");
+    const oldHtml = btn ? btn.innerHTML : "";
+
+    try {
+      isExportingExcel = true;
+      if (btn) {
+        btn.disabled = true;
+        btn.classList.add("btn-loading");
+        btn.innerHTML = '<span class="spinner-inline"></span>กำลังสร้าง...';
+      }
+
+      const workbook = new ExcelJS.Workbook();
+      const sheet = workbook.addWorksheet("ข้อมูลที่บันทึกไว้");
+
+      sheet.columns = [
+        { header: "วันที่/เวลา",    key: "time",      width: 22 },
+        { header: "ฝั่ง",           key: "label",     width: 16 },
+        { header: "ทุน (฿)",        key: "thb",       width: 14 },
+        { header: "ค่าน้ำ",         key: "odds",      width: 10 },
+        { header: "หลังแทง",        key: "ret",       width: 14 },
+        { header: "กำไร",           key: "profit",    width: 14 },
+        { header: "กำไรทั้งหมด",    key: "maxProfit", width: 16 },
+        { header: "ทุนรวม",         key: "total",     width: 14 },
+        { header: "รูปภาพ",         key: "image",     width: 30 },
+        { header: "หมายเหตุ",       key: "note",      width: 30 },
+        { header: "Export At",      key: "exportedAt",width: 26 }
+      ];
+      sheet.getRow(1).font = { bold: true };
+      sheet.getRow(1).alignment = { vertical: "middle", horizontal: "center" };
+
+      const exportedAt = new Date().toISOString();
+      let currentRowNumber = 2;
+
+      recs.forEach(rec => {
+        const rowsData = rec.rows || [];
+        const images = rec.images || [];
+        const calculatedMaxProfit = Math.max(...rowsData.map(r => Number(r.profit) || 0));
+        const maxProfit = (rec.maxProfit !== undefined && rec.maxProfit !== null)
+          ? Number(rec.maxProfit) || 0
+          : calculatedMaxProfit;
+        const firstRowNumber = currentRowNumber;
+
+        rowsData.forEach((row, idx) => {
+          const excelRow = sheet.addRow({
+            time: thaiDT(rec.timestamp),
+            label: row.label || "",
+            thb: Math.round(row.thb || 0),
+            odds: row.odds || "",
+            ret: Math.round(row.ret || 0),
+            profit: Math.round(row.profit || 0),
+            maxProfit: idx === 0 ? Math.round(maxProfit || 0) : "",
+            total: idx === 0 ? Math.round(rec.total || 0) : "",
+            image: "",
+            note: idx === 0 ? (rec.note || "") : "",
+            exportedAt
+          });
+          excelRow.height = 22;
+          currentRowNumber++;
+        });
+
+        images.forEach((img, imgIdx) => {
+          try {
+            const imageSrc = typeof img === "string" ? img : img.dataUrl;
+            const imageInfo = dataUrlToExcelImageInfo(imageSrc);
+            if (!imageInfo) return;
+
+            let targetRow = firstRowNumber + imgIdx;
+            if (imgIdx >= rowsData.length) {
+              const extraRow = sheet.addRow({ time:"",label:"",thb:"",odds:"",ret:"",profit:"",maxProfit:"",total:"",image:"",note:"",exportedAt });
+              targetRow = extraRow.number;
+              currentRowNumber++;
+            }
+
+            sheet.getRow(targetRow).height = 120;
+            const imageId = workbook.addImage({ base64: imageInfo.base64, extension: imageInfo.extension });
+            sheet.addImage(imageId, {
+              tl: { col: 8.1, row: targetRow - 0.9 },
+              ext: { width: 220, height: 145 }
+            });
+          } catch(err) { /* continue */ }
+        });
+      });
+
+      sheet.eachRow(row => {
+        row.alignment = { vertical: "middle", horizontal: "center", wrapText: true };
+      });
+
+      const now = new Date();
+      const yyyy = now.getFullYear();
+      const mm = String(now.getMonth() + 1).padStart(2, "0");
+      const dd = String(now.getDate()).padStart(2, "0");
+
+      const buffer = await workbook.xlsx.writeBuffer();
+      saveAs(
+        new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }),
+        `calculatormax-history-${yyyy}-${mm}-${dd}.xlsx`
+      );
+    } catch (err) {
+      alert("Export Excel ไม่สำเร็จ");
+    } finally {
+      isExportingExcel = false;
+      if (btn) {
+        btn.disabled = false;
+        btn.classList.remove("btn-loading");
+        btn.innerHTML = oldHtml || "📥 Export Excel";
+      }
+    }
+  }
+
+  // ─── Edit Record ───────────────────────────────────────────────────
+  let editingRecordId = null;
+
+  function editRecord(id) {
+    const recs = loadRecs();
+    const rec = recs.find(r => r.id === id);
+    if (!rec) return;
+    editingRecordId = id;
+    const body = document.getElementById("edit-record-body");
+    body.innerHTML = `<div class="edit-record-box">
+      <label>ทุนรวม</label>
+      <input id="edit-total" type="number" class="edit-input" value="${rec.total || 0}" />
+      <label>กำไรทั้งหมด</label>
+      <input id="edit-max-profit" type="number" class="edit-input" value="${rec.maxProfit !== undefined ? rec.maxProfit : Math.max(...(rec.rows || []).map(r => Number(r.profit) || 0))}" />
+      <label>หมายเหตุ</label>
+      <textarea id="edit-note" class="edit-input" rows="3" placeholder="หมายเหตุ" style="grid-column:1/-1;">${escapeHtml(rec.note || "")}</textarea>
+      ${(rec.rows || []).map((row, i) => `
+        <div class="edit-row-box">
+          <div class="edit-row-title">แถวที่ ${i + 1}</div>
+          <label>ฝั่ง</label>
+          <input id="edit-row-${i}-label" class="edit-input" value="${row.label || ''}" />
+          <label>ทุน (฿)</label>
+          <input id="edit-row-${i}-thb" type="number" class="edit-input" value="${row.thb || 0}" />
+          <label>ค่าน้ำ</label>
+          <input id="edit-row-${i}-odds" type="number" step="0.01" class="edit-input" value="${row.odds || 0}" />
+          <label>หลังแทง</label>
+          <input id="edit-row-${i}-ret" type="number" class="edit-input" value="${row.ret || 0}" />
+          <label>กำไร</label>
+          <input id="edit-row-${i}-profit" type="number" class="edit-input" value="${row.profit || 0}" />
+        </div>`).join("")}
+    </div>`;
+    document.getElementById("edit-record-modal").classList.add("open");
+  }
+
+  function closeEditRecordModal() {
+    editingRecordId = null;
+    document.getElementById("edit-record-modal").classList.remove("open");
+  }
+
+  function saveEditedRecord() {
+    if (!editingRecordId) return;
+    const recs = loadRecs();
+    const idx = recs.findIndex(r => r.id === editingRecordId);
+    if (idx === -1) { closeEditRecordModal(); return; }
+    const rec = recs[idx];
+    const newTotal = parseFloat(document.getElementById("edit-total").value) || 0;
+    rec.total = newTotal;
+    const maxProfitEl = document.getElementById("edit-max-profit");
+    rec.maxProfit = maxProfitEl ? parseFloat(maxProfitEl.value) || 0 : rec.maxProfit;
+    const noteEl2 = document.getElementById("edit-note");
+    rec.note = noteEl2 ? noteEl2.value.trim() : (rec.note || "");
+    (rec.rows || []).forEach((row, i) => {
+      const labelEl = document.getElementById(`edit-row-${i}-label`);
+      const thbEl   = document.getElementById(`edit-row-${i}-thb`);
+      const oddsEl  = document.getElementById(`edit-row-${i}-odds`);
+      const retEl   = document.getElementById(`edit-row-${i}-ret`);
+      const profEl  = document.getElementById(`edit-row-${i}-profit`);
+      if (labelEl) row.label  = labelEl.value;
+      if (thbEl)   row.thb    = parseFloat(thbEl.value) || 0;
+      if (oddsEl)  row.odds   = parseFloat(oddsEl.value) || 0;
+      if (retEl)   row.ret    = parseFloat(retEl.value) || 0;
+      if (profEl)  row.profit = parseFloat(profEl.value) || 0;
+    });
+    saveRecs(recs);
+    closeEditRecordModal();
+    renderHistory();
+    const dailyModal = document.getElementById("daily-modal");
+    if (dailyModal && dailyModal.classList.contains("open")) renderDailyModal();
+  }
+
+  // ─── Windows Calculator ──────────────────────────────────────────
+  const winCalcState = {
+    expr:      [],
+    current:   "0",
+    justCalc:  false
+  };
+  let winCalcHistory = []; // [{exprStr, result}]
+
+  function winCalcOpen() {
+    document.getElementById("win-calc-overlay").classList.add("open");
+    winCalcUpdateDisplay();
+    winCalcRenderHistory();
+  }
+  function winCalcClose() {
+    document.getElementById("win-calc-overlay").classList.remove("open");
+  }
+  function winCalcMinimize() {
+    document.getElementById("win-calc-overlay").classList.remove("open");
+  }
+  function winCalcRestore() {
+    document.getElementById("win-calc-overlay").classList.add("open");
+    winCalcUpdateDisplay();
+  }
+  function winCalcOverlayClick(e) {
+    if (e.target === document.getElementById("win-calc-overlay")) winCalcClose();
+  }
+
+  function winCalcFmtNum(n) {
+    const str = String(n);
+    if (str === "Infinity" || str === "-Infinity" || str === "NaN" ||
+        str === "Error" || str === "Cannot divide by zero" || str === "Invalid input") return str;
+    const parts = str.split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+  }
+
+  function winCalcExprStr() {
+    let s = "";
+    for (let i = 0; i < winCalcState.expr.length; i++) {
+      const t = winCalcState.expr[i];
+      if (["+","−","×","÷"].includes(t)) s += " " + t + " ";
+      else s += winCalcFmtNum(t);
+    }
+    return s;
+  }
+
+  function winCalcUpdateDisplay() {
+    const exprEl   = document.getElementById("win-calc-expr");
+    const resultEl = document.getElementById("win-calc-result");
+    if (!exprEl || !resultEl) return;
+    if (winCalcState.justCalc) {
+      exprEl.textContent   = winCalcExprStr() + " =";
+      resultEl.textContent = winCalcFmtNum(winCalcState.current);
+    } else {
+      exprEl.textContent   = winCalcExprStr();
+      resultEl.textContent = winCalcFmtNum(winCalcState.current);
+    }
+  }
+
+  function winCalcDigit(d) {
+    if (winCalcState.justCalc) {
+      winCalcState.expr     = [];
+      winCalcState.current  = "";
+      winCalcState.justCalc = false;
+    }
+    if (d === ".") {
+      if (winCalcState.current.includes(".")) return;
+      if (winCalcState.current === "" || winCalcState.current === "-") winCalcState.current += "0";
+    }
+    if (d === "0" && winCalcState.current === "0") return;
+    if (winCalcState.current === "0" && d !== ".") winCalcState.current = d;
+    else winCalcState.current += d;
+    winCalcUpdateDisplay();
+  }
+
+  function winCalcOp(op) {
+    winCalcState.justCalc = false;
+    const cur = winCalcState.current;
+    if (cur !== "" && cur !== "-" && winCalcState.expr.length >= 2) {
+      const r = winCalcEval([...winCalcState.expr, cur], "");
+      winCalcState.expr    = [String(r)];
+      winCalcState.current = "";
+    } else if (cur !== "" && cur !== "-") {
+      winCalcState.expr.push(cur);
+      winCalcState.current = "";
+    }
+    const e = winCalcState.expr;
+    if (e.length > 0 && ["+","−","×","÷"].includes(e[e.length-1])) e[e.length-1] = op;
+    else e.push(op);
+    winCalcUpdateDisplay();
+  }
+
+  function winCalcEquals() {
+    const cur = winCalcState.current;
+    const e   = winCalcState.expr;
+    if (e.length === 0 && (cur === "" || cur === "0")) return;
+
+    const fullTokens = [...e, ...(cur !== "" ? [cur] : [])];
+    const result     = winCalcEval(fullTokens, "");
+
+    // Build expression string for history BEFORE overwriting state
+    const exprDisplay = winCalcExprStr() + (cur !== "" ? (e.length ? " " + winCalcFmtNum(cur) : winCalcFmtNum(cur)) : "");
+
+    winCalcState.expr     = fullTokens;
+    winCalcState.current  = String(result);
+    winCalcState.justCalc = true;
+
+    // Add to history
+    winCalcHistory.unshift({
+      exprStr: exprDisplay + " =",
+      result:  winCalcFmtNum(result)
+    });
+    if (winCalcHistory.length > 50) winCalcHistory.pop();
+
+    winCalcUpdateDisplay();
+    winCalcRenderHistory();
+  }
+
+  function winCalcEval(tokens, cur) {
+    const all  = cur !== "" ? [...tokens, cur] : [...tokens];
+    const toks = all.filter(t => t !== "");
+    if (toks.length === 0) return 0;
+    let expr = "";
+    toks.forEach(function(t) {
+      if      (t === "÷") expr += "/";
+      else if (t === "×") expr += "*";
+      else if (t === "−") expr += "-";
+      else                expr += t;
+    });
+    try {
+      if (/^[0-9+\-*/().%\s]+$/.test(expr)) {
+        let r = Function('"use strict"; return (' + expr + ')')();
+        if (!isFinite(r)) return "Cannot divide by zero";
+        return Math.round(r * 1e10) / 1e10;
+      }
+      return "Error";
+    } catch(e) { return "Error"; }
+  }
+
+  function winCalcFn(fn) {
+    let n = parseFloat(winCalcState.current) || 0;
+    switch(fn) {
+      case "ce":
+        winCalcState.current = "0"; winCalcState.justCalc = false; break;
+      case "c":
+        winCalcState.expr = []; winCalcState.current = "0"; winCalcState.justCalc = false; break;
+      case "back":
+        if (winCalcState.justCalc) { winCalcState.current = "0"; winCalcState.justCalc = false; break; }
+        winCalcState.current = winCalcState.current.length > 1 ? winCalcState.current.slice(0,-1) : "0";
+        break;
+      case "sign":
+        if (winCalcState.current === "0" || winCalcState.current === "") break;
+        winCalcState.current = winCalcState.current.startsWith("-") ? winCalcState.current.slice(1) : "-" + winCalcState.current;
+        break;
+      case "pct": {
+        const base = winCalcState.expr.length >= 2 ? parseFloat(winCalcState.expr[winCalcState.expr.length-2])||0 : 0;
+        const pct  = base ? base * n / 100 : n / 100;
+        winCalcState.current = String(Math.round(pct * 1e10) / 1e10);
+        winCalcState.justCalc = false; break;
+      }
+      case "inv":
+        if (n === 0) { winCalcState.current = "Cannot divide by zero"; break; }
+        winCalcState.current = String(Math.round((1/n)*1e10)/1e10); winCalcState.justCalc = false; break;
+      case "sqr":
+        winCalcState.current = String(Math.round(n*n*1e10)/1e10); winCalcState.justCalc = false; break;
+      case "sqrt":
+        if (n < 0) { winCalcState.current = "Invalid input"; break; }
+        winCalcState.current = String(Math.round(Math.sqrt(n)*1e10)/1e10); winCalcState.justCalc = false; break;
+    }
+    winCalcUpdateDisplay();
+  }
+
+  let winCalcHistOpen = false;
+
+  function winCalcToggleHistory() {
+    winCalcHistOpen = !winCalcHistOpen;
+    const panel   = document.getElementById("win-calc-hist-panel");
+    const chevron = document.getElementById("win-calc-hist-chevron");
+    const clearBtn= document.getElementById("win-calc-hist-clear");
+    panel.classList.toggle("open", winCalcHistOpen);
+    if (chevron) chevron.classList.toggle("open", winCalcHistOpen);
+    if (clearBtn) clearBtn.style.display = winCalcHistOpen ? "flex" : "none";
+  }
+
+  // ── History ─────────────────────────────────────────────────────
+  function winCalcRenderHistory() {
+    const list = document.getElementById("win-calc-hist-list");
+    if (!list) return;
+    if (winCalcHistory.length === 0) {
+      list.innerHTML = `<div id="win-calc-hist-empty">
+        <span style="font-size:22px;">🕐</span>
+        <span>No history yet</span>
+      </div>`;
+      return;
+    }
+    list.innerHTML = winCalcHistory.map(function(item, idx) {
+      return `<div class="win-calc-hist-item" onclick="winCalcLoadHistory(${idx})">
+        <div class="win-calc-hist-expr">${item.exprStr}</div>
+        <div class="win-calc-hist-val">${item.result}</div>
+      </div>`;
+    }).join("");
+  }
+
+  function winCalcLoadHistory(idx) {
+    const item = winCalcHistory[idx];
+    if (!item) return;
+    winCalcState.expr     = [];
+    winCalcState.current  = item.result.replace(/,/g, "");
+    winCalcState.justCalc = false;
+    winCalcUpdateDisplay();
+  }
+
+  function winCalcClearHistory() {
+    winCalcHistory = [];
+    winCalcRenderHistory();
+  }
+
+  // ── Keyboard support ────────────────────────────────────────────
+  document.addEventListener("keydown", function(e) {
+    const overlay = document.getElementById("win-calc-overlay");
+    if (!overlay || !overlay.classList.contains("open")) return;
+    const tag = document.activeElement ? document.activeElement.tagName.toLowerCase() : "";
+    if (tag === "input" || tag === "textarea") return;
+    e.stopPropagation();
+    const k = e.key;
+    if      (k >= "0" && k <= "9")  { e.preventDefault(); winCalcDigit(k); }
+    else if (k === ".")              { e.preventDefault(); winCalcDigit("."); }
+    else if (k === "+")              { e.preventDefault(); winCalcOp("+"); }
+    else if (k === "-")              { e.preventDefault(); winCalcOp("−"); }
+    else if (k === "*")              { e.preventDefault(); winCalcOp("×"); }
+    else if (k === "/")              { e.preventDefault(); winCalcOp("÷"); }
+    else if (k === "%")              { e.preventDefault(); winCalcFn("pct"); }
+    else if (k === "Enter" || k === "=") { e.preventDefault(); winCalcEquals(); }
+    else if (k === "Backspace")      { e.preventDefault(); winCalcFn("back"); }
+    else if (k === "Delete")         { e.preventDefault(); winCalcFn("c"); }
+    else if (k === "Escape")         { e.preventDefault(); winCalcClose(); }
+  });
+  // ────────────────────────────────────────────────────────────────
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  // ─── Center Toast ──────────────────────────────────────────────────
+  let centerToastTimer = null;
+
+  function showCenterToast(message) {
+    const toast = document.getElementById("center-toast");
+    if (!toast) return;
+    toast.textContent = message || "บันทึกข้อมูลสำเร็จ";
+    toast.classList.add("show");
+    clearTimeout(centerToastTimer);
+    centerToastTimer = setTimeout(() => { toast.classList.remove("show"); }, 2000);
+  }
+
+  // ─── Quick Calculate ──────────────────────────────────────────────
+  let winCalcQuickMode = false;
+
+  function quickSetWin1Amount10000() {
+    const win1 = 10000;
+    const o = getDrawOdds();
+    const a = getWin1Odds();
+    const r = getRate();
+
+    // Set win1 amount
+    win1AmtThb.value = formatComma(win1.toString());
+    win1AmtUsdt.value = r > 0 ? fmtMoney(win1 / r) : "";
+
+    // Back-calculate draw to balance profits: draw = (win1 × a) / o
+    if (o > 0 && a > 0) {
+      const draw = Math.round((win1 * a) / o);
+      drawAmtThb.value  = formatComma(draw.toString());
+      drawAmtUsdt.value = r > 0 ? fmtMoney(draw / r) : "";
+    }
+
+    winCalcQuickMode = false; // back to normal auto mode
+    calculate();
+  }
+
   // ─── Init ─────────────────────────────────────────────────────────
   window.addEventListener("DOMContentLoaded",()=>{
     loadRate(); calculate(); updateHistoryCount();
   });
 </script>
+<!-- Attachment Modal -->
+<div class="modal-overlay" id="attach-modal">
+  <div class="modal attach-modal-box">
+    <div class="modal-header">
+      <div class="modal-title">📎 แนบรูปภาพก่อนบันทึก</div>
+      <button class="modal-close" onclick="cancelAttachSave()">✕ ปิด</button>
+    </div>
+    <div class="modal-body">
+      <label style="display:block;font-size:12px;color:var(--text-muted);margin-bottom:6px;">หมายเหตุ</label>
+      <textarea id="save-note-input" class="edit-input" rows="3" placeholder="เช่น รายละเอียดเพิ่มเติม / ลีก / คู่แข่ง / เหตุผลที่บันทึก" style="width:100%;margin-bottom:14px;"></textarea>
+      <div id="attach-drop-zone" class="attach-drop-zone">
+        <div class="attach-drop-title">ลากรูปมาวางที่นี่</div>
+        <div class="attach-drop-sub">หรือกดปุ่มเพื่อเลือกรูป / วางรูปด้วย Ctrl+V หรือ Cmd+V</div>
+        <button class="btn btn-attach" onclick="document.getElementById('attach-input').click()">📎 เลือกรูปภาพ</button>
+        <input type="file" id="attach-input" accept="image/*" multiple style="display:none;" onchange="onAttachChange(event)" />
+      </div>
+      <div id="attach-preview" class="attach-preview"></div>
+    </div>
+    <div class="modal-footer">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;width:100%;">
+        <button class="btn btn-save" onclick="confirmSaveRecord()">💾 บันทึก</button>
+        <button class="btn btn-danger" onclick="cancelAttachSave()">ยกเลิก</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Record Modal -->
+<div class="modal-overlay" id="edit-record-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">✏️ แก้ไขข้อมูลที่บันทึกไว้</div>
+      <button class="modal-close" onclick="closeEditRecordModal()">✕ ปิด</button>
+    </div>
+    <div class="modal-body" id="edit-record-body"></div>
+    <div class="modal-footer">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;width:100%;">
+        <button class="btn btn-save" onclick="saveEditedRecord()">💾 บันทึกการแก้ไข</button>
+        <button class="btn btn-danger" onclick="closeEditRecordModal()">ยกเลิก</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="" />
+</div>
+<div id="center-toast" class="center-toast">บันทึกข้อมูลสำเร็จ</div>
+<!-- ─── Windows Calculator Modal ──────────────────────────────────── -->
+<div id="win-calc-overlay" onclick="winCalcOverlayClick(event)">
+  <div id="win-calc-modal">
+
+    <!-- Title bar -->
+    <div id="win-calc-titlebar">
+      <span class="win-calc-title">Calculator</span>
+      <div class="win-calc-tb-btns">
+        <button class="win-calc-tb-btn" onclick="winCalcMinimize()" title="Minimize">&#8722;</button>
+        <button class="win-calc-tb-btn win-calc-close" onclick="winCalcClose()" title="Close">✕</button>
+      </div>
+    </div>
+
+    <!-- Standard label -->
+    <div id="win-calc-subheader">
+      <span class="win-calc-mode">Standard</span>
+    </div>
+
+    <!-- Display -->
+    <div id="win-calc-display">
+      <div id="win-calc-expr"></div>
+      <div id="win-calc-result">0</div>
+    </div>
+
+    <!-- Button grid — Windows Standard layout
+         %   CE   C   ⌫
+         ¹/x x²  ²√x  ÷
+         7   8    9   ×
+         4   5    6   −
+         1   2    3   +
+         +/− 0    .   =
+    -->
+    <div id="win-calc-btns">
+      <button class="win-calc-btn win-calc-fn" onclick="winCalcFn('pct')">%</button>
+      <button class="win-calc-btn win-calc-fn" onclick="winCalcFn('ce')">CE</button>
+      <button class="win-calc-btn win-calc-fn" onclick="winCalcFn('c')">C</button>
+      <button class="win-calc-btn win-calc-fn" onclick="winCalcFn('back')">⌫</button>
+
+      <button class="win-calc-btn win-calc-fn" onclick="winCalcFn('inv')">¹/x</button>
+      <button class="win-calc-btn win-calc-fn" onclick="winCalcFn('sqr')">x²</button>
+      <button class="win-calc-btn win-calc-fn" onclick="winCalcFn('sqrt')">²√x</button>
+      <button class="win-calc-btn win-calc-op" onclick="winCalcOp('÷')">÷</button>
+
+      <button class="win-calc-btn" onclick="winCalcDigit('7')">7</button>
+      <button class="win-calc-btn" onclick="winCalcDigit('8')">8</button>
+      <button class="win-calc-btn" onclick="winCalcDigit('9')">9</button>
+      <button class="win-calc-btn win-calc-op" onclick="winCalcOp('×')">×</button>
+
+      <button class="win-calc-btn" onclick="winCalcDigit('4')">4</button>
+      <button class="win-calc-btn" onclick="winCalcDigit('5')">5</button>
+      <button class="win-calc-btn" onclick="winCalcDigit('6')">6</button>
+      <button class="win-calc-btn win-calc-op" onclick="winCalcOp('−')">−</button>
+
+      <button class="win-calc-btn" onclick="winCalcDigit('1')">1</button>
+      <button class="win-calc-btn" onclick="winCalcDigit('2')">2</button>
+      <button class="win-calc-btn" onclick="winCalcDigit('3')">3</button>
+      <button class="win-calc-btn win-calc-op" onclick="winCalcOp('+')">+</button>
+
+      <button class="win-calc-btn win-calc-fn" onclick="winCalcFn('sign')">+/−</button>
+      <button class="win-calc-btn" onclick="winCalcDigit('0')">0</button>
+      <button class="win-calc-btn" onclick="winCalcDigit('.')">.</button>
+      <button class="win-calc-btn win-calc-eq" onclick="winCalcEquals()">=</button>
+    </div>
+
+    <!-- History toggle row -->
+    <div id="win-calc-hist-toggle-row">
+      <button id="win-calc-hist-toggle-btn" onclick="winCalcToggleHistory()">
+        History <span id="win-calc-hist-chevron">▲</span>
+      </button>
+      <button id="win-calc-hist-clear" onclick="winCalcClearHistory()" title="Clear history" style="display:none;">🗑</button>
+    </div>
+
+    <!-- Collapsible history panel -->
+    <div id="win-calc-hist-panel">
+      <div id="win-calc-hist-inner">
+        <div id="win-calc-hist-list">
+          <div id="win-calc-hist-empty">
+            <span style="font-size:22px;">🕐</span>
+            <span>No history yet</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- Floating calculator button — always visible -->
+<div id="win-calc-mini" onclick="winCalcOpen()" title="Calculator">🧮 Calculator</div>
+<!-- ──────────────────────────────────────────────────────────────── -->
 
 </body>
 </html>
