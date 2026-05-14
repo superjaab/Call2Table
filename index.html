@@ -189,7 +189,6 @@
       text-transform: uppercase;
       letter-spacing: 1px;
     }
-    /* vertical dividers in header too */
     .card-header > span {
       padding: 10px 14px;
       border-right: 1px solid var(--border);
@@ -208,14 +207,12 @@
     .bet-row:last-child { border-bottom: none; }
     .bet-row:hover { background: rgba(91,138,255,0.04); }
 
-    /* vertical dividers between columns */
     .bet-row > * {
       border-right: 1px solid var(--border);
       padding: 12px 12px;
     }
     .bet-row > *:last-child { border-right: none; }
 
-    /* web name col */
     .web-name-col {
       display: flex;
       align-items: center;
@@ -236,7 +233,6 @@
     .web-name-input:focus { color: var(--accent); }
     .web-name-input::placeholder { color: var(--text-dim); font-size: 13px; font-weight: 400; text-align: center; }
 
-    /* Dual amount */
     .dual-amount { display: flex; gap: 8px; align-items: stretch; }
     .amount-half { flex: 1; display: flex; flex-direction: column; gap: 4px; }
     .amount-label {
@@ -247,7 +243,6 @@
     .amount-label.thb-label { color: var(--thb-color); }
     .amount-label.usdt-label { color: var(--usdt-color); }
 
-    /* Currency logos — now sit INSIDE input on the left */
     .currency-logo {
       width: 20px; height: 20px; border-radius: 50%;
       display: inline-flex; align-items: center; justify-content: center;
@@ -256,7 +251,6 @@
     .logo-thb { background: linear-gradient(135deg, #2a7adf, #4f9fff); color: #fff; }
     .logo-usdt { background: linear-gradient(135deg, #26a17b, #3fcba0); color: #fff; }
 
-    /* Logo sits absolutely inside input on left */
     .amount-input-wrap {
       position: relative; flex: 1; display: flex; flex-direction: column;
     }
@@ -269,7 +263,7 @@
       border-radius: 8px; color: var(--text);
       font-family: 'IBM Plex Mono', monospace;
       font-size: 14px; font-weight: 600;
-      padding: 9px 32px 9px 34px;  /* left space for logo, right for copy btn */
+      padding: 9px 32px 9px 34px;
       width: 100%; flex: 1; outline: none; text-align: right;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
@@ -279,7 +273,6 @@
     .amount-input.usdt-input:focus { border-color: var(--usdt-color); box-shadow: 0 0 0 3px rgba(245,192,64,0.15); }
     .amount-input::placeholder { color: var(--text-dim); }
 
-    /* copy button */
     .copy-btn-inline {
       position: absolute; right: 3px; top: 50%; transform: translateY(-50%);
       background: var(--surface); border: 1px solid var(--border);
@@ -297,7 +290,6 @@
       font-weight: 300; flex-shrink: 0;
     }
 
-    /* Odds col */
     .odds-col {
       display: flex;
       align-items: flex-start;
@@ -308,7 +300,7 @@
       display: flex; align-items: center; justify-content: center; gap: 5px;
     }
 
-    /* ── Floating dropdown (fixed to viewport) ── */
+    /* ── Floating dropdown ── */
     .float-dropdown {
       position: fixed;
       z-index: 9999;
@@ -329,7 +321,6 @@
     .float-dropdown::-webkit-scrollbar-track { background: transparent; }
     .float-dropdown::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
-    /* Option rows — full-width list items */
     .odds-option {
       display: block;
       width: 100%;
@@ -352,7 +343,6 @@
     .odds-option:hover { background: var(--accent2); color: #fff; }
     .odds-option.exact { color: var(--gold); font-weight: 800; background: rgba(255,208,96,0.08); }
 
-    /* Picker toggle btn */
     .odds-picker-btn {
       background: var(--surface2);
       border: 1.5px solid var(--border);
@@ -370,7 +360,6 @@
       border-color: var(--accent2); color: var(--accent2);
       background: rgba(160,122,255,0.12);
     }
-    /* hide spin buttons on decimal input */
     #draw_odds_decimal::-webkit-inner-spin-button,
     #draw_odds_decimal::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
     #draw_odds_decimal { -moz-appearance: textfield; }
@@ -391,7 +380,7 @@
     }
     .clear-btn:hover { background: rgba(255,77,106,0.24); border-color: var(--red); }
 
-    /* ── Save group with attach ── */
+    /* ── Save group ── */
     .save-group {
       display: flex;
       flex-direction: column;
@@ -445,7 +434,6 @@
       display: flex; align-items: center; justify-content: center;
     }
 
-    /* image in history */
     .rec-images {
       display: flex; flex-wrap: wrap; gap: 6px;
       padding: 8px 12px 10px;
@@ -457,7 +445,6 @@
     }
     .rec-img:hover { transform: scale(1.05); }
 
-    /* lightbox */
     .lightbox {
       position: fixed; inset: 0; z-index: 10000;
       background: rgba(0,0,0,0.88);
@@ -562,7 +549,6 @@
     .profit-neg { color: var(--red); }
     .result-empty { text-align: center; padding: 28px; color: var(--text-dim); font-size: 14px; }
 
-    /* Total row inside result card */
     .result-total-row {
       display: flex; align-items: center; justify-content: flex-end; gap: 10px;
       padding: 10px 16px; background: rgba(79,124,255,0.05);
@@ -700,7 +686,6 @@
       padding: 4px 8px; transition: all 0.2s;
     }
     .rec-del-btn:hover { background: rgba(244,63,94,0.2); }
-
     .rec-edit-btn {
       background: rgba(79,124,255,0.12);
       border: 1px solid rgba(79,124,255,0.35);
@@ -748,7 +733,6 @@
       font-size: 13px; color: var(--accent); text-align: left;
     }
     .rec-table tr:last-child td { border-bottom: none; }
-
     .history-footer { display: flex; justify-content: flex-end; padding-top: 6px; }
     .del-all-btn {
       background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.3);
@@ -758,7 +742,6 @@
     }
     .del-all-btn:hover { background: rgba(244,63,94,0.2); }
 
-    /* ── Responsive ── */
     @media (max-width: 600px) {
       .card-header { grid-template-columns: 60px 1fr 160px; font-size: 10px; }
       .bet-row { grid-template-columns: 60px 1fr 160px; }
@@ -770,105 +753,47 @@
       .app-title { font-size: 16px; }
     }
 
-    /* ── Design Overrides ── */
     .app-title { font-size: 22px; letter-spacing: 0.5px; }
-
-    .rate-pill {
-      background: var(--glow-gold);
-      border-color: rgba(245,200,66,0.22);
-    }
+    .rate-pill { background: var(--glow-gold); border-color: rgba(245,200,66,0.22); }
     .theme-toggle:hover { border-color: var(--accent); color: var(--text); background: var(--glow-accent); }
-
-    .card {
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      box-shadow: 0 4px 28px var(--shadow);
-    }
-    .card-header {
-      border-bottom: 1px solid var(--border);
-      font-weight: 700; letter-spacing: 1.2px; color: var(--text-dim);
-    }
+    .card { border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 4px 28px var(--shadow); }
+    .card-header { border-bottom: 1px solid var(--border); font-weight: 700; letter-spacing: 1.2px; color: var(--text-dim); }
     .bet-row:hover { background: var(--glow-accent); }
     .amount-input { border-radius: 10px; }
     .odds-input { border-radius: 10px; }
     .clear-btn { border-radius: 8px; }
-
-    .btn {
-      border-radius: 10px;
-      font-size: 14px;
-    }
-    .btn-primary {
-      background: linear-gradient(135deg, #3b6af0, #7a4ff5);
-      box-shadow: 0 4px 18px rgba(59,106,240,0.38);
-    }
+    .btn { border-radius: 10px; font-size: 14px; }
+    .btn-primary { background: linear-gradient(135deg, #3b6af0, #7a4ff5); box-shadow: 0 4px 18px rgba(59,106,240,0.38); }
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(59,106,240,0.48); }
-    .btn-green {
-      background: linear-gradient(135deg, #1fa85a, #16a34a);
-      box-shadow: 0 4px 18px rgba(34,197,94,0.32);
-    }
+    .btn-green { background: linear-gradient(135deg, #1fa85a, #16a34a); box-shadow: 0 4px 18px rgba(34,197,94,0.32); }
     .btn-green:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(34,197,94,0.42); }
-    .btn-save {
-      background: linear-gradient(135deg, #e8a800, #c8760a);
-      box-shadow: 0 4px 18px rgba(232,168,0,0.38);
-    }
+    .btn-save { background: linear-gradient(135deg, #e8a800, #c8760a); box-shadow: 0 4px 18px rgba(232,168,0,0.38); }
     .btn-save:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(232,168,0,0.48); }
-    .btn-purple {
-      background: linear-gradient(135deg, #7c3aed, #5b21b6);
-      box-shadow: 0 4px 18px rgba(124,58,237,0.38);
-    }
+    .btn-purple { background: linear-gradient(135deg, #7c3aed, #5b21b6); box-shadow: 0 4px 18px rgba(124,58,237,0.38); }
     .btn-purple:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(124,58,237,0.48); }
     .btn-danger { border-color: rgba(255,77,109,0.26); }
     .btn-danger:hover { background: rgba(255,77,109,0.18); transform: translateY(-1px); }
-
-    .result-card {
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      box-shadow: 0 4px 28px var(--shadow);
-      margin-bottom: 22px;
-    }
+    .result-card { border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 4px 28px var(--shadow); margin-bottom: 22px; }
     .result-total-row { background: var(--glow-accent); border-top-color: var(--border); }
     .result-row > span { padding: 16px 16px; }
     .result-row .profit-val { font-size: 20px; }
-
-    .history-toggle {
-      border-radius: 14px;
-      box-shadow: 0 2px 14px var(--shadow);
-    }
+    .history-toggle { border-radius: 14px; box-shadow: 0 2px 14px var(--shadow); }
     .history-toggle.open { border-radius: 14px 14px 0 0; }
     .history-toggle:hover { border-color: var(--accent); background: var(--glow-accent); }
-    .history-body {
-      border-radius: 0 0 14px 14px;
-      box-shadow: 0 6px 24px var(--shadow);
-    }
-    .record-card {
-      border-radius: 12px;
-      transition: box-shadow 0.2s;
-    }
+    .history-body { border-radius: 0 0 14px 14px; box-shadow: 0 6px 24px var(--shadow); }
+    .record-card { border-radius: 12px; transition: box-shadow 0.2s; }
     .record-card:hover { box-shadow: 0 4px 20px rgba(91,138,255,0.12); }
     .record-note { background: var(--glow-accent); }
-    /* ── Attach Modal ── */
     .attach-modal-box { max-width: 620px; }
     .attach-drop-zone {
-      border: 2px dashed var(--border);
-      border-radius: 12px;
-      padding: 24px;
-      text-align: center;
-      background: var(--surface2);
-      transition: all 0.2s;
-      margin-bottom: 14px;
+      border: 2px dashed var(--border); border-radius: 12px; padding: 24px;
+      text-align: center; background: var(--surface2); transition: all 0.2s; margin-bottom: 14px;
     }
-    .attach-drop-zone.drag-over {
-      border-color: var(--accent);
-      background: rgba(91,138,255,0.12);
-    }
+    .attach-drop-zone.drag-over { border-color: var(--accent); background: rgba(91,138,255,0.12); }
     .attach-drop-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
     .attach-drop-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
-
-    /* Task 4: stronger profit color override for history table */
     .rec-table td.profit-pos { color: var(--green) !important; }
     .rec-table td.profit-neg { color: var(--red) !important; }
-
-    /* ── Loading spinner ── */
     .btn-loading { opacity: 0.75; pointer-events: none; }
     .spinner-inline {
       display: inline-block; width: 13px; height: 13px;
@@ -877,209 +802,70 @@
       vertical-align: -2px; margin-right: 6px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ── Daily Summary note ── */
-    .daily-item-note {
-      margin-top: 6px;
-      font-size: 15px;
-      color: var(--text);
-      line-height: 1.55;
-      word-break: break-word;
-      font-weight: 500;
-    }
-    .daily-item-note-label {
-      color: var(--accent);
-      font-size: 15px;
-      font-weight: 800;
-      margin-right: 4px;
-    }
-
-    /* ── History record note ── */
-    .record-note {
-      padding: 8px 12px;
-      border-bottom: 1px solid var(--border);
-      color: var(--text-muted);
-      font-size: 13px;
-      line-height: 1.5;
-      background: rgba(79,124,255,0.04);
-    }
-    .record-note-label {
-      color: var(--accent);
-      font-weight: 700;
-      margin-right: 4px;
-    }
-
-    /* ── Center toast ── */
+    .daily-item-note { margin-top: 6px; font-size: 15px; color: var(--text); line-height: 1.55; word-break: break-word; font-weight: 500; }
+    .daily-item-note-label { color: var(--accent); font-size: 15px; font-weight: 800; margin-right: 4px; }
+    .record-note { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--text-muted); font-size: 13px; line-height: 1.5; background: rgba(79,124,255,0.04); }
+    .record-note-label { color: var(--accent); font-weight: 700; margin-right: 4px; }
     .center-toast {
-      position: fixed;
-      left: 50%; top: 50%;
+      position: fixed; left: 50%; top: 50%;
       transform: translate(-50%, -50%) scale(0.96);
-      z-index: 20000;
-      background: var(--surface);
-      color: var(--text);
-      border: 1px solid var(--border-light);
-      box-shadow: 0 18px 60px var(--shadow);
-      border-radius: 14px;
-      padding: 16px 24px;
-      font-size: 16px;
-      font-weight: 700;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 20000; background: var(--surface); color: var(--text);
+      border: 1px solid var(--border-light); box-shadow: 0 18px 60px var(--shadow);
+      border-radius: 14px; padding: 16px 24px; font-size: 16px; font-weight: 700;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s ease, transform 0.2s ease;
     }
-    .center-toast.show {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
-    }
-
-    /* ── Floating nav buttons top-right ── */
-    #float-nav {
-      position: fixed; top: 20px; right: 20px;
-      z-index: 10000;
-      display: flex; gap: 6px;
-    }
+    .center-toast.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    #float-nav { position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; gap: 6px; }
     .float-nav-btn {
-      background: #2b2b2b; color: #e2e8f0;
-      border: 1px solid #444; border-radius: 24px;
-      padding: 7px 14px;
-      font-size: 16px; font-family: 'Kanit', sans-serif;
-      cursor: pointer;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.5);
-      transition: background 0.15s, opacity 0.15s;
+      background: #2b2b2b; color: #e2e8f0; border: 1px solid #444; border-radius: 24px;
+      padding: 7px 14px; font-size: 16px; font-family: 'Kanit', sans-serif; cursor: pointer;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.5); transition: background 0.15s, opacity 0.15s;
       user-select: none; line-height: 1;
     }
     .float-nav-btn:hover:not(:disabled) { background: #3a3a3a; }
     .float-nav-btn:disabled { opacity: 0.32; cursor: default; pointer-events: none; }
-    [data-theme="light"] .float-nav-btn {
-      background: #2b2b2b; color: #e2e8f0; border-color: #444;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.35);
-    }
+    [data-theme="light"] .float-nav-btn { background: #2b2b2b; color: #e2e8f0; border-color: #444; box-shadow: 0 4px 18px rgba(0,0,0,0.35); }
     [data-theme="light"] .float-nav-btn:hover:not(:disabled) { background: #3a3a3a; }
     .win-calc-header-btn {
-      background: #27272a;
-      border: 1px solid #3f3f46;
-      border-radius: 10px;
-      color: #fff;
-      cursor: pointer;
-      font-size: 20px;
-      width: 38px; height: 38px;
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.2s;
-      line-height: 1;
+      background: #27272a; border: 1px solid #3f3f46; border-radius: 10px; color: #fff;
+      cursor: pointer; font-size: 20px; width: 38px; height: 38px;
+      display: flex; align-items: center; justify-content: center; transition: all 0.2s; line-height: 1;
     }
-    [data-theme="light"] .win-calc-header-btn {
-      background: #e4e4e7; border-color: #d4d4d8; color: #18181b;
-    }
-    .win-calc-header-btn:hover {
-      background: #3f3f46; transform: scale(1.08);
-    }
+    [data-theme="light"] .win-calc-header-btn { background: #e4e4e7; border-color: #d4d4d8; color: #18181b; }
+    .win-calc-header-btn:hover { background: #3f3f46; transform: scale(1.08); }
     [data-theme="light"] .win-calc-header-btn:hover { background: #d4d4d8; }
-
-    /* ── Always-visible floating calculator button ── */
     #win-calc-mini {
-      position: fixed; bottom: 20px; right: 20px;
-      z-index: 11000;
-      background: #2b2b2b;
-      color: #e2e8f0;
-      border: 1px solid #444;
-      border-radius: 24px;
-      padding: 8px 18px;
-      font-size: 14px; font-family: 'Kanit', sans-serif;
-      cursor: pointer;
-      display: flex !important;
-      align-items: center; gap: 6px;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.5);
-      transition: background 0.15s;
+      position: fixed; bottom: 20px; right: 20px; z-index: 11000;
+      background: #2b2b2b; color: #e2e8f0; border: 1px solid #444; border-radius: 24px;
+      padding: 8px 18px; font-size: 14px; font-family: 'Kanit', sans-serif; cursor: pointer;
+      display: flex !important; align-items: center; gap: 6px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.5); transition: background 0.15s;
     }
     #win-calc-mini:hover { background: #3a3a3a; }
-
-    /* card-header เงินทุน center */
     .card-header > span:nth-child(2) { text-align: center; }
-
     #win-calc-overlay {
-      position:fixed; inset:0;
-      background:rgba(0,0,0,0.45);
-      z-index:11000;
+      position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:11000;
       display:none; align-items:center; justify-content:center;
     }
     #win-calc-overlay.open { display:flex; }
-
-    /* main window — single column */
     #win-calc-modal {
-      background:#1c1c1c;
-      border:1px solid #3a3a3a;
-      border-radius:8px;
-      width:320px;
-      max-height:92vh;
-      overflow:hidden;
-      display:flex; flex-direction:column;
-      box-shadow:0 24px 64px rgba(0,0,0,0.8);
-      user-select:none;
+      background:#1c1c1c; border:1px solid #3a3a3a; border-radius:8px; width:320px;
+      max-height:92vh; overflow:hidden; display:flex; flex-direction:column;
+      box-shadow:0 24px 64px rgba(0,0,0,0.8); user-select:none;
     }
-
-    /* title bar */
-    #win-calc-titlebar {
-      display:flex; align-items:center;
-      background:#202020; padding:6px 8px 6px 14px; gap:8px;
-      flex-shrink:0;
-    }
+    #win-calc-titlebar { display:flex; align-items:center; background:#202020; padding:6px 8px 6px 14px; gap:8px; flex-shrink:0; }
     .win-calc-title { font-size:13px; color:#ccc; font-family:'Segoe UI',sans-serif; flex:1; }
     .win-calc-tb-btns { display:flex; gap:2px; }
-    .win-calc-tb-btn {
-      background:transparent; border:none; color:#bbb;
-      width:34px; height:28px; border-radius:4px; cursor:pointer;
-      font-size:14px; display:flex; align-items:center; justify-content:center;
-      transition:background 0.15s;
-    }
+    .win-calc-tb-btn { background:transparent; border:none; color:#bbb; width:34px; height:28px; border-radius:4px; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center; transition:background 0.15s; }
     .win-calc-tb-btn:hover { background:#444; }
     .win-calc-tb-btn.win-calc-close:hover { background:#e81123; color:#fff; }
-
-    /* Standard label */
-    #win-calc-subheader {
-      padding:8px 14px 2px; background:#1c1c1c; flex-shrink:0;
-    }
-    #win-calc-subheader .win-calc-mode {
-      font-size:20px; font-weight:600; color:#fff; font-family:'Segoe UI',sans-serif;
-    }
-
-    /* display */
-    #win-calc-display {
-      padding:6px 16px 8px; background:#1c1c1c; flex-shrink:0;
-      min-height:80px;
-      display:flex; flex-direction:column; align-items:flex-end; justify-content:flex-end; gap:2px;
-    }
-    #win-calc-expr {
-      font-size:13px; color:#777; font-family:'Segoe UI',Consolas,monospace;
-      min-height:18px; text-align:right; word-break:break-all; width:100%;
-    }
-    #win-calc-result {
-      font-size:42px; font-weight:300; color:#fff;
-      font-family:'Segoe UI',Consolas,monospace;
-      text-align:right; word-break:break-all; line-height:1.1; width:100%;
-    }
-
-    /* button grid — Windows layout:
-       Row1: %   CE   C   ⌫
-       Row2: ¹/x x²  ²√x  ÷
-       Row3: 7   8    9   ×
-       Row4: 4   5    6   −
-       Row5: 1   2    3   +
-       Row6: +/− 0    .   =   (= spans row 6+7 vertically is NOT how Win does it)
-       Windows actually: last row is [+/−][0][.][=] — 0 does NOT span
-       But = IS the same height as other buttons (no span).
-       The Windows layout keeps 0 as single cell. */
-    #win-calc-btns {
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:1px; background:#111; padding:1px; flex-shrink:0;
-    }
-    .win-calc-btn {
-      background:#2b2b2b; border:none; color:#fff;
-      font-size:16px; font-family:'Segoe UI',sans-serif;
-      height:54px; cursor:pointer;
-      display:flex; align-items:center; justify-content:center;
-      transition:background 0.1s; border-radius:0;
-    }
+    #win-calc-subheader { padding:8px 14px 2px; background:#1c1c1c; flex-shrink:0; }
+    #win-calc-subheader .win-calc-mode { font-size:20px; font-weight:600; color:#fff; font-family:'Segoe UI',sans-serif; }
+    #win-calc-display { padding:6px 16px 8px; background:#1c1c1c; flex-shrink:0; min-height:80px; display:flex; flex-direction:column; align-items:flex-end; justify-content:flex-end; gap:2px; }
+    #win-calc-expr { font-size:13px; color:#777; font-family:'Segoe UI',Consolas,monospace; min-height:18px; text-align:right; word-break:break-all; width:100%; }
+    #win-calc-result { font-size:42px; font-weight:300; color:#fff; font-family:'Segoe UI',Consolas,monospace; text-align:right; word-break:break-all; line-height:1.1; width:100%; }
+    #win-calc-btns { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:#111; padding:1px; flex-shrink:0; }
+    .win-calc-btn { background:#2b2b2b; border:none; color:#fff; font-size:16px; font-family:'Segoe UI',sans-serif; height:54px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background 0.1s; border-radius:0; }
     .win-calc-btn:hover  { background:#3a3a3a; }
     .win-calc-btn:active { background:#4d4d4d; }
     .win-calc-btn.win-calc-op  { background:#333; color:#87cefa; font-size:18px; }
@@ -1089,156 +875,131 @@
     .win-calc-btn.win-calc-eq  { background:#0067c0; color:#fff; font-size:22px; font-weight:300; }
     .win-calc-btn.win-calc-eq:hover  { background:#0078d4; }
     .win-calc-btn.win-calc-eq:active { background:#005a9e; }
-
-    /* ── Collapsible History panel (below buttons) ── */
-    #win-calc-hist-panel {
-      background:#1c1c1c;
-      border-top:1px solid #2e2e2e;
-      display:flex; flex-direction:column;
-      flex-shrink:0;
-      transition:max-height 0.25s ease;
-      max-height:0; overflow:hidden;
-    }
+    #win-calc-hist-panel { background:#1c1c1c; border-top:1px solid #2e2e2e; display:flex; flex-direction:column; flex-shrink:0; transition:max-height 0.25s ease; max-height:0; overflow:hidden; }
     #win-calc-hist-panel.open { max-height:260px; }
-
-    #win-calc-hist-inner {
-      display:flex; flex-direction:column;
-      height:240px;
-    }
-
-    #win-calc-hist-list {
-      flex:1; overflow-y:auto; padding:6px 0;
-    }
+    #win-calc-hist-inner { display:flex; flex-direction:column; height:240px; }
+    #win-calc-hist-list { flex:1; overflow-y:auto; padding:6px 0; }
     #win-calc-hist-list::-webkit-scrollbar { width:4px; }
     #win-calc-hist-list::-webkit-scrollbar-thumb { background:#444; border-radius:2px; }
-
-    #win-calc-hist-bar {
-      display:flex; align-items:center; justify-content:space-between;
-      padding:6px 12px; border-top:1px solid #2e2e2e; flex-shrink:0;
-    }
-    .win-calc-hist-tab {
-      font-size:13px; font-weight:700; color:#fff;
-      font-family:'Segoe UI',sans-serif;
-      background:transparent; border:none; cursor:default;
-      border-bottom:2px solid #0078d4; padding:2px 4px;
-    }
-    #win-calc-hist-clear {
-      background:transparent; border:none; color:#888;
-      cursor:pointer; font-size:16px;
-      width:28px; height:28px;
-      display:flex; align-items:center; justify-content:center;
-      border-radius:4px; transition:all 0.15s;
-    }
+    #win-calc-hist-bar { display:flex; align-items:center; justify-content:space-between; padding:6px 12px; border-top:1px solid #2e2e2e; flex-shrink:0; }
+    .win-calc-hist-tab { font-size:13px; font-weight:700; color:#fff; font-family:'Segoe UI',sans-serif; background:transparent; border:none; cursor:default; border-bottom:2px solid #0078d4; padding:2px 4px; }
+    #win-calc-hist-clear { background:transparent; border:none; color:#888; cursor:pointer; font-size:16px; width:28px; height:28px; display:flex; align-items:center; justify-content:center; border-radius:4px; transition:all 0.15s; }
     #win-calc-hist-clear:hover { background:#333; color:#f87171; }
-
-    #win-calc-hist-empty {
-      display:flex; flex-direction:column;
-      align-items:center; justify-content:center;
-      height:100%; color:#555;
-      font-size:12px; font-family:'Segoe UI',sans-serif;
-      gap:6px; padding:20px; text-align:center;
-    }
-    .win-calc-hist-item {
-      padding:8px 14px; cursor:pointer;
-      border-radius:4px; margin:0 4px 2px;
-      transition:background 0.12s; text-align:right;
-    }
+    #win-calc-hist-empty { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color:#555; font-size:12px; font-family:'Segoe UI',sans-serif; gap:6px; padding:20px; text-align:center; }
+    .win-calc-hist-item { padding:8px 14px; cursor:pointer; border-radius:4px; margin:0 4px 2px; transition:background 0.12s; text-align:right; }
     .win-calc-hist-item:hover { background:#2a2a2a; }
     .win-calc-hist-expr { font-size:11px; color:#666; font-family:'Segoe UI',Consolas,monospace; word-break:break-all; }
     .win-calc-hist-val  { font-size:20px; font-weight:300; color:#fff; font-family:'Segoe UI',Consolas,monospace; }
-
-    /* toggle history button row */
-    #win-calc-hist-toggle-row {
-      display:flex; align-items:center; justify-content:space-between;
-      background:#1c1c1c; padding:4px 12px;
-      border-top:1px solid #2a2a2a; flex-shrink:0;
-    }
-    #win-calc-hist-toggle-btn {
-      background:transparent; border:none; color:#666;
-      font-size:12px; font-family:'Segoe UI',sans-serif;
-      cursor:pointer; display:flex; align-items:center; gap:4px;
-      padding:4px 6px; border-radius:4px; transition:all 0.15s;
-    }
+    #win-calc-hist-toggle-row { display:flex; align-items:center; justify-content:space-between; background:#1c1c1c; padding:4px 12px; border-top:1px solid #2a2a2a; flex-shrink:0; }
+    #win-calc-hist-toggle-btn { background:transparent; border:none; color:#666; font-size:12px; font-family:'Segoe UI',sans-serif; cursor:pointer; display:flex; align-items:center; gap:4px; padding:4px 6px; border-radius:4px; transition:all 0.15s; }
     #win-calc-hist-toggle-btn:hover { background:#2a2a2a; color:#aaa; }
     #win-calc-hist-chevron { transition:transform 0.2s; font-size:10px; }
     #win-calc-hist-chevron.open { transform:rotate(180deg); }
-
-    /* minimized floating bar */
-    #win-calc-mini {
-      position:fixed; bottom:20px; right:20px; z-index:11000;
-      background:#2b2b2b; color:#e2e8f0; border:1px solid #444;
-      border-radius:24px; padding:8px 18px;
-      font-size:14px; font-family:'Kanit',sans-serif;
-      cursor:pointer; display:none;
-      box-shadow:0 4px 18px rgba(0,0,0,0.5); transition:background 0.15s;
-    }
+    #win-calc-mini { position:fixed; bottom:20px; right:20px; z-index:11000; background:#2b2b2b; color:#e2e8f0; border:1px solid #444; border-radius:24px; padding:8px 18px; font-size:14px; font-family:'Kanit',sans-serif; cursor:pointer; display:none; box-shadow:0 4px 18px rgba(0,0,0,0.5); transition:background 0.15s; }
     #win-calc-mini:hover { background:#3a3a3a; }
-    /* ───────────────────────────────────────────────────────────────── */
-    /* ── Currency Converter popup ── */
     #fx-popup {
-      position: fixed;
-      top: 68px; right: 20px;
-      z-index: 12000;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 20px 20px 18px;
-      width: 300px;
-      box-shadow: 0 16px 56px var(--shadow);
-      display: none;
-      flex-direction: column;
-      gap: 14px;
-      animation: fxFadeIn 0.18s ease;
+      position: fixed; top: 68px; right: 20px; z-index: 12000;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
+      padding: 20px 20px 18px; width: 300px; box-shadow: 0 16px 56px var(--shadow);
+      display: none; flex-direction: column; gap: 14px; animation: fxFadeIn 0.18s ease;
     }
     #fx-popup.open { display: flex; }
-    @keyframes fxFadeIn {
-      from { opacity:0; transform:translateY(-8px) scale(0.97); }
-      to   { opacity:1; transform:translateY(0)    scale(1);    }
-    }
-    .fx-title {
-      font-size: 15px; font-weight: 700; color: var(--text);
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .fx-close {
-      background: none; border: none; color: var(--text-dim);
-      cursor: pointer; font-size: 16px; line-height: 1;
-      padding: 2px 6px; border-radius: 6px; transition: all 0.15s;
-    }
+    @keyframes fxFadeIn { from { opacity:0; transform:translateY(-8px) scale(0.97); } to { opacity:1; transform:translateY(0) scale(1); } }
+    .fx-title { font-size: 15px; font-weight: 700; color: var(--text); display: flex; align-items: center; justify-content: space-between; }
+    .fx-close { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 16px; line-height: 1; padding: 2px 6px; border-radius: 6px; transition: all 0.15s; }
     .fx-close:hover { background: rgba(255,77,109,0.12); color: var(--red); }
-    .fx-section {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px 14px;
-      display: flex; flex-direction: column; gap: 8px;
-    }
-    .fx-label {
-      font-size: 11px; font-weight: 700; color: var(--text-dim);
-      text-transform: uppercase; letter-spacing: 0.9px;
-    }
+    .fx-section { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+    .fx-label { font-size: 11px; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.9px; }
     .fx-row { display: flex; align-items: center; gap: 8px; }
-    .fx-input {
-      flex: 1; background: var(--surface);
-      border: 1.5px solid var(--border); border-radius: 10px;
-      color: var(--text); font-family: 'IBM Plex Mono', monospace;
-      font-size: 16px; font-weight: 600;
-      padding: 9px 12px; outline: none; text-align: right;
-      transition: border-color 0.2s, box-shadow 0.2s; min-width: 0;
-    }
+    .fx-input { flex: 1; background: var(--surface); border: 1.5px solid var(--border); border-radius: 10px; color: var(--text); font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 600; padding: 9px 12px; outline: none; text-align: right; transition: border-color 0.2s, box-shadow 0.2s; min-width: 0; }
     .fx-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--glow-accent); }
-    .fx-currency-badge {
-      font-size: 12px; font-weight: 700; color: var(--text-muted);
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 8px; padding: 6px 10px; white-space: nowrap; flex-shrink: 0;
-    }
-    .fx-result-row {
-      display: flex; align-items: center; justify-content: space-between; padding-top: 2px;
-    }
+    .fx-currency-badge { font-size: 12px; font-weight: 700; color: var(--text-muted); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; white-space: nowrap; flex-shrink: 0; }
+    .fx-result-row { display: flex; align-items: center; justify-content: space-between; padding-top: 2px; }
     .fx-result-label { font-size: 12px; color: var(--text-dim); }
     .fx-result-val { font-family: 'IBM Plex Mono', monospace; font-size: 18px; font-weight: 700; color: var(--accent); }
     .fx-rate-note { font-size: 11px; color: var(--text-dim); text-align: center; }
     .fx-rate-note b { color: var(--gold); font-weight: 700; }
 
+    /* ── ค่าน้ำติดลบ: hint box สำหรับแสดงส่วนต่าง ── */
+    .neg-odds-note {
+      font-size: 12px;
+      color: var(--red);
+      background: rgba(255,77,109,0.08);
+      border: 1px solid rgba(255,77,109,0.25);
+      border-radius: 6px;
+      padding: 4px 10px;
+      margin-top: 6px;
+      text-align: center;
+      display: none;
+    }
+
+    /* ── Balance hint box (แสดงคำแนะนำเงินทุนก่อนเฉลี่ย) ── */
+    .balance-hint-box {
+      display: none;
+      background: rgba(240,180,41,0.07);
+      border: 1.5px solid rgba(240,180,41,0.35);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 14px;
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.7;
+    }
+    .balance-hint-box.show { display: block; }
+    .balance-hint-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .balance-hint-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 12px;
+    }
+    .balance-hint-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 13px;
+    }
+    .balance-hint-row .bh-label { color: var(--text-muted); }
+    .balance-hint-row .bh-val {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--accent);
+    }
+    .balance-hint-row .bh-val.neg-side { color: var(--gold); }
+    .balance-hint-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+    .btn-hint-apply {
+      background: linear-gradient(135deg, var(--gold), #c8760a);
+      border: none; border-radius: 8px; color: #111;
+      cursor: pointer; font-family: 'Kanit', sans-serif;
+      font-size: 13px; font-weight: 700;
+      padding: 8px 18px; transition: all 0.2s;
+    }
+    .btn-hint-apply:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(232,168,0,0.4); }
+    .btn-hint-dismiss {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px; color: var(--text-dim);
+      cursor: pointer; font-family: 'Kanit', sans-serif;
+      font-size: 13px; padding: 8px 14px; transition: all 0.2s;
+    }
+    .btn-hint-dismiss:hover { border-color: var(--border-light); color: var(--text-muted); }
   </style>
 </head>
 <body>
@@ -1296,12 +1057,16 @@
       </div>
     </div>
     <div class="odds-col">
-      <div class="odds-group">
-        <input type="number" id="draw_odds_main" class="odds-input" min="0" style="width:50px;" />
-        <span class="odds-dot">.</span>
-        <input type="number" id="draw_odds_decimal" class="odds-input" min="0" max="99" style="width:50px;" />
-        <button class="odds-picker-btn" id="dec-picker-btn" onclick="toggleDecPicker(event)" title="เลือกทศนิยม">▾</button>
-        <button class="clear-btn" onclick="draw_odds_main.value='';draw_odds_decimal.value='';forceAutoWin1Amount();suggestWin1MinimumOdds();closeAll();">✕</button>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;">
+        <div class="odds-group">
+          <input type="number" id="draw_odds_main" class="odds-input" min="0" style="width:50px;" />
+          <span class="odds-dot">.</span>
+          <input type="number" id="draw_odds_decimal" class="odds-input" min="0" max="99" style="width:50px;" />
+          <button class="odds-picker-btn" id="dec-picker-btn" onclick="toggleDecPicker(event)" title="เลือกทศนิยม">▾</button>
+          <button class="clear-btn" onclick="draw_odds_main.value='';draw_odds_decimal.value='';forceAutoWin1Amount();suggestWin1MinimumOdds();closeAll();">✕</button>
+        </div>
+        <!-- ← แก้ค่าน้ำติดลบ: แสดงส่วนต่างเมื่อ draw ติดลบ -->
+        <div class="neg-odds-note" id="draw-neg-note"></div>
       </div>
     </div>
   </div>
@@ -1331,17 +1096,31 @@
       </div>
     </div>
     <div class="odds-col">
-      <div class="odds-group">
-        <input type="text" id="win1_odds" class="odds-input" inputmode="decimal" style="width:88px;" />
-        <button class="odds-picker-btn" id="odds-picker-btn" onclick="toggleOddsPicker(event)" title="เลือกค่าน้ำ">▾</button>
-        <button class="clear-btn" onclick="win1_odds.value='';win1_amt_thb.value='';win1_amt_usdt.value='';calculate();closeAll();">✕</button>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;">
+        <div class="odds-group">
+          <input type="text" id="win1_odds" class="odds-input" inputmode="decimal" style="width:88px;" />
+          <button class="odds-picker-btn" id="odds-picker-btn" onclick="toggleOddsPicker(event)" title="เลือกค่าน้ำ">▾</button>
+          <button class="clear-btn" onclick="win1_odds.value='';win1_amt_thb.value='';win1_amt_usdt.value='';calculate();closeAll();">✕</button>
+        </div>
+        <!-- ← แก้ค่าน้ำติดลบ: แสดงส่วนต่างเมื่อ win1 ติดลบ -->
+        <div class="neg-odds-note" id="win1-neg-note"></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Hint -->
+<!-- Hint: แนะนำ min odds -->
 <div id="required-win1-odds" class="hint-box"></div>
+
+<!-- Balance Hint: แนะนำเงินทุนก่อนเฉลี่ย (ค่าน้ำติดลบ) -->
+<div id="balance-hint-box" class="balance-hint-box">
+  <div class="balance-hint-title">💡 <span id="bh-title-text">แนะนำการเฉลี่ยเงินทุน</span></div>
+  <div class="balance-hint-rows" id="bh-rows"></div>
+  <div class="balance-hint-actions">
+    <button class="btn-hint-dismiss" onclick="dismissBalanceHint()">ยกเลิก</button>
+    <button class="btn-hint-apply" onclick="applyBalanceHint()">✅ ใช้ค่านี้เลย</button>
+  </div>
+</div>
 
 <!-- Buttons -->
 <div class="btn-row">
@@ -1422,7 +1201,6 @@
   </div>
 </div>
 
-<!-- Fixed floating dropdowns — must be before <script> so getElementById works -->
 <div class="float-dropdown" id="odds-dropdown"></div>
 <div class="float-dropdown" id="dec-dropdown"></div>
 
@@ -1504,22 +1282,14 @@
     if (sp[1]!==undefined) v=sp[0]+"."+sp[1].slice(0,2);
     el.value = v===""?"":formatComma(v);
   }
-  function cleanOdds(el) {
-    let v=el.value.replace(/[^\d.]/g,"");
-    const p=v.split(".");
-    if (p.length>2) v=p[0]+"."+p.slice(1).join("");
-    el.value=v;
-  }
-
   function cleanWin1Odds(el) {
-    // Allow only xx.xx format: max 2 digits before dot, max 2 after
     let v = el.value.replace(/[^\d.]/g,"");
     const parts = v.split(".");
-    if (parts.length > 2) v = parts[0] + "." + parts.slice(1).join(""); // remove extra dots
+    if (parts.length > 2) v = parts[0] + "." + parts.slice(1).join("");
     const sp = v.split(".");
-    let intPart = (sp[0] || "").slice(0, 2);   // max 2 digits before dot
+    let intPart = (sp[0] || "").slice(0, 2);
     if (sp.length > 1) {
-      const decPart = sp[1].slice(0, 2);        // max 2 digits after dot
+      const decPart = sp[1].slice(0, 2);
       v = intPart + "." + decPart;
     } else {
       v = intPart;
@@ -1547,33 +1317,77 @@
     thbEl.value = (r>0&&u>0)?formatComma(Math.round(u*r).toString()):"";
   }
 
-  // ─── Calculate ────────────────────────────────────────────────────
-  function forceAutoWin1Amount() {
-    const d=parseMoney(drawAmtThb), o=getDrawOdds(), a=getWin1Odds();
-    if (!d||!o||!a) { calculate(); return; }
-    const w=Math.round((d*o)/a);
-    win1AmtThb.value=formatComma(w.toString());
-    const r=getRate(); win1AmtUsdt.value=r>0?fmtMoney(w/r):"";
-    calculate();
+  // ─── ← แก้ค่าน้ำติดลบ: ฟังก์ชันอัพเดต note แสดงส่วนต่าง ────────
+  function updateNegOddsNotes() {
+    const d = parseMoney(drawAmtThb);
+    const x = parseMoney(win1AmtThb);
+    const o = getDrawOdds();
+    const a = getWin1Odds();
+    const drawNote = document.getElementById("draw-neg-note");
+    const win1Note = document.getElementById("win1-neg-note");
+
+    if (o > 0 && o < 1 && d > 0) {
+      const diff = Math.round(d * (1 - o));
+      drawNote.textContent = `🔻 ค่าน้ำติดลบ ส่วนต่าง ${fmt(diff)} ฿`;
+      drawNote.style.display = "block";
+    } else {
+      drawNote.style.display = "none";
+    }
+
+    if (a > 0 && a < 1 && x > 0) {
+      const diff = Math.round(x * (1 - a));
+      win1Note.textContent = `🔻 ค่าน้ำติดลบ ส่วนต่าง ${fmt(diff)} ฿`;
+      win1Note.style.display = "block";
+    } else {
+      win1Note.style.display = "none";
+    }
   }
 
+  // ─── Calculate ──────────────────────────────────────────────────
+  // ← แก้ค่าน้ำติดลบ: เพิ่มลอจิกครบทุกกรณี
   function calculate() {
     const d=parseMoney(drawAmtThb), o=getDrawOdds(), a=getWin1Odds(), x=parseMoney(win1AmtThb);
     const total=d+x;
     totalInvestment.textContent=total>0?fmt(total):"0";
     if (!d||!o||!a||!x) {
       resultTable.innerHTML='<div class="result-empty">กรุณากรอกข้อมูลให้ครบ</div>';
+      updateNegOddsNotes();
       return;
     }
-    const w1ret=x*a, dret=d*o;
+
+    // ← แก้ค่าน้ำติดลบ: ตรวจสอบว่าฝั่งไหนติดลบ
+    const drawNeg = o < 1;
+    const win1Neg = a < 1;
+
+    // ← แก้ค่าน้ำติดลบ: คำนวณส่วนต่างที่หายไปจากค่าน้ำ
+    // เช่น แทง 1000 ที่ 0.85 → ส่วนต่าง = 1000 × (1 - 0.85) = 150
+    const drawDiff = drawNeg ? d*(1-o) : 0;
+    const win1Diff = win1Neg ? x*(1-a) : 0;
+
+    // ← แก้ค่าน้ำติดลบ: ผลตอบแทนหลัก
+    // ติดลบ → ×2 (ได้ทุนคืน + อีกฝั่งแพ้คืนมา)
+    // ปกติ  → ×odds
+    const dret  = drawNeg ? d*2 : d*o;
+    const w1ret = win1Neg ? x*2 : x*a;
+
+    // ← แก้ค่าน้ำติดลบ: ยอดรวมจริง = ผลตอบแทนตัวเอง + ส่วนต่างของอีกฝั่ง
+    const dSum  = dret  + win1Diff;
+    const w1Sum = w1ret + drawDiff;
+
     const drawName = drawWebName.value.trim() || "1";
     const win1Name = win1WebName.value.trim() || "2";
+
+    // ← แก้ค่าน้ำติดลบ: แสดง 🔻 ถ้าค่าน้ำติดลบ
+    const drawLabel = drawNeg ? `ออก ${drawName} 🔻` : `ออก ${drawName}`;
+    const win1Label = win1Neg ? `ออก ${win1Name} 🔻` : `ออก ${win1Name}`;
+
     const rows = [
-      { name:`ออก ${drawName}`,  sum:dret,  profit:dret-total  },
-      { name:`ออก ${win1Name}`,  sum:w1ret, profit:w1ret-total }
+      { name: drawLabel,  sum: dSum,  profit: dSum-total  },
+      { name: win1Label,  sum: w1Sum, profit: w1Sum-total }
     ];
+
     resultTable.innerHTML = rows.map(r=>{
-      const profitRounded = Math.round(r.profit) || 0; // fix -0
+      const profitRounded = Math.round(r.profit) || 0;
       const cls = profitRounded>=0?"profit-pos":"profit-neg";
       const sign= profitRounded>0?"+":"";
       return `<div class="result-row">
@@ -1582,12 +1396,120 @@
         <span class="profit-val ${cls}">${sign}${fmt(profitRounded)}</span>
       </div>`;
     }).join("");
+
+    updateNegOddsNotes();
   }
 
+  // ─── forceAutoWin1Amount ─────────────────────────────────────────
+  function forceAutoWin1Amount() {
+    const d=parseMoney(drawAmtThb), o=getDrawOdds(), a=getWin1Odds();
+    if (!d||!o||!a) { calculate(); return; }
+
+    const drawNeg = o < 1;
+    const win1Neg = a < 1;
+    const drawName = drawWebName.value.trim() || "1";
+    const win1Name = win1WebName.value.trim() || "2";
+
+    let w;
+
+    if (!drawNeg && !win1Neg) {
+      // ── ปกติ ──
+      w = Math.round((d*o)/a);
+
+    } else if (drawNeg && !win1Neg) {
+      // ── ฝั่ง 1 ติดลบ: d*2 = w*a → w = d*2/a ──
+      w = Math.round((d*2)/a);
+      const _add1 = w - parseMoney(win1AmtThb);
+      const _p1 = Math.round(d*2 - (d+w));
+      const _t1 = _add1>0?`ควรเพิ่มอีก <span class="hint-odds-val">+${fmt(_add1)} ฿</span>`:_add1<0?`ควรลดลง <span class="hint-odds-val">${fmt(Math.abs(_add1))} ฿</span>`:`เหมาะสมแล้ว`;
+      hintBox.innerHTML=`💡 เงินทุนฝั่ง <strong>"${win1Name}"</strong> ${_t1} เพื่อให้กำไรทั้งสองฝั่งเท่ากัน (กำไร ~${_p1>=0?'+':''}${fmt(_p1)} ฿)`;
+      hintBox.style.display="block";
+
+    } else if (!drawNeg && win1Neg) {
+      // ── ฝั่ง 2 ติดลบ: d*o = w*(1+a) → w = d*o/(1+a) ──
+      w = Math.round((d*o)/(1+a));
+      const _add2 = w - parseMoney(win1AmtThb);
+      const _diff2 = Math.round(w*(1-a));
+      const _p2 = Math.round(d*o + _diff2 - (d+w));
+      const _t2 = _add2>0?`ควรเพิ่มอีก <span class="hint-odds-val">+${fmt(_add2)} ฿</span>`:_add2<0?`ควรลดลง <span class="hint-odds-val">${fmt(Math.abs(_add2))} ฿</span>`:`เหมาะสมแล้ว`;
+      hintBox.innerHTML=`💡 เงินทุนฝั่ง <strong>"${win1Name}"</strong> ${_t2} เพื่อให้กำไรทั้งสองฝั่งเท่ากัน (กำไร ~${_p2>=0?'+':''}${fmt(_p2)} ฿)`;
+      hintBox.style.display="block";
+
+    } else {
+      // ── ทั้งคู่ติดลบ ──
+      // ออก 1 = d*2 + w*(1-a)  ออก 2 = w*2 + d*(1-o)
+      // เฉลี่ย: d*2 + w*(1-a) = w*2 + d*(1-o)
+      // d*(2-(1-o)) = w*(2-(1-a))  →  d*(1+o) = w*(1+a)
+      // w = d*(1+o)/(1+a)
+      w = Math.round(d*(1+o)/(1+a));
+      const _add3 = w - parseMoney(win1AmtThb);
+      const _total3 = d+w;
+      const _dSum3 = d*2 + w*(1-a);
+      const _p3 = Math.round(_dSum3 - _total3);
+      const _t3 = _add3>0?`ควรเพิ่มอีก <span class="hint-odds-val">+${fmt(_add3)} ฿</span>`:_add3<0?`ควรลดลง <span class="hint-odds-val">${fmt(Math.abs(_add3))} ฿</span>`:`เหมาะสมแล้ว`;
+      hintBox.innerHTML=`💡 เงินทุนฝั่ง <strong>"${win1Name}"</strong> ${_t3} เพื่อให้กำไรทั้งสองฝั่งเท่ากัน (กำไร ~${_p3>=0?'+':''}${fmt(_p3)} ฿)`;
+      hintBox.style.display="block";
+    }
+
+    _isAutoSetting = true;
+    win1AmtThb.value=formatComma(w.toString());
+    const r=getRate(); win1AmtUsdt.value=r>0?fmtMoney(w/r):"";
+    _isAutoSetting = false;
+    calculate();
+    if (!drawNeg && !win1Neg) suggestWin1MinimumOdds();
+  }
+
+  function dismissBalanceHint() {}
+
+  // ─── forceAutoDrawAmount ─────────────────────────────────────────
+  function forceAutoDrawAmount() {
+    const x=parseMoney(win1AmtThb), o=getDrawOdds(), a=getWin1Odds();
+    if (!x||!o||!a) { calculate(); return; }
+
+    const drawNeg = o < 1;
+    const win1Neg = a < 1;
+
+    let draw;
+    if (!drawNeg && !win1Neg) {
+      draw = Math.round((x*a)/o);
+    } else if (drawNeg && !win1Neg) {
+      draw = Math.round((x*a)/2);
+    } else if (!drawNeg && win1Neg) {
+      draw = Math.round((x*(1+a))/o);
+    } else {
+      draw = Math.round(x*(1+a)/(1+o));
+    }
+
+    _isAutoSetting = true;
+    drawAmtThb.value=formatComma(draw.toString());
+    const r=getRate(); drawAmtUsdt.value=r>0?fmtMoney(draw/r):"";
+    _isAutoSetting = false;
+    calculate();
+  }
+
+  // ─── maximizeWinProfit ───────────────────────────────────────────
+  // ← แก้ค่าน้ำติดลบ: คำนวณกำไรสูงสุดรองรับค่าน้ำติดลบ
   function maximizeWinProfit() {
-    const d=parseMoney(drawAmtThb), o=getDrawOdds();
-    if (!d||!o||o<=1) { calculate(); return; }
-    const w=Math.round(d*(o-1));
+    const d=parseMoney(drawAmtThb), o=getDrawOdds(), a=getWin1Odds();
+    if (!d||!o) { calculate(); return; }
+
+    const drawNeg = o < 1; // ← แก้ค่าน้ำติดลบ
+    const win1Neg = a < 1; // ← แก้ค่าน้ำติดลบ
+
+    let w;
+    if (!drawNeg && !win1Neg && o > 1) {
+      // ปกติ: ให้ win1 ได้กำไรสูงสุด = d×(o-1)
+      w = Math.round(d*(o-1));
+    } else if (drawNeg && !win1Neg && a > 0) {
+      // draw ติดลบ: เงินทุนเท่ากันสองฝั่ง
+      w = d;
+    } else if (!drawNeg && win1Neg && o > 0) {
+      // win1 ติดลบ: เงินทุนเท่ากันสองฝั่ง
+      w = d;
+    } else {
+      calculate(); return;
+    }
+
     win1AmtThb.value=formatComma(w.toString());
     const r=getRate(); win1AmtUsdt.value=r>0?fmtMoney(w/r):"";
     calculate();
@@ -1608,6 +1530,10 @@
     totalInvestment.textContent="0";
     resultTable.innerHTML='<div class="result-empty">กรุณากรอกข้อมูลให้ครบ</div>';
     hintBox.style.display="none"; hintBox.innerHTML="";
+    // ← แก้ค่าน้ำติดลบ: ซ่อน note และ balance hint
+    document.getElementById("draw-neg-note").style.display="none";
+    document.getElementById("win1-neg-note").style.display="none";
+    dismissBalanceHint();
     if (isManualRate) usdtRateInput.value="";
     calcPushSnapshot(); calcUpdateNavBtns();
   }
@@ -1640,7 +1566,7 @@
   }
 
   // ─── Image Attach ──────────────────────────────────────────────────
-  let pendingImages = []; // array of { dataUrl, name }
+  let pendingImages = [];
 
   function renderAttachPreview() {
     const wrap = document.getElementById("attach-preview");
@@ -1699,15 +1625,26 @@
     const d=parseMoney(drawAmtThb), o=getDrawOdds(), a=getWin1Odds(), x=parseMoney(win1AmtThb);
     if (!d||!o||!a||!x) { alert("กรุณากรอกข้อมูลให้ครบก่อนบันทึก"); return; }
     const total=d+x;
+
+    // ← แก้ค่าน้ำติดลบ: ใช้ผลลัพธ์ที่คำนวณรองรับค่าน้ำติดลบ
+    const drawNeg = o < 1;
+    const win1Neg = a < 1;
+    const drawDiff = drawNeg ? d*(1-o) : 0;
+    const win1Diff = win1Neg ? x*(1-a) : 0;
+    const dret  = drawNeg ? d*2 : d*o;
+    const w1ret = win1Neg ? x*2 : x*a;
+    const dSum  = dret + win1Diff;
+    const w1Sum = w1ret + drawDiff;
+
     pendingSaveRecord = {
       id: Date.now(),
       timestamp: Date.now(),
       rows: [
-        { label: drawWebName.value.trim()||"1", thb:d, odds:o, ret:d*o, profit:d*o-total },
-        { label: win1WebName.value.trim()||"2", thb:x, odds:a, ret:x*a, profit:x*a-total }
+        { label: drawWebName.value.trim()||"1", thb:d, odds:o, ret:dSum, profit:dSum-total },
+        { label: win1WebName.value.trim()||"2", thb:x, odds:a, ret:w1Sum, profit:w1Sum-total }
       ],
       total,
-      maxProfit: Math.max(d*o-total, x*a-total),
+      maxProfit: Math.max(dSum-total, w1Sum-total),
       images: []
     };
     pendingImages = [];
@@ -1824,7 +1761,6 @@
     if (dailySelected.has(id)) dailySelected.delete(id);
     else dailySelected.add(id);
     updateDailySummary();
-    // update item style
     document.querySelectorAll(".daily-check-item").forEach(el=>{
       const elId = parseInt(el.dataset.id);
       el.classList.toggle("selected", dailySelected.has(elId));
@@ -1888,34 +1824,36 @@
     updateDailySummary();
   }
 
-  // lastEditedSide: "draw" = ช่องบน, "win1" = ช่องล่าง
   let lastEditedSide = "draw";
-
-  function forceAutoDrawAmount() {
-    const x=parseMoney(win1AmtThb), o=getDrawOdds(), a=getWin1Odds();
-    if (!x||!o||!a) { calculate(); return; }
-    const draw=Math.round((x*a)/o);
-    drawAmtThb.value=formatComma(draw.toString());
-    const r=getRate(); drawAmtUsdt.value=r>0?fmtMoney(draw/r):"";
-    calculate();
-  }
+  let _isAutoSetting = false; // ป้องกัน loop
 
   // ─── Events ───────────────────────────────────────────────────────
   drawAmtThb.addEventListener("input",()=>{
+    if (_isAutoSetting) return;
     lastEditedSide="draw";
-    cleanMoneyInput(drawAmtThb); syncFromThb(drawAmtThb,drawAmtUsdt); forceAutoWin1Amount();
+    cleanMoneyInput(drawAmtThb); syncFromThb(drawAmtThb,drawAmtUsdt);
+    forceAutoWin1Amount();
   });
   drawAmtUsdt.addEventListener("input",()=>{
+    if (_isAutoSetting) return;
     lastEditedSide="draw";
-    cleanMoneyInput(drawAmtUsdt); syncFromUsdt(drawAmtUsdt,drawAmtThb); forceAutoWin1Amount();
+    cleanMoneyInput(drawAmtUsdt); syncFromUsdt(drawAmtUsdt,drawAmtThb);
+    forceAutoWin1Amount();
   });
   win1AmtThb.addEventListener("input",()=>{
+    if (_isAutoSetting) return;
     lastEditedSide="win1"; winCalcQuickMode=false;
-    cleanMoneyInput(win1AmtThb); syncFromThb(win1AmtThb,win1AmtUsdt); forceAutoDrawAmount();
+    cleanMoneyInput(win1AmtThb); syncFromThb(win1AmtThb,win1AmtUsdt);
+    // ค่าน้ำติดลบ: ไม่ย้อนกลับแก้ฝั่ง draw (พิมพ์ได้ปกติ)
+    if (getDrawOdds()<1 || getWin1Odds()<1) { calculate(); updateNegOddsNotes(); }
+    else forceAutoDrawAmount();
   });
   win1AmtUsdt.addEventListener("input",()=>{
+    if (_isAutoSetting) return;
     lastEditedSide="win1"; winCalcQuickMode=false;
-    cleanMoneyInput(win1AmtUsdt); syncFromUsdt(win1AmtUsdt,win1AmtThb); forceAutoDrawAmount();
+    cleanMoneyInput(win1AmtUsdt); syncFromUsdt(win1AmtUsdt,win1AmtThb);
+    if (getDrawOdds()<1 || getWin1Odds()<1) { calculate(); updateNegOddsNotes(); }
+    else forceAutoDrawAmount();
   });
 
   drawOddsMain.addEventListener("input",()=>{
@@ -1945,7 +1883,7 @@
     });
   });
 
-  // ─── Odds Picker (win1 full odds) ────────────────────────────────
+  // ─── Odds Picker ──────────────────────────────────────────────────
   const ODDS_LIST = [
     1.00,1.01,1.02,1.03,1.04,1.05,1.06,1.07,1.08,1.09,1.10,1.11,1.12,1.13,1.14,
     1.15,1.16,1.17,1.18,1.19,1.20,1.21,1.22,1.23,1.24,1.25,1.26,1.27,1.28,1.29,
@@ -1968,11 +1906,10 @@
   const decDropdown    = document.getElementById("dec-dropdown");
   const decPickerBtn   = document.getElementById("dec-picker-btn");
 
-  let activeDropdown = null; // track which is open
+  let activeDropdown = null;
 
   function positionDropdown(dd, anchorBtn) {
     const r = anchorBtn.getBoundingClientRect();
-    // align left edge of dropdown with left edge of anchor
     let left = r.left;
     const ddW = 140;
     if (left + ddW > window.innerWidth - 4) left = window.innerWidth - ddW - 4;
@@ -1993,7 +1930,6 @@
     oddsKeyBuffer = ""; decKeyBuffer = "";
   }
 
-  // ── Win1 full-odds picker — show ALL, scroll to nearest ──
   function buildOddsOptions() {
     const val = parseFloat(win1Odds.value) || 0;
     oddsDropdown.innerHTML = ODDS_LIST.map((o, i) => {
@@ -2005,7 +1941,6 @@
 
   function scrollDropdownTo(container, btn) {
     if (!btn) return;
-    // offsetTop is relative to offsetParent — need position relative to container
     const btnTop = btn.offsetTop;
     const btnH   = btn.offsetHeight;
     const cH     = container.clientHeight;
@@ -2066,38 +2001,35 @@
   drawOddsDecimal.addEventListener("input", () => {
     drawOddsDecimal.value = drawOddsDecimal.value.replace(/[^\d]/g,"").slice(0,2);
     suggestWin1MinimumOdds();
-    if (lastEditedSide==="win1") forceAutoDrawAmount(); else forceAutoWin1Amount();
+    if (getDrawOdds()<1 || getWin1Odds()<1) { calculate(); updateNegOddsNotes(); }
+    else if (lastEditedSide==="win1") forceAutoDrawAmount(); else forceAutoWin1Amount();
     if (decDropdown.classList.contains("open")) {
       highlightDecVal();
       requestAnimationFrame(scrollDecToVal);
     }
   });
 
-  // ── Keyboard search while dropdown open ──
   let oddsKeyBuffer = "";
   let oddsKeyTimer  = null;
   let decKeyBuffer  = "";
   let decKeyTimer   = null;
 
   document.addEventListener("keydown", (e) => {
-    // Only handle when a dropdown is open and key is a digit or dot or backspace
     if (!activeDropdown) return;
-    if (e.target === win1Odds || e.target === drawOddsDecimal) return; // let normal input handle it
-
+    if (e.target === win1Odds || e.target === drawOddsDecimal) return;
+    e.stopPropagation();
+    const k = e.key;
     if (activeDropdown === "odds") {
       if (e.key === "Escape") { closeAll(); return; }
       if (!/^[\d.]$/.test(e.key) && e.key !== "Backspace") return;
       e.preventDefault();
-      if (e.key === "Backspace") {
-        oddsKeyBuffer = oddsKeyBuffer.slice(0, -1);
-      } else {
+      if (e.key === "Backspace") { oddsKeyBuffer = oddsKeyBuffer.slice(0, -1); }
+      else {
         oddsKeyBuffer += e.key;
-        // keep valid: only one dot, max 5 chars
         oddsKeyBuffer = oddsKeyBuffer.replace(/[^\d.]/g,"");
         const parts = oddsKeyBuffer.split(".");
         if (parts.length > 2) oddsKeyBuffer = parts[0] + "." + parts.slice(1).join("");
       }
-      // scroll to closest match
       const searchVal = parseFloat(oddsKeyBuffer) || 0;
       if (searchVal) {
         let bestBtn = null, bestD = Infinity;
@@ -2106,38 +2038,27 @@
           if (d < bestD) { bestD = d; bestBtn = btn; }
         });
         oddsDropdown.querySelectorAll(".odds-option").forEach(btn => btn.classList.remove("exact"));
-        if (bestBtn) {
-          bestBtn.classList.add("exact");
-          scrollDropdownTo(oddsDropdown, bestBtn);
-        }
+        if (bestBtn) { bestBtn.classList.add("exact"); scrollDropdownTo(oddsDropdown, bestBtn); }
       }
-      // clear buffer after 1.5s of no typing
       clearTimeout(oddsKeyTimer);
       oddsKeyTimer = setTimeout(() => { oddsKeyBuffer = ""; }, 1500);
-
     } else if (activeDropdown === "dec") {
       if (e.key === "Escape") { closeAll(); return; }
       if (!/^\d$/.test(e.key) && e.key !== "Backspace") return;
       e.preventDefault();
-      if (e.key === "Backspace") {
-        decKeyBuffer = decKeyBuffer.slice(0, -1);
-      } else {
-        decKeyBuffer = (decKeyBuffer + e.key).slice(-2); // max 2 digits
-      }
+      if (e.key === "Backspace") { decKeyBuffer = decKeyBuffer.slice(0, -1); }
+      else { decKeyBuffer = (decKeyBuffer + e.key).slice(-2); }
       const searchVal = parseInt(decKeyBuffer, 10);
       if (!isNaN(searchVal) && searchVal >= 1 && searchVal <= 99) {
-        const n = searchVal;
         decDropdown.querySelectorAll(".odds-option").forEach(btn => btn.classList.remove("exact"));
-        const btn = decDropdown.querySelector(`[data-n="${n}"]`);
-        if (btn) {
-          btn.classList.add("exact");
-          scrollDropdownTo(decDropdown, btn);
-        }
+        const btn = decDropdown.querySelector(`[data-n="${searchVal}"]`);
+        if (btn) { btn.classList.add("exact"); scrollDropdownTo(decDropdown, btn); }
       }
       clearTimeout(decKeyTimer);
       decKeyTimer = setTimeout(() => { decKeyBuffer = ""; }, 1500);
     }
   });
+
   document.addEventListener("mousedown", (e) => {
     if (!oddsDropdown.contains(e.target) && e.target !== oddsPickerBtn &&
         !decDropdown.contains(e.target) && e.target !== decPickerBtn) {
@@ -2149,7 +2070,6 @@
   }, true);
   window.addEventListener("resize", () => { if (activeDropdown) closeAll(); });
 
-  // ── Draw decimal picker — show ALL 01-99, scroll to nearest ──
   function buildDecOptions() {
     decDropdown.innerHTML = Array.from({length:99}, (_,i) => {
       const n   = i + 1;
@@ -2169,7 +2089,7 @@
   function pickDec(lbl) {
     drawOddsDecimal.value = lbl;
     suggestWin1MinimumOdds();
-    forceAutoWin1Amount();
+    if (lastEditedSide==="win1") forceAutoDrawAmount(); else forceAutoWin1Amount();
     closeAll();
   }
 
@@ -2184,15 +2104,6 @@
     activeDropdown = "dec";
     requestAnimationFrame(() => requestAnimationFrame(() => { highlightDecVal(); scrollDecToVal(); }));
   }
-
-  drawOddsDecimal.addEventListener("input", () => {
-    drawOddsDecimal.value = drawOddsDecimal.value.replace(/[^\d]/g,"").slice(0,2);
-    suggestWin1MinimumOdds(); forceAutoWin1Amount();
-    if (decDropdown.classList.contains("open")) {
-      highlightDecVal();
-      requestAnimationFrame(() => requestAnimationFrame(scrollDecToVal));
-    }
-  });
 
   // ─── Attach helpers ────────────────────────────────────────────────
   function addImageFiles(files) {
@@ -2212,25 +2123,17 @@
     e.target.value = "";
   }
 
-  // Drag & drop on attach-drop-zone
   document.addEventListener("DOMContentLoaded", () => {
     const zone = document.getElementById("attach-drop-zone");
     if (!zone) return;
-    zone.addEventListener("dragover", e => {
-      e.preventDefault();
-      zone.classList.add("drag-over");
-    });
-    zone.addEventListener("dragleave", () => {
-      zone.classList.remove("drag-over");
-    });
+    zone.addEventListener("dragover", e => { e.preventDefault(); zone.classList.add("drag-over"); });
+    zone.addEventListener("dragleave", () => { zone.classList.remove("drag-over"); });
     zone.addEventListener("drop", e => {
-      e.preventDefault();
-      zone.classList.remove("drag-over");
+      e.preventDefault(); zone.classList.remove("drag-over");
       if (e.dataTransfer.files && e.dataTransfer.files.length) addImageFiles(e.dataTransfer.files);
     });
   });
 
-  // Clipboard paste — only when attach-modal is open
   document.addEventListener("paste", e => {
     const modal = document.getElementById("attach-modal");
     if (!modal || !modal.classList.contains("open")) return;
@@ -2263,195 +2166,98 @@
 
     const btn = document.getElementById("google-sheet-export-btn");
     const oldHtml = btn ? btn.innerHTML : "";
-
     try {
       isExportingGoogleSheet = true;
-      if (btn) {
-        btn.disabled = true;
-        btn.classList.add("btn-loading");
-        btn.innerHTML = '<span class="spinner-inline"></span>กำลังส่ง...';
-      }
-
+      if (btn) { btn.disabled = true; btn.classList.add("btn-loading"); btn.innerHTML = '<span class="spinner-inline"></span>กำลังส่ง...'; }
       const payload = {
         exportedAt: new Date().toISOString(),
         records: recs.map(rec => {
           const calculatedMaxProfit = Math.max(...(rec.rows || []).map(r => Number(r.profit) || 0));
-          const maxProfit = (rec.maxProfit !== undefined && rec.maxProfit !== null)
-            ? Number(rec.maxProfit) || 0
-            : calculatedMaxProfit;
-          return {
-            id: rec.id,
-            timestamp: rec.timestamp,
-            displayTime: thaiDT(rec.timestamp),
-            total: rec.total || 0,
-            maxProfit,
-            note: rec.note || "",
-            imageCount: (rec.images || []).length,
-            imageNote: (rec.images || []).length ? `มีรูปแนบ ${(rec.images || []).length} รูป` : "ไม่มีรูปแนบ",
-            rows: (rec.rows || []).map(row => ({
-              label: row.label || "",
-              thb: row.thb || 0,
-              odds: row.odds || "",
-              ret: row.ret || 0,
-              profit: row.profit || 0
-            }))
-          };
+          const maxProfit = (rec.maxProfit !== undefined && rec.maxProfit !== null) ? Number(rec.maxProfit) || 0 : calculatedMaxProfit;
+          return { id: rec.id, timestamp: rec.timestamp, displayTime: thaiDT(rec.timestamp), total: rec.total || 0, maxProfit, note: rec.note || "", imageCount: (rec.images || []).length, imageNote: (rec.images || []).length ? `มีรูปแนบ ${(rec.images || []).length} รูป` : "ไม่มีรูปแนบ", rows: (rec.rows || []).map(row => ({ label: row.label || "", thb: row.thb || 0, odds: row.odds || "", ret: row.ret || 0, profit: row.profit || 0 })) };
         })
       };
-
-      await fetch(GOOGLE_SHEET_WEBAPP_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(payload)
-      });
-
+      await fetch(GOOGLE_SHEET_WEBAPP_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) });
       alert(`ส่งข้อมูลไป Google Sheet แล้ว — ${recs.length} รายการ`);
     } catch (err) {
       alert("ส่งข้อมูลไป Google Sheet ไม่สำเร็จ");
     } finally {
       isExportingGoogleSheet = false;
-      if (btn) {
-        btn.disabled = false;
-        btn.classList.remove("btn-loading");
-        btn.innerHTML = oldHtml || "📤 บันทึกลง Google Sheet";
-      }
+      if (btn) { btn.disabled = false; btn.classList.remove("btn-loading"); btn.innerHTML = oldHtml || "📤 บันทึกลง Google Sheet"; }
     }
   }
 
-  // ─── Excel Export (ExcelJS with embedded images) ───────────────────
+  // ─── Excel Export ──────────────────────────────────────────────────
   function dataUrlToExcelImageInfo(dataUrl) {
     if (!dataUrl || !dataUrl.startsWith("data:")) return null;
-    const parts = dataUrl.split(",");
-    const meta = parts[0];
-    const base64 = parts[1];
+    const parts = dataUrl.split(","); const meta = parts[0]; const base64 = parts[1];
     const mimeMatch = meta.match(/data:image\/(png|jpeg|jpg|webp|gif);base64/);
     let extension = "png";
-    if (mimeMatch && mimeMatch[1]) {
-      extension = mimeMatch[1] === "jpg" ? "jpeg" : mimeMatch[1];
-    }
+    if (mimeMatch && mimeMatch[1]) extension = mimeMatch[1] === "jpg" ? "jpeg" : mimeMatch[1];
     return { base64, extension };
   }
 
   async function exportAllHistoryToExcel() {
     if (isExportingExcel) return;
-
-    if (typeof ExcelJS === "undefined" || typeof saveAs === "undefined") {
-      alert("ไม่สามารถ Export Excel ได้ กรุณาตรวจสอบการโหลดไลบรารี");
-      return;
-    }
-
+    if (typeof ExcelJS === "undefined" || typeof saveAs === "undefined") { alert("ไม่สามารถ Export Excel ได้ กรุณาตรวจสอบการโหลดไลบรารี"); return; }
     const allRecs = loadRecs();
     if (!allRecs.length) { alert("ยังไม่มีข้อมูลที่บันทึกไว้"); return; }
     const recs = allRecs.filter(r => dailySelected.has(r.id));
     if (!recs.length) { alert("กรุณาเลือกรายการที่ต้องการ Export Excel ก่อน"); return; }
-
     const btn = document.getElementById("excel-export-btn");
     const oldHtml = btn ? btn.innerHTML : "";
-
     try {
       isExportingExcel = true;
-      if (btn) {
-        btn.disabled = true;
-        btn.classList.add("btn-loading");
-        btn.innerHTML = '<span class="spinner-inline"></span>กำลังสร้าง...';
-      }
-
+      if (btn) { btn.disabled = true; btn.classList.add("btn-loading"); btn.innerHTML = '<span class="spinner-inline"></span>กำลังสร้าง...'; }
       const workbook = new ExcelJS.Workbook();
       const sheet = workbook.addWorksheet("ข้อมูลที่บันทึกไว้");
-
       sheet.columns = [
-        { header: "วันที่/เวลา",    key: "time",      width: 22 },
-        { header: "ฝั่ง",           key: "label",     width: 16 },
-        { header: "ทุน (฿)",        key: "thb",       width: 14 },
-        { header: "ค่าน้ำ",         key: "odds",      width: 10 },
-        { header: "หลังแทง",        key: "ret",       width: 14 },
-        { header: "กำไร",           key: "profit",    width: 14 },
-        { header: "กำไรทั้งหมด",    key: "maxProfit", width: 16 },
-        { header: "ทุนรวม",         key: "total",     width: 14 },
-        { header: "รูปภาพ",         key: "image",     width: 30 },
-        { header: "หมายเหตุ",       key: "note",      width: 30 },
-        { header: "Export At",      key: "exportedAt",width: 26 }
+        { header: "วันที่/เวลา", key: "time", width: 22 }, { header: "ฝั่ง", key: "label", width: 16 },
+        { header: "ทุน (฿)", key: "thb", width: 14 }, { header: "ค่าน้ำ", key: "odds", width: 10 },
+        { header: "หลังแทง", key: "ret", width: 14 }, { header: "กำไร", key: "profit", width: 14 },
+        { header: "กำไรทั้งหมด", key: "maxProfit", width: 16 }, { header: "ทุนรวม", key: "total", width: 14 },
+        { header: "รูปภาพ", key: "image", width: 30 }, { header: "หมายเหตุ", key: "note", width: 30 },
+        { header: "Export At", key: "exportedAt", width: 26 }
       ];
       sheet.getRow(1).font = { bold: true };
       sheet.getRow(1).alignment = { vertical: "middle", horizontal: "center" };
-
       const exportedAt = new Date().toISOString();
       let currentRowNumber = 2;
-
       recs.forEach(rec => {
-        const rowsData = rec.rows || [];
-        const images = rec.images || [];
+        const rowsData = rec.rows || []; const images = rec.images || [];
         const calculatedMaxProfit = Math.max(...rowsData.map(r => Number(r.profit) || 0));
-        const maxProfit = (rec.maxProfit !== undefined && rec.maxProfit !== null)
-          ? Number(rec.maxProfit) || 0
-          : calculatedMaxProfit;
+        const maxProfit = (rec.maxProfit !== undefined && rec.maxProfit !== null) ? Number(rec.maxProfit) || 0 : calculatedMaxProfit;
         const firstRowNumber = currentRowNumber;
-
         rowsData.forEach((row, idx) => {
-          const excelRow = sheet.addRow({
-            time: thaiDT(rec.timestamp),
-            label: row.label || "",
-            thb: Math.round(row.thb || 0),
-            odds: row.odds || "",
-            ret: Math.round(row.ret || 0),
-            profit: Math.round(row.profit || 0),
-            maxProfit: idx === 0 ? Math.round(maxProfit || 0) : "",
-            total: idx === 0 ? Math.round(rec.total || 0) : "",
-            image: "",
-            note: idx === 0 ? (rec.note || "") : "",
-            exportedAt
-          });
-          excelRow.height = 22;
-          currentRowNumber++;
+          const excelRow = sheet.addRow({ time: thaiDT(rec.timestamp), label: row.label || "", thb: Math.round(row.thb || 0), odds: row.odds || "", ret: Math.round(row.ret || 0), profit: Math.round(row.profit || 0), maxProfit: idx === 0 ? Math.round(maxProfit || 0) : "", total: idx === 0 ? Math.round(rec.total || 0) : "", image: "", note: idx === 0 ? (rec.note || "") : "", exportedAt });
+          excelRow.height = 22; currentRowNumber++;
         });
-
         images.forEach((img, imgIdx) => {
           try {
             const imageSrc = typeof img === "string" ? img : img.dataUrl;
             const imageInfo = dataUrlToExcelImageInfo(imageSrc);
             if (!imageInfo) return;
-
             let targetRow = firstRowNumber + imgIdx;
             if (imgIdx >= rowsData.length) {
               const extraRow = sheet.addRow({ time:"",label:"",thb:"",odds:"",ret:"",profit:"",maxProfit:"",total:"",image:"",note:"",exportedAt });
-              targetRow = extraRow.number;
-              currentRowNumber++;
+              targetRow = extraRow.number; currentRowNumber++;
             }
-
             sheet.getRow(targetRow).height = 120;
             const imageId = workbook.addImage({ base64: imageInfo.base64, extension: imageInfo.extension });
-            sheet.addImage(imageId, {
-              tl: { col: 8.1, row: targetRow - 0.9 },
-              ext: { width: 220, height: 145 }
-            });
-          } catch(err) { /* continue */ }
+            sheet.addImage(imageId, { tl: { col: 8.1, row: targetRow - 0.9 }, ext: { width: 220, height: 145 } });
+          } catch(err) {}
         });
       });
-
-      sheet.eachRow(row => {
-        row.alignment = { vertical: "middle", horizontal: "center", wrapText: true };
-      });
-
+      sheet.eachRow(row => { row.alignment = { vertical: "middle", horizontal: "center", wrapText: true }; });
       const now = new Date();
-      const yyyy = now.getFullYear();
-      const mm = String(now.getMonth() + 1).padStart(2, "0");
-      const dd = String(now.getDate()).padStart(2, "0");
-
+      const yyyy = now.getFullYear(); const mm = String(now.getMonth() + 1).padStart(2, "0"); const dd = String(now.getDate()).padStart(2, "0");
       const buffer = await workbook.xlsx.writeBuffer();
-      saveAs(
-        new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }),
-        `calculatormax-history-${yyyy}-${mm}-${dd}.xlsx`
-      );
+      saveAs(new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }), `calculatormax-history-${yyyy}-${mm}-${dd}.xlsx`);
     } catch (err) {
       alert("Export Excel ไม่สำเร็จ");
     } finally {
       isExportingExcel = false;
-      if (btn) {
-        btn.disabled = false;
-        btn.classList.remove("btn-loading");
-        btn.innerHTML = oldHtml || "📥 Export Excel";
-      }
+      if (btn) { btn.disabled = false; btn.classList.remove("btn-loading"); btn.innerHTML = oldHtml || "📥 Export Excel"; }
     }
   }
 
@@ -2459,103 +2265,65 @@
   let editingRecordId = null;
 
   function editRecord(id) {
-    const recs = loadRecs();
-    const rec = recs.find(r => r.id === id);
+    const recs = loadRecs(); const rec = recs.find(r => r.id === id);
     if (!rec) return;
     editingRecordId = id;
     const body = document.getElementById("edit-record-body");
     body.innerHTML = `<div class="edit-record-box">
-      <label>ทุนรวม</label>
-      <input id="edit-total" type="number" class="edit-input" value="${rec.total || 0}" />
-      <label>กำไรทั้งหมด</label>
-      <input id="edit-max-profit" type="number" class="edit-input" value="${rec.maxProfit !== undefined ? rec.maxProfit : Math.max(...(rec.rows || []).map(r => Number(r.profit) || 0))}" />
+      <label>ทุนรวม</label><input id="edit-total" type="number" class="edit-input" value="${rec.total || 0}" />
+      <label>กำไรทั้งหมด</label><input id="edit-max-profit" type="number" class="edit-input" value="${rec.maxProfit !== undefined ? rec.maxProfit : Math.max(...(rec.rows || []).map(r => Number(r.profit) || 0))}" />
       <label>หมายเหตุ</label>
       <textarea id="edit-note" class="edit-input" rows="3" placeholder="หมายเหตุ" style="grid-column:1/-1;">${escapeHtml(rec.note || "")}</textarea>
       ${(rec.rows || []).map((row, i) => `
         <div class="edit-row-box">
           <div class="edit-row-title">แถวที่ ${i + 1}</div>
-          <label>ฝั่ง</label>
-          <input id="edit-row-${i}-label" class="edit-input" value="${row.label || ''}" />
-          <label>ทุน (฿)</label>
-          <input id="edit-row-${i}-thb" type="number" class="edit-input" value="${row.thb || 0}" />
-          <label>ค่าน้ำ</label>
-          <input id="edit-row-${i}-odds" type="number" step="0.01" class="edit-input" value="${row.odds || 0}" />
-          <label>หลังแทง</label>
-          <input id="edit-row-${i}-ret" type="number" class="edit-input" value="${row.ret || 0}" />
-          <label>กำไร</label>
-          <input id="edit-row-${i}-profit" type="number" class="edit-input" value="${row.profit || 0}" />
+          <label>ฝั่ง</label><input id="edit-row-${i}-label" class="edit-input" value="${row.label || ''}" />
+          <label>ทุน (฿)</label><input id="edit-row-${i}-thb" type="number" class="edit-input" value="${row.thb || 0}" />
+          <label>ค่าน้ำ</label><input id="edit-row-${i}-odds" type="number" step="0.01" class="edit-input" value="${row.odds || 0}" />
+          <label>หลังแทง</label><input id="edit-row-${i}-ret" type="number" class="edit-input" value="${row.ret || 0}" />
+          <label>กำไร</label><input id="edit-row-${i}-profit" type="number" class="edit-input" value="${row.profit || 0}" />
         </div>`).join("")}
     </div>`;
     document.getElementById("edit-record-modal").classList.add("open");
   }
 
-  function closeEditRecordModal() {
-    editingRecordId = null;
-    document.getElementById("edit-record-modal").classList.remove("open");
-  }
+  function closeEditRecordModal() { editingRecordId = null; document.getElementById("edit-record-modal").classList.remove("open"); }
 
   function saveEditedRecord() {
     if (!editingRecordId) return;
-    const recs = loadRecs();
-    const idx = recs.findIndex(r => r.id === editingRecordId);
+    const recs = loadRecs(); const idx = recs.findIndex(r => r.id === editingRecordId);
     if (idx === -1) { closeEditRecordModal(); return; }
     const rec = recs[idx];
-    const newTotal = parseFloat(document.getElementById("edit-total").value) || 0;
-    rec.total = newTotal;
+    rec.total = parseFloat(document.getElementById("edit-total").value) || 0;
     const maxProfitEl = document.getElementById("edit-max-profit");
     rec.maxProfit = maxProfitEl ? parseFloat(maxProfitEl.value) || 0 : rec.maxProfit;
     const noteEl2 = document.getElementById("edit-note");
     rec.note = noteEl2 ? noteEl2.value.trim() : (rec.note || "");
     (rec.rows || []).forEach((row, i) => {
-      const labelEl = document.getElementById(`edit-row-${i}-label`);
-      const thbEl   = document.getElementById(`edit-row-${i}-thb`);
-      const oddsEl  = document.getElementById(`edit-row-${i}-odds`);
-      const retEl   = document.getElementById(`edit-row-${i}-ret`);
-      const profEl  = document.getElementById(`edit-row-${i}-profit`);
-      if (labelEl) row.label  = labelEl.value;
-      if (thbEl)   row.thb    = parseFloat(thbEl.value) || 0;
-      if (oddsEl)  row.odds   = parseFloat(oddsEl.value) || 0;
-      if (retEl)   row.ret    = parseFloat(retEl.value) || 0;
-      if (profEl)  row.profit = parseFloat(profEl.value) || 0;
+      const labelEl = document.getElementById(`edit-row-${i}-label`); const thbEl = document.getElementById(`edit-row-${i}-thb`);
+      const oddsEl = document.getElementById(`edit-row-${i}-odds`); const retEl = document.getElementById(`edit-row-${i}-ret`);
+      const profEl = document.getElementById(`edit-row-${i}-profit`);
+      if (labelEl) row.label = labelEl.value; if (thbEl) row.thb = parseFloat(thbEl.value) || 0;
+      if (oddsEl) row.odds = parseFloat(oddsEl.value) || 0; if (retEl) row.ret = parseFloat(retEl.value) || 0;
+      if (profEl) row.profit = parseFloat(profEl.value) || 0;
     });
-    saveRecs(recs);
-    closeEditRecordModal();
-    renderHistory();
+    saveRecs(recs); closeEditRecordModal(); renderHistory();
     const dailyModal = document.getElementById("daily-modal");
     if (dailyModal && dailyModal.classList.contains("open")) renderDailyModal();
   }
 
   // ─── Windows Calculator ──────────────────────────────────────────
-  const winCalcState = {
-    expr:      [],
-    current:   "0",
-    justCalc:  false
-  };
-  let winCalcHistory = []; // [{exprStr, result}]
+  const winCalcState = { expr: [], current: "0", justCalc: false };
+  let winCalcHistory = [];
 
-  function winCalcOpen() {
-    document.getElementById("win-calc-overlay").classList.add("open");
-    winCalcUpdateDisplay();
-    winCalcRenderHistory();
-  }
-  function winCalcClose() {
-    document.getElementById("win-calc-overlay").classList.remove("open");
-  }
-  function winCalcMinimize() {
-    document.getElementById("win-calc-overlay").classList.remove("open");
-  }
-  function winCalcRestore() {
-    document.getElementById("win-calc-overlay").classList.add("open");
-    winCalcUpdateDisplay();
-  }
-  function winCalcOverlayClick(e) {
-    if (e.target === document.getElementById("win-calc-overlay")) winCalcClose();
-  }
+  function winCalcOpen() { document.getElementById("win-calc-overlay").classList.add("open"); winCalcUpdateDisplay(); winCalcRenderHistory(); }
+  function winCalcClose() { document.getElementById("win-calc-overlay").classList.remove("open"); }
+  function winCalcMinimize() { document.getElementById("win-calc-overlay").classList.remove("open"); }
+  function winCalcOverlayClick(e) { if (e.target === document.getElementById("win-calc-overlay")) winCalcClose(); }
 
   function winCalcFmtNum(n) {
     const str = String(n);
-    if (str === "Infinity" || str === "-Infinity" || str === "NaN" ||
-        str === "Error" || str === "Cannot divide by zero" || str === "Invalid input") return str;
+    if (str === "Infinity" || str === "-Infinity" || str === "NaN" || str === "Error" || str === "Cannot divide by zero" || str === "Invalid input") return str;
     const parts = str.split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
@@ -2565,38 +2333,23 @@
     let s = "";
     for (let i = 0; i < winCalcState.expr.length; i++) {
       const t = winCalcState.expr[i];
-      if (["+","−","×","÷"].includes(t)) s += " " + t + " ";
-      else s += winCalcFmtNum(t);
+      if (["+","−","×","÷"].includes(t)) s += " " + t + " "; else s += winCalcFmtNum(t);
     }
     return s;
   }
 
   function winCalcUpdateDisplay() {
-    const exprEl   = document.getElementById("win-calc-expr");
-    const resultEl = document.getElementById("win-calc-result");
+    const exprEl = document.getElementById("win-calc-expr"); const resultEl = document.getElementById("win-calc-result");
     if (!exprEl || !resultEl) return;
-    if (winCalcState.justCalc) {
-      exprEl.textContent   = winCalcExprStr() + " =";
-      resultEl.textContent = winCalcFmtNum(winCalcState.current);
-    } else {
-      exprEl.textContent   = winCalcExprStr();
-      resultEl.textContent = winCalcFmtNum(winCalcState.current);
-    }
+    if (winCalcState.justCalc) { exprEl.textContent = winCalcExprStr() + " ="; resultEl.textContent = winCalcFmtNum(winCalcState.current); }
+    else { exprEl.textContent = winCalcExprStr(); resultEl.textContent = winCalcFmtNum(winCalcState.current); }
   }
 
   function winCalcDigit(d) {
-    if (winCalcState.justCalc) {
-      winCalcState.expr     = [];
-      winCalcState.current  = "";
-      winCalcState.justCalc = false;
-    }
-    if (d === ".") {
-      if (winCalcState.current.includes(".")) return;
-      if (winCalcState.current === "" || winCalcState.current === "-") winCalcState.current += "0";
-    }
+    if (winCalcState.justCalc) { winCalcState.expr = []; winCalcState.current = ""; winCalcState.justCalc = false; }
+    if (d === ".") { if (winCalcState.current.includes(".")) return; if (winCalcState.current === "" || winCalcState.current === "-") winCalcState.current += "0"; }
     if (d === "0" && winCalcState.current === "0") return;
-    if (winCalcState.current === "0" && d !== ".") winCalcState.current = d;
-    else winCalcState.current += d;
+    if (winCalcState.current === "0" && d !== ".") winCalcState.current = d; else winCalcState.current += d;
     winCalcUpdateDisplay();
   }
 
@@ -2604,62 +2357,32 @@
     winCalcState.justCalc = false;
     const cur = winCalcState.current;
     if (cur !== "" && cur !== "-" && winCalcState.expr.length >= 2) {
-      const r = winCalcEval([...winCalcState.expr, cur], "");
-      winCalcState.expr    = [String(r)];
-      winCalcState.current = "";
-    } else if (cur !== "" && cur !== "-") {
-      winCalcState.expr.push(cur);
-      winCalcState.current = "";
-    }
+      const r = winCalcEval([...winCalcState.expr, cur], ""); winCalcState.expr = [String(r)]; winCalcState.current = "";
+    } else if (cur !== "" && cur !== "-") { winCalcState.expr.push(cur); winCalcState.current = ""; }
     const e = winCalcState.expr;
-    if (e.length > 0 && ["+","−","×","÷"].includes(e[e.length-1])) e[e.length-1] = op;
-    else e.push(op);
+    if (e.length > 0 && ["+","−","×","÷"].includes(e[e.length-1])) e[e.length-1] = op; else e.push(op);
     winCalcUpdateDisplay();
   }
 
   function winCalcEquals() {
-    const cur = winCalcState.current;
-    const e   = winCalcState.expr;
+    const cur = winCalcState.current; const e = winCalcState.expr;
     if (e.length === 0 && (cur === "" || cur === "0")) return;
-
     const fullTokens = [...e, ...(cur !== "" ? [cur] : [])];
-    const result     = winCalcEval(fullTokens, "");
-
-    // Build expression string for history BEFORE overwriting state
+    const result = winCalcEval(fullTokens, "");
     const exprDisplay = winCalcExprStr() + (cur !== "" ? (e.length ? " " + winCalcFmtNum(cur) : winCalcFmtNum(cur)) : "");
-
-    winCalcState.expr     = fullTokens;
-    winCalcState.current  = String(result);
-    winCalcState.justCalc = true;
-
-    // Add to history
-    winCalcHistory.unshift({
-      exprStr: exprDisplay + " =",
-      result:  winCalcFmtNum(result)
-    });
+    winCalcState.expr = fullTokens; winCalcState.current = String(result); winCalcState.justCalc = true;
+    winCalcHistory.unshift({ exprStr: exprDisplay + " =", result: winCalcFmtNum(result) });
     if (winCalcHistory.length > 50) winCalcHistory.pop();
-
-    winCalcUpdateDisplay();
-    winCalcRenderHistory();
+    winCalcUpdateDisplay(); winCalcRenderHistory();
   }
 
   function winCalcEval(tokens, cur) {
-    const all  = cur !== "" ? [...tokens, cur] : [...tokens];
-    const toks = all.filter(t => t !== "");
+    const all = cur !== "" ? [...tokens, cur] : [...tokens]; const toks = all.filter(t => t !== "");
     if (toks.length === 0) return 0;
     let expr = "";
-    toks.forEach(function(t) {
-      if      (t === "÷") expr += "/";
-      else if (t === "×") expr += "*";
-      else if (t === "−") expr += "-";
-      else                expr += t;
-    });
+    toks.forEach(function(t) { if (t === "÷") expr += "/"; else if (t === "×") expr += "*"; else if (t === "−") expr += "-"; else expr += t; });
     try {
-      if (/^[0-9+\-*/().%\s]+$/.test(expr)) {
-        let r = Function('"use strict"; return (' + expr + ')')();
-        if (!isFinite(r)) return "Cannot divide by zero";
-        return Math.round(r * 1e10) / 1e10;
-      }
+      if (/^[0-9+\-*/().%\s]+$/.test(expr)) { let r = Function('"use strict"; return (' + expr + ')')(); if (!isFinite(r)) return "Cannot divide by zero"; return Math.round(r * 1e10) / 1e10; }
       return "Error";
     } catch(e) { return "Error"; }
   }
@@ -2667,32 +2390,14 @@
   function winCalcFn(fn) {
     let n = parseFloat(winCalcState.current) || 0;
     switch(fn) {
-      case "ce":
-        winCalcState.current = "0"; winCalcState.justCalc = false; break;
-      case "c":
-        winCalcState.expr = []; winCalcState.current = "0"; winCalcState.justCalc = false; break;
-      case "back":
-        if (winCalcState.justCalc) { winCalcState.current = "0"; winCalcState.justCalc = false; break; }
-        winCalcState.current = winCalcState.current.length > 1 ? winCalcState.current.slice(0,-1) : "0";
-        break;
-      case "sign":
-        if (winCalcState.current === "0" || winCalcState.current === "") break;
-        winCalcState.current = winCalcState.current.startsWith("-") ? winCalcState.current.slice(1) : "-" + winCalcState.current;
-        break;
-      case "pct": {
-        const base = winCalcState.expr.length >= 2 ? parseFloat(winCalcState.expr[winCalcState.expr.length-2])||0 : 0;
-        const pct  = base ? base * n / 100 : n / 100;
-        winCalcState.current = String(Math.round(pct * 1e10) / 1e10);
-        winCalcState.justCalc = false; break;
-      }
-      case "inv":
-        if (n === 0) { winCalcState.current = "Cannot divide by zero"; break; }
-        winCalcState.current = String(Math.round((1/n)*1e10)/1e10); winCalcState.justCalc = false; break;
-      case "sqr":
-        winCalcState.current = String(Math.round(n*n*1e10)/1e10); winCalcState.justCalc = false; break;
-      case "sqrt":
-        if (n < 0) { winCalcState.current = "Invalid input"; break; }
-        winCalcState.current = String(Math.round(Math.sqrt(n)*1e10)/1e10); winCalcState.justCalc = false; break;
+      case "ce": winCalcState.current = "0"; winCalcState.justCalc = false; break;
+      case "c": winCalcState.expr = []; winCalcState.current = "0"; winCalcState.justCalc = false; break;
+      case "back": if (winCalcState.justCalc) { winCalcState.current = "0"; winCalcState.justCalc = false; break; } winCalcState.current = winCalcState.current.length > 1 ? winCalcState.current.slice(0,-1) : "0"; break;
+      case "sign": if (winCalcState.current === "0" || winCalcState.current === "") break; winCalcState.current = winCalcState.current.startsWith("-") ? winCalcState.current.slice(1) : "-" + winCalcState.current; break;
+      case "pct": { const base = winCalcState.expr.length >= 2 ? parseFloat(winCalcState.expr[winCalcState.expr.length-2])||0 : 0; const pct = base ? base * n / 100 : n / 100; winCalcState.current = String(Math.round(pct * 1e10) / 1e10); winCalcState.justCalc = false; break; }
+      case "inv": if (n === 0) { winCalcState.current = "Cannot divide by zero"; break; } winCalcState.current = String(Math.round((1/n)*1e10)/1e10); winCalcState.justCalc = false; break;
+      case "sqr": winCalcState.current = String(Math.round(n*n*1e10)/1e10); winCalcState.justCalc = false; break;
+      case "sqrt": if (n < 0) { winCalcState.current = "Invalid input"; break; } winCalcState.current = String(Math.round(Math.sqrt(n)*1e10)/1e10); winCalcState.justCalc = false; break;
     }
     winCalcUpdateDisplay();
   }
@@ -2701,48 +2406,25 @@
 
   function winCalcToggleHistory() {
     winCalcHistOpen = !winCalcHistOpen;
-    const panel   = document.getElementById("win-calc-hist-panel");
-    const chevron = document.getElementById("win-calc-hist-chevron");
-    const clearBtn= document.getElementById("win-calc-hist-clear");
+    const panel = document.getElementById("win-calc-hist-panel"); const chevron = document.getElementById("win-calc-hist-chevron"); const clearBtn = document.getElementById("win-calc-hist-clear");
     panel.classList.toggle("open", winCalcHistOpen);
     if (chevron) chevron.classList.toggle("open", winCalcHistOpen);
     if (clearBtn) clearBtn.style.display = winCalcHistOpen ? "flex" : "none";
   }
 
-  // ── History ─────────────────────────────────────────────────────
   function winCalcRenderHistory() {
-    const list = document.getElementById("win-calc-hist-list");
-    if (!list) return;
-    if (winCalcHistory.length === 0) {
-      list.innerHTML = `<div id="win-calc-hist-empty">
-        <span style="font-size:22px;">🕐</span>
-        <span>No history yet</span>
-      </div>`;
-      return;
-    }
-    list.innerHTML = winCalcHistory.map(function(item, idx) {
-      return `<div class="win-calc-hist-item" onclick="winCalcLoadHistory(${idx})">
-        <div class="win-calc-hist-expr">${item.exprStr}</div>
-        <div class="win-calc-hist-val">${item.result}</div>
-      </div>`;
-    }).join("");
+    const list = document.getElementById("win-calc-hist-list"); if (!list) return;
+    if (winCalcHistory.length === 0) { list.innerHTML = `<div id="win-calc-hist-empty"><span style="font-size:22px;">🕐</span><span>No history yet</span></div>`; return; }
+    list.innerHTML = winCalcHistory.map(function(item, idx) { return `<div class="win-calc-hist-item" onclick="winCalcLoadHistory(${idx})"><div class="win-calc-hist-expr">${item.exprStr}</div><div class="win-calc-hist-val">${item.result}</div></div>`; }).join("");
   }
 
   function winCalcLoadHistory(idx) {
-    const item = winCalcHistory[idx];
-    if (!item) return;
-    winCalcState.expr     = [];
-    winCalcState.current  = item.result.replace(/,/g, "");
-    winCalcState.justCalc = false;
-    winCalcUpdateDisplay();
+    const item = winCalcHistory[idx]; if (!item) return;
+    winCalcState.expr = []; winCalcState.current = item.result.replace(/,/g, ""); winCalcState.justCalc = false; winCalcUpdateDisplay();
   }
 
-  function winCalcClearHistory() {
-    winCalcHistory = [];
-    winCalcRenderHistory();
-  }
+  function winCalcClearHistory() { winCalcHistory = []; winCalcRenderHistory(); }
 
-  // ── Keyboard support ────────────────────────────────────────────
   document.addEventListener("keydown", function(e) {
     const overlay = document.getElementById("win-calc-overlay");
     if (!overlay || !overlay.classList.contains("open")) return;
@@ -2762,183 +2444,91 @@
     else if (k === "Delete")         { e.preventDefault(); winCalcFn("c"); }
     else if (k === "Escape")         { e.preventDefault(); winCalcClose(); }
   });
-  // ────────────────────────────────────────────────────────────────
+
   function escapeHtml(value) {
-    return String(value ?? "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+    return String(value ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
   }
 
   // ─── Center Toast ──────────────────────────────────────────────────
   let centerToastTimer = null;
-
   function showCenterToast(message) {
-    const toast = document.getElementById("center-toast");
-    if (!toast) return;
-    toast.textContent = message || "บันทึกข้อมูลสำเร็จ";
-    toast.classList.add("show");
-    clearTimeout(centerToastTimer);
-    centerToastTimer = setTimeout(() => { toast.classList.remove("show"); }, 2000);
+    const toast = document.getElementById("center-toast"); if (!toast) return;
+    toast.textContent = message || "บันทึกข้อมูลสำเร็จ"; toast.classList.add("show");
+    clearTimeout(centerToastTimer); centerToastTimer = setTimeout(() => { toast.classList.remove("show"); }, 2000);
   }
 
   // ─── Quick Calculate ──────────────────────────────────────────────
   let winCalcQuickMode = false;
 
   function quickSetWin1Amount10000() {
-    const win1 = 10000;
-    const o = getDrawOdds();
-    const a = getWin1Odds();
-    const r = getRate();
-
-    // Set win1 amount
+    const win1 = 10000; const o = getDrawOdds(); const a = getWin1Odds(); const r = getRate();
     win1AmtThb.value = formatComma(win1.toString());
     win1AmtUsdt.value = r > 0 ? fmtMoney(win1 / r) : "";
-
-    // Back-calculate draw to balance profits: draw = (win1 × a) / o
     if (o > 0 && a > 0) {
       const draw = Math.round((win1 * a) / o);
       drawAmtThb.value  = formatComma(draw.toString());
       drawAmtUsdt.value = r > 0 ? fmtMoney(draw / r) : "";
     }
-
-    winCalcQuickMode = false; // back to normal auto mode
-    calculate();
+    winCalcQuickMode = false; calculate();
   }
 
-  // ─── Select all on focus for odds inputs ─────────────────────────
-  [drawOddsMain, drawOddsDecimal, win1Odds].forEach(el => {
-    el.addEventListener("focus", () => el.select());
-  });
+  [drawOddsMain, drawOddsDecimal, win1Odds].forEach(el => { el.addEventListener("focus", () => el.select()); });
+  [drawAmtUsdt, win1AmtUsdt].forEach(el => { el.addEventListener("focus", () => el.select()); });
 
-  // ─── Select all on focus for USDT inputs ─────────────────────────
-  [drawAmtUsdt, win1AmtUsdt].forEach(el => {
-    el.addEventListener("focus", () => el.select());
-  });
-  const CALC_UNDO_STACK = [];   // past snapshots
-  const CALC_REDO_STACK = [];   // future snapshots (after undo)
-  let   calcSnapshotTimer = null;
-  let   calcIsRestoring   = false; // prevent snapshot during restore
+  // ─── Undo/Redo ────────────────────────────────────────────────────
+  const CALC_UNDO_STACK = []; const CALC_REDO_STACK = [];
+  let calcSnapshotTimer = null; let calcIsRestoring = false;
 
   function calcSnapshot() {
-    return {
-      drawWebName:   drawWebName.value,
-      win1WebName:   win1WebName.value,
-      drawAmtThb:    drawAmtThb.value,
-      drawAmtUsdt:   drawAmtUsdt.value,
-      win1AmtThb:    win1AmtThb.value,
-      win1AmtUsdt:   win1AmtUsdt.value,
-      drawOddsMain:  drawOddsMain.value,
-      drawOddsDecimal: drawOddsDecimal.value,
-      win1Odds:      win1Odds.value
-    };
+    return { drawWebName: drawWebName.value, win1WebName: win1WebName.value, drawAmtThb: drawAmtThb.value, drawAmtUsdt: drawAmtUsdt.value, win1AmtThb: win1AmtThb.value, win1AmtUsdt: win1AmtUsdt.value, drawOddsMain: drawOddsMain.value, drawOddsDecimal: drawOddsDecimal.value, win1Odds: win1Odds.value };
   }
-
-  function calcSnapshotsEqual(a, b) {
-    return JSON.stringify(a) === JSON.stringify(b);
-  }
-
+  function calcSnapshotsEqual(a, b) { return JSON.stringify(a) === JSON.stringify(b); }
   function calcPushSnapshot() {
     if (calcIsRestoring) return;
-    const snap = calcSnapshot();
-    const last = CALC_UNDO_STACK[CALC_UNDO_STACK.length - 1];
-    if (last && calcSnapshotsEqual(last, snap)) return; // no change
-    CALC_UNDO_STACK.push(snap);
-    if (CALC_UNDO_STACK.length > 80) CALC_UNDO_STACK.shift();
-    CALC_REDO_STACK.length = 0; // clear redo on new action
-    calcUpdateNavBtns();
+    const snap = calcSnapshot(); const last = CALC_UNDO_STACK[CALC_UNDO_STACK.length - 1];
+    if (last && calcSnapshotsEqual(last, snap)) return;
+    CALC_UNDO_STACK.push(snap); if (CALC_UNDO_STACK.length > 80) CALC_UNDO_STACK.shift();
+    CALC_REDO_STACK.length = 0; calcUpdateNavBtns();
   }
-
-  function calcDebouncedPush() {
-    clearTimeout(calcSnapshotTimer);
-    calcSnapshotTimer = setTimeout(calcPushSnapshot, 600);
-  }
-
+  function calcDebouncedPush() { clearTimeout(calcSnapshotTimer); calcSnapshotTimer = setTimeout(calcPushSnapshot, 600); }
   function calcRestoreSnapshot(snap) {
     calcIsRestoring = true;
-    drawWebName.value      = snap.drawWebName;
-    win1WebName.value      = snap.win1WebName;
-    drawAmtThb.value       = snap.drawAmtThb;
-    drawAmtUsdt.value      = snap.drawAmtUsdt;
-    win1AmtThb.value       = snap.win1AmtThb;
-    win1AmtUsdt.value      = snap.win1AmtUsdt;
-    drawOddsMain.value     = snap.drawOddsMain;
-    drawOddsDecimal.value  = snap.drawOddsDecimal;
-    win1Odds.value         = snap.win1Odds;
-    calcIsRestoring = false;
-    suggestWin1MinimumOdds();
-    calculate();
+    drawWebName.value = snap.drawWebName; win1WebName.value = snap.win1WebName;
+    drawAmtThb.value = snap.drawAmtThb; drawAmtUsdt.value = snap.drawAmtUsdt;
+    win1AmtThb.value = snap.win1AmtThb; win1AmtUsdt.value = snap.win1AmtUsdt;
+    drawOddsMain.value = snap.drawOddsMain; drawOddsDecimal.value = snap.drawOddsDecimal; win1Odds.value = snap.win1Odds;
+    calcIsRestoring = false; suggestWin1MinimumOdds(); calculate();
   }
-
   function calcUndo() {
     if (CALC_UNDO_STACK.length < 2) return;
-    const current = CALC_UNDO_STACK.pop();
-    CALC_REDO_STACK.push(current);
-    const prev = CALC_UNDO_STACK[CALC_UNDO_STACK.length - 1];
-    calcRestoreSnapshot(prev);
-    calcUpdateNavBtns();
+    const current = CALC_UNDO_STACK.pop(); CALC_REDO_STACK.push(current);
+    const prev = CALC_UNDO_STACK[CALC_UNDO_STACK.length - 1]; calcRestoreSnapshot(prev); calcUpdateNavBtns();
   }
-
   function calcRedo() {
     if (CALC_REDO_STACK.length === 0) return;
-    const next = CALC_REDO_STACK.pop();
-    CALC_UNDO_STACK.push(next);
-    calcRestoreSnapshot(next);
-    calcUpdateNavBtns();
+    const next = CALC_REDO_STACK.pop(); CALC_UNDO_STACK.push(next); calcRestoreSnapshot(next); calcUpdateNavBtns();
   }
-
   function calcUpdateNavBtns() {
-    const undoBtn = document.getElementById("calc-undo-btn");
-    const redoBtn = document.getElementById("calc-redo-btn");
+    const undoBtn = document.getElementById("calc-undo-btn"); const redoBtn = document.getElementById("calc-redo-btn");
     if (undoBtn) undoBtn.disabled = CALC_UNDO_STACK.length < 2;
     if (redoBtn) redoBtn.disabled = CALC_REDO_STACK.length === 0;
   }
 
-  // Hook debounced snapshot into every calc-relevant input
-  [drawWebName, win1WebName, drawAmtThb, drawAmtUsdt,
-   win1AmtThb, win1AmtUsdt, drawOddsMain, drawOddsDecimal, win1Odds
-  ].forEach(el => el.addEventListener("input", calcDebouncedPush));
+  [drawWebName, win1WebName, drawAmtThb, drawAmtUsdt, win1AmtThb, win1AmtUsdt, drawOddsMain, drawOddsDecimal, win1Odds].forEach(el => el.addEventListener("input", calcDebouncedPush));
 
   // ─── Currency Converter ───────────────────────────────────────────
   function fxOpen() {
     const popup = document.getElementById("fx-popup");
     if (popup.classList.contains("open")) { fxClose(); return; }
-    fxUpdateRateDisplay();
-    popup.classList.add("open");
-    document.getElementById("fx-thb-in").focus();
+    fxUpdateRateDisplay(); popup.classList.add("open"); document.getElementById("fx-thb-in").focus();
   }
-  function fxClose() {
-    document.getElementById("fx-popup").classList.remove("open");
-  }
-  function fxUpdateRateDisplay() {
-    const r = getRate();
-    const el = document.getElementById("fx-rate-display");
-    if (el) el.textContent = r > 0 ? fmtMoney(r) : "ไม่ทราบ";
-  }
-  function fxCalcThbToUsdt() {
-    const r = getRate();
-    const val = parseFloat(document.getElementById("fx-thb-in").value) || 0;
-    const out = document.getElementById("fx-thb-out");
-    if (!r || !val) { out.textContent = "—"; return; }
-    out.textContent = fmtMoney(val / r);
-  }
-  function fxCalcUsdtToThb() {
-    const r = getRate();
-    const val = parseFloat(document.getElementById("fx-usdt-in").value) || 0;
-    const out = document.getElementById("fx-usdt-out");
-    if (!r || !val) { out.textContent = "—"; return; }
-    out.textContent = Math.round(val * r).toLocaleString("th");
-  }
-  // Close popup when clicking outside
+  function fxClose() { document.getElementById("fx-popup").classList.remove("open"); }
+  function fxUpdateRateDisplay() { const r = getRate(); const el = document.getElementById("fx-rate-display"); if (el) el.textContent = r > 0 ? fmtMoney(r) : "ไม่ทราบ"; }
+  function fxCalcThbToUsdt() { const r = getRate(); const val = parseFloat(document.getElementById("fx-thb-in").value) || 0; const out = document.getElementById("fx-thb-out"); if (!r || !val) { out.textContent = "—"; return; } out.textContent = fmtMoney(val / r); }
+  function fxCalcUsdtToThb() { const r = getRate(); const val = parseFloat(document.getElementById("fx-usdt-in").value) || 0; const out = document.getElementById("fx-usdt-out"); if (!r || !val) { out.textContent = "—"; return; } out.textContent = Math.round(val * r).toLocaleString("th"); }
   document.addEventListener("click", function(e) {
-    const popup = document.getElementById("fx-popup");
-    const btn   = document.getElementById("fx-btn");
-    if (popup && popup.classList.contains("open") &&
-        !popup.contains(e.target) && e.target !== btn) {
-      fxClose();
-    }
+    const popup = document.getElementById("fx-popup"); const btn = document.getElementById("fx-btn");
+    if (popup && popup.classList.contains("open") && !popup.contains(e.target) && e.target !== btn) fxClose();
   });
 
   // ─── Init ─────────────────────────────────────────────────────────
@@ -2947,6 +2537,7 @@
     calcPushSnapshot(); calcUpdateNavBtns();
   });
 </script>
+
 <!-- Attachment Modal -->
 <div class="modal-overlay" id="attach-modal">
   <div class="modal attach-modal-box">
@@ -2996,12 +2587,12 @@
   <button class="lightbox-close" onclick="closeLightbox()">✕</button>
   <img id="lightbox-img" src="" alt="" />
 </div>
+
 <div id="center-toast" class="center-toast">บันทึกข้อมูลสำเร็จ</div>
-<!-- ─── Windows Calculator Modal ──────────────────────────────────── -->
+
+<!-- Windows Calculator Modal -->
 <div id="win-calc-overlay" onclick="winCalcOverlayClick(event)">
   <div id="win-calc-modal">
-
-    <!-- Title bar -->
     <div id="win-calc-titlebar">
       <span class="win-calc-title">Calculator</span>
       <div class="win-calc-tb-btns">
@@ -3009,122 +2600,76 @@
         <button class="win-calc-tb-btn win-calc-close" onclick="winCalcClose()" title="Close">✕</button>
       </div>
     </div>
-
-    <!-- Standard label -->
-    <div id="win-calc-subheader">
-      <span class="win-calc-mode">Standard</span>
-    </div>
-
-    <!-- Display -->
+    <div id="win-calc-subheader"><span class="win-calc-mode">Standard</span></div>
     <div id="win-calc-display">
       <div id="win-calc-expr"></div>
       <div id="win-calc-result">0</div>
     </div>
-
-    <!-- Button grid — Windows Standard layout
-         %   CE   C   ⌫
-         ¹/x x²  ²√x  ÷
-         7   8    9   ×
-         4   5    6   −
-         1   2    3   +
-         +/− 0    .   =
-    -->
     <div id="win-calc-btns">
       <button class="win-calc-btn win-calc-fn" onclick="winCalcFn('pct')">%</button>
       <button class="win-calc-btn win-calc-fn" onclick="winCalcFn('ce')">CE</button>
       <button class="win-calc-btn win-calc-fn" onclick="winCalcFn('c')">C</button>
       <button class="win-calc-btn win-calc-fn" onclick="winCalcFn('back')">⌫</button>
-
       <button class="win-calc-btn win-calc-fn" onclick="winCalcFn('inv')">¹/x</button>
       <button class="win-calc-btn win-calc-fn" onclick="winCalcFn('sqr')">x²</button>
       <button class="win-calc-btn win-calc-fn" onclick="winCalcFn('sqrt')">²√x</button>
       <button class="win-calc-btn win-calc-op" onclick="winCalcOp('÷')">÷</button>
-
       <button class="win-calc-btn" onclick="winCalcDigit('7')">7</button>
       <button class="win-calc-btn" onclick="winCalcDigit('8')">8</button>
       <button class="win-calc-btn" onclick="winCalcDigit('9')">9</button>
       <button class="win-calc-btn win-calc-op" onclick="winCalcOp('×')">×</button>
-
       <button class="win-calc-btn" onclick="winCalcDigit('4')">4</button>
       <button class="win-calc-btn" onclick="winCalcDigit('5')">5</button>
       <button class="win-calc-btn" onclick="winCalcDigit('6')">6</button>
       <button class="win-calc-btn win-calc-op" onclick="winCalcOp('−')">−</button>
-
       <button class="win-calc-btn" onclick="winCalcDigit('1')">1</button>
       <button class="win-calc-btn" onclick="winCalcDigit('2')">2</button>
       <button class="win-calc-btn" onclick="winCalcDigit('3')">3</button>
       <button class="win-calc-btn win-calc-op" onclick="winCalcOp('+')">+</button>
-
       <button class="win-calc-btn win-calc-fn" onclick="winCalcFn('sign')">+/−</button>
       <button class="win-calc-btn" onclick="winCalcDigit('0')">0</button>
       <button class="win-calc-btn" onclick="winCalcDigit('.')">.</button>
       <button class="win-calc-btn win-calc-eq" onclick="winCalcEquals()">=</button>
     </div>
-
-    <!-- History toggle row -->
     <div id="win-calc-hist-toggle-row">
-      <button id="win-calc-hist-toggle-btn" onclick="winCalcToggleHistory()">
-        History <span id="win-calc-hist-chevron">▲</span>
-      </button>
+      <button id="win-calc-hist-toggle-btn" onclick="winCalcToggleHistory()">History <span id="win-calc-hist-chevron">▲</span></button>
       <button id="win-calc-hist-clear" onclick="winCalcClearHistory()" title="Clear history" style="display:none;">🗑</button>
     </div>
-
-    <!-- Collapsible history panel -->
     <div id="win-calc-hist-panel">
       <div id="win-calc-hist-inner">
         <div id="win-calc-hist-list">
-          <div id="win-calc-hist-empty">
-            <span style="font-size:22px;">🕐</span>
-            <span>No history yet</span>
-          </div>
+          <div id="win-calc-hist-empty"><span style="font-size:22px;">🕐</span><span>No history yet</span></div>
         </div>
       </div>
     </div>
-
   </div>
 </div>
-<!-- Floating calculator button — always visible -->
+
 <div id="win-calc-mini" onclick="winCalcOpen()" title="Calculator">🧮 Calculator</div>
-<!-- ──────────────────────────────────────────────────────────────── -->
+
 <!-- Currency Converter Popup -->
 <div id="fx-popup">
-  <div class="fx-title">
-    <span>💱 แปลงสกุลเงิน</span>
-    <button class="fx-close" onclick="fxClose()">✕</button>
-  </div>
-
-  <!-- THB → USDT -->
+  <div class="fx-title"><span>💱 แปลงสกุลเงิน</span><button class="fx-close" onclick="fxClose()">✕</button></div>
   <div class="fx-section">
     <div class="fx-label">฿ บาท → USDT</div>
     <div class="fx-row">
-      <input class="fx-input" id="fx-thb-in" type="number" placeholder="0" inputmode="decimal"
-             oninput="fxCalcThbToUsdt()" onfocus="this.select()" />
+      <input class="fx-input" id="fx-thb-in" type="number" placeholder="0" inputmode="decimal" oninput="fxCalcThbToUsdt()" onfocus="this.select()" />
       <span class="fx-currency-badge">THB</span>
     </div>
-    <div class="fx-result-row">
-      <span class="fx-result-label">= USDT</span>
-      <span class="fx-result-val" id="fx-thb-out">—</span>
-    </div>
+    <div class="fx-result-row"><span class="fx-result-label">= USDT</span><span class="fx-result-val" id="fx-thb-out">—</span></div>
   </div>
-
-  <!-- USDT → THB -->
   <div class="fx-section">
     <div class="fx-label">₮ USDT → บาท</div>
     <div class="fx-row">
-      <input class="fx-input" id="fx-usdt-in" type="number" placeholder="0" inputmode="decimal"
-             oninput="fxCalcUsdtToThb()" onfocus="this.select()" />
+      <input class="fx-input" id="fx-usdt-in" type="number" placeholder="0" inputmode="decimal" oninput="fxCalcUsdtToThb()" onfocus="this.select()" />
       <span class="fx-currency-badge">USDT</span>
     </div>
-    <div class="fx-result-row">
-      <span class="fx-result-label">= THB</span>
-      <span class="fx-result-val" id="fx-usdt-out">—</span>
-    </div>
+    <div class="fx-result-row"><span class="fx-result-label">= THB</span><span class="fx-result-val" id="fx-usdt-out">—</span></div>
   </div>
-
   <div class="fx-rate-note">อัตรา: 1 USDT = <b id="fx-rate-display">...</b> ฿</div>
 </div>
 
-<!-- Floating Undo/Redo buttons top-right -->
+<!-- Floating Undo/Redo -->
 <div id="float-nav">
   <button class="float-nav-btn" id="calc-undo-btn" onclick="calcUndo()" title="Undo">↩︎</button>
   <button class="float-nav-btn" id="calc-redo-btn" onclick="calcRedo()" title="Redo">↪︎</button>
