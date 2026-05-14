@@ -1413,42 +1413,16 @@
     let w;
 
     if (!drawNeg && !win1Neg) {
-      // ── ปกติ ──
       w = Math.round((d*o)/a);
 
     } else if (drawNeg && !win1Neg) {
-      // ── ฝั่ง 1 ติดลบ: d*2 = w*a → w = d*2/a ──
       w = Math.round((d*2)/a);
-      const _add1 = w - parseMoney(win1AmtThb);
-      const _p1 = Math.round(d*2 - (d+w));
-      const _t1 = _add1>0?`ควรเพิ่มอีก <span class="hint-odds-val">+${fmt(_add1)} ฿</span>`:_add1<0?`ควรลดลง <span class="hint-odds-val">${fmt(Math.abs(_add1))} ฿</span>`:`เหมาะสมแล้ว`;
-      hintBox.innerHTML=`💡 เงินทุนฝั่ง <strong>"${win1Name}"</strong> ${_t1} เพื่อให้กำไรทั้งสองฝั่งเท่ากัน (กำไร ~${_p1>=0?'+':''}${fmt(_p1)} ฿)`;
-      hintBox.style.display="block";
 
     } else if (!drawNeg && win1Neg) {
-      // ── ฝั่ง 2 ติดลบ: d*o = w*(1+a) → w = d*o/(1+a) ──
       w = Math.round((d*o)/(1+a));
-      const _add2 = w - parseMoney(win1AmtThb);
-      const _diff2 = Math.round(w*(1-a));
-      const _p2 = Math.round(d*o + _diff2 - (d+w));
-      const _t2 = _add2>0?`ควรเพิ่มอีก <span class="hint-odds-val">+${fmt(_add2)} ฿</span>`:_add2<0?`ควรลดลง <span class="hint-odds-val">${fmt(Math.abs(_add2))} ฿</span>`:`เหมาะสมแล้ว`;
-      hintBox.innerHTML=`💡 เงินทุนฝั่ง <strong>"${win1Name}"</strong> ${_t2} เพื่อให้กำไรทั้งสองฝั่งเท่ากัน (กำไร ~${_p2>=0?'+':''}${fmt(_p2)} ฿)`;
-      hintBox.style.display="block";
 
     } else {
-      // ── ทั้งคู่ติดลบ ──
-      // ออก 1 = d*2 + w*(1-a)  ออก 2 = w*2 + d*(1-o)
-      // เฉลี่ย: d*2 + w*(1-a) = w*2 + d*(1-o)
-      // d*(2-(1-o)) = w*(2-(1-a))  →  d*(1+o) = w*(1+a)
-      // w = d*(1+o)/(1+a)
       w = Math.round(d*(1+o)/(1+a));
-      const _add3 = w - parseMoney(win1AmtThb);
-      const _total3 = d+w;
-      const _dSum3 = d*2 + w*(1-a);
-      const _p3 = Math.round(_dSum3 - _total3);
-      const _t3 = _add3>0?`ควรเพิ่มอีก <span class="hint-odds-val">+${fmt(_add3)} ฿</span>`:_add3<0?`ควรลดลง <span class="hint-odds-val">${fmt(Math.abs(_add3))} ฿</span>`:`เหมาะสมแล้ว`;
-      hintBox.innerHTML=`💡 เงินทุนฝั่ง <strong>"${win1Name}"</strong> ${_t3} เพื่อให้กำไรทั้งสองฝั่งเท่ากัน (กำไร ~${_p3>=0?'+':''}${fmt(_p3)} ฿)`;
-      hintBox.style.display="block";
     }
 
     _isAutoSetting = true;
@@ -1456,7 +1430,28 @@
     const r=getRate(); win1AmtUsdt.value=r>0?fmtMoney(w/r):"";
     _isAutoSetting = false;
     calculate();
-    if (!drawNeg && !win1Neg) suggestWin1MinimumOdds();
+
+    if (!drawNeg && !win1Neg) {
+      suggestWin1MinimumOdds();
+    } else {
+      // diff = เงินทุนฝั่ง 2 ที่ควรเป็น ลบ เงินทุนฝั่ง 1
+      const _diff = w - d;
+      let _profit;
+      if (drawNeg && !win1Neg) {
+        _profit = Math.round(d*2 - (d+w));
+      } else if (!drawNeg && win1Neg) {
+        _profit = Math.round(d*o + Math.round(w*(1-a)) - (d+w));
+      } else {
+        _profit = Math.round(d*2 + w*(1-a) - (d+w));
+      }
+      const _txt = _diff>0
+        ? `ควรเพิ่มอีก <span class="hint-odds-val">+${fmt(_diff)} ฿</span>`
+        : _diff<0
+        ? `ควรลดลง <span class="hint-odds-val">${fmt(Math.abs(_diff))} ฿</span>`
+        : `เหมาะสมแล้ว`;
+      hintBox.innerHTML=`💡 เงินทุนฝั่ง <strong>"${win1Name}"</strong> ${_txt} เพื่อให้กำไรทั้งสองฝั่งเท่ากัน (กำไร ~${_profit>=0?'+':''}${fmt(_profit)} ฿)`;
+      hintBox.style.display="block";
+    }
   }
 
   function dismissBalanceHint() {}
