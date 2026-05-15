@@ -912,14 +912,19 @@
     .fx-close { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 16px; line-height: 1; padding: 2px 6px; border-radius: 6px; transition: all 0.15s; }
     .fx-close:hover { background: rgba(255,77,109,0.12); color: var(--red); }
     .fx-section { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
-    .fx-label { font-size: 11px; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.9px; }
+    .fx-section-thb { border-color: rgba(96,170,255,0.4); }
+    .fx-section-usdt { border-color: rgba(245,200,66,0.35); }
+    .fx-label { font-size: 14px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 7px; }
     .fx-row { display: flex; align-items: center; gap: 8px; }
     .fx-input { flex: 1; background: var(--surface); border: 1.5px solid var(--border); border-radius: 10px; color: var(--text); font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 600; padding: 9px 12px; outline: none; text-align: right; transition: border-color 0.2s, box-shadow 0.2s; min-width: 0; }
     .fx-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--glow-accent); }
-    .fx-currency-badge { font-size: 12px; font-weight: 700; color: var(--text-muted); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; white-space: nowrap; flex-shrink: 0; }
+    #fx-thb-in:focus { border-color: var(--thb-color); box-shadow: 0 0 0 3px rgba(96,170,255,0.18); }
+    #fx-usdt-in:focus { border-color: var(--usdt-color); box-shadow: 0 0 0 3px rgba(245,200,66,0.15); }
     .fx-result-row { display: flex; align-items: center; justify-content: space-between; padding-top: 2px; }
     .fx-result-label { font-size: 12px; color: var(--text-dim); }
+    .fx-result-right { display: flex; align-items: center; gap: 6px; }
     .fx-result-val { font-family: 'IBM Plex Mono', monospace; font-size: 18px; font-weight: 700; color: var(--accent); }
+    .fx-result-unit { font-size: 12px; font-weight: 700; color: var(--text-muted); font-family: 'IBM Plex Mono', monospace; }
     .fx-rate-note { font-size: 11px; color: var(--text-dim); text-align: center; }
     .fx-rate-note b { color: var(--gold); font-weight: 700; }
 
@@ -1461,7 +1466,7 @@
       w = Math.round((d*o)/a);
 
     } else if (drawNeg && !win1Neg) {
-      w = Math.round((d*2)/a);
+      w = Math.round(d*(1+o)/a);
 
     } else if (!drawNeg && win1Neg) {
       w = Math.round((d*o)/(1+a));
@@ -1513,7 +1518,7 @@
     if (!drawNeg && !win1Neg) {
       draw = Math.round((x*a)/o);
     } else if (drawNeg && !win1Neg) {
-      draw = Math.round((x*a)/2);
+      draw = Math.round((x*a)/(1+o));
     } else if (!drawNeg && win1Neg) {
       draw = Math.round((x*(1+a))/o);
     } else {
@@ -1924,6 +1929,7 @@
   });
   drawOddsDecimal.addEventListener("input",()=>{
     drawOddsDecimal.value=drawOddsDecimal.value.replace(/[^\d]/g,"").slice(0,2);
+    if (drawOddsDecimal.value.length===2) win1Odds.focus();
     if (autoCalcEnabled) {
       suggestWin1MinimumOdds();
       if (lastEditedSide==="win1") forceAutoDrawAmount(); else forceAutoWin1Amount();
@@ -2539,6 +2545,7 @@
   }
 
   [drawOddsMain, drawOddsDecimal, win1Odds].forEach(el => { el.addEventListener("focus", () => el.select()); });
+  win1Odds.addEventListener("click", () => win1Odds.select());
   [drawAmtUsdt, win1AmtUsdt].forEach(el => { el.addEventListener("focus", () => el.select()); });
 
   // ─── Undo/Redo ────────────────────────────────────────────────────
@@ -2724,22 +2731,51 @@
 <!-- Currency Converter Popup -->
 <div id="fx-popup">
   <div class="fx-title"><span>💱 แปลงสกุลเงิน</span><button class="fx-close" onclick="fxClose()">✕</button></div>
-  <div class="fx-section">
-    <div class="fx-label">฿ บาท → USDT</div>
-    <div class="fx-row">
-      <input class="fx-input" id="fx-thb-in" type="number" placeholder="0" inputmode="decimal" oninput="fxCalcThbToUsdt()" onfocus="this.select()" />
-      <span class="fx-currency-badge">THB</span>
+
+  <!-- บาท → USDT -->
+  <div class="fx-section fx-section-thb">
+    <div class="fx-label">
+      <span class="currency-logo logo-thb">฿</span>
+      บาท (THB)
+      <span style="color:var(--text-dim);font-size:13px;font-weight:400;">→</span>
+      USDT
     </div>
-    <div class="fx-result-row"><span class="fx-result-label">= USDT</span><span class="fx-result-val" id="fx-thb-out">—</span></div>
-  </div>
-  <div class="fx-section">
-    <div class="fx-label">₮ USDT → บาท</div>
     <div class="fx-row">
-      <input class="fx-input" id="fx-usdt-in" type="number" placeholder="0" inputmode="decimal" oninput="fxCalcUsdtToThb()" onfocus="this.select()" />
-      <span class="fx-currency-badge">USDT</span>
+      <span class="currency-logo logo-thb" style="flex-shrink:0;">฿</span>
+      <input class="fx-input" id="fx-thb-in" type="text" inputmode="decimal" placeholder="กรอกจำนวนบาท" oninput="fxCalcThbToUsdt()" onfocus="this.select()" onclick="this.select()" />
     </div>
-    <div class="fx-result-row"><span class="fx-result-label">= THB</span><span class="fx-result-val" id="fx-usdt-out">—</span></div>
+    <div class="fx-result-row">
+      <span class="fx-result-label">ได้รับ</span>
+      <div class="fx-result-right">
+        <span class="currency-logo logo-usdt" style="width:18px;height:18px;font-size:9px;flex-shrink:0;">₮</span>
+        <span class="fx-result-val" id="fx-thb-out">—</span>
+        <span class="fx-result-unit">USDT</span>
+      </div>
+    </div>
   </div>
+
+  <!-- USDT → บาท -->
+  <div class="fx-section fx-section-usdt">
+    <div class="fx-label">
+      <span class="currency-logo logo-usdt">₮</span>
+      USDT
+      <span style="color:var(--text-dim);font-size:13px;font-weight:400;">→</span>
+      บาท (THB)
+    </div>
+    <div class="fx-row">
+      <span class="currency-logo logo-usdt" style="flex-shrink:0;">₮</span>
+      <input class="fx-input" id="fx-usdt-in" type="text" inputmode="decimal" placeholder="กรอกจำนวน USDT" oninput="fxCalcUsdtToThb()" onfocus="this.select()" onclick="this.select()" />
+    </div>
+    <div class="fx-result-row">
+      <span class="fx-result-label">ได้รับ</span>
+      <div class="fx-result-right">
+        <span class="currency-logo logo-thb" style="width:18px;height:18px;font-size:9px;flex-shrink:0;">฿</span>
+        <span class="fx-result-val" id="fx-usdt-out">—</span>
+        <span class="fx-result-unit">บาท</span>
+      </div>
+    </div>
+  </div>
+
   <div class="fx-rate-note">อัตรา: 1 USDT = <b id="fx-rate-display">...</b> ฿</div>
 </div>
 
