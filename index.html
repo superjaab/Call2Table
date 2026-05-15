@@ -1000,6 +1000,43 @@
       font-size: 13px; padding: 8px 14px; transition: all 0.2s;
     }
     .btn-hint-dismiss:hover { border-color: var(--border-light); color: var(--text-muted); }
+
+    /* ── Auto Calc Toggle (header pill) ── */
+    .auto-toggle-pill {
+      display: flex; align-items: center; gap: 7px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 5px 12px 5px 10px;
+      cursor: pointer;
+      font-size: 13px;
+      font-family: 'Kanit', sans-serif;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: all 0.2s;
+      user-select: none;
+    }
+    .auto-toggle-pill:hover { border-color: var(--border-light); color: var(--text); }
+    .auto-toggle-pill.on { border-color: rgba(46,204,113,0.55); color: var(--green); }
+    .auto-switch-track {
+      width: 30px; height: 17px;
+      border-radius: 9px;
+      background: var(--border);
+      position: relative;
+      transition: background 0.25s;
+      flex-shrink: 0;
+    }
+    .auto-toggle-pill.on .auto-switch-track { background: var(--green); }
+    .auto-switch-thumb {
+      position: absolute;
+      width: 13px; height: 13px;
+      border-radius: 50%;
+      background: #fff;
+      top: 2px; left: 2px;
+      transition: left 0.25s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+    .auto-toggle-pill.on .auto-switch-thumb { left: 15px; }
   </style>
 </head>
 <body>
@@ -1010,6 +1047,10 @@
   <div class="header-right">
     <button class="win-calc-header-btn" onclick="winCalcOpen()" title="Calculator">🧮</button>
     <button class="win-calc-header-btn" onclick="fxOpen()" title="แปลงสกุลเงิน" id="fx-btn">💱</button>
+    <button class="auto-toggle-pill on" id="auto-calc-toggle-btn" onclick="toggleAutoCalc()" title="เปิด/ปิดคำนวณอัตโนมัติ">
+      <div class="auto-switch-track"><div class="auto-switch-thumb"></div></div>
+      <span id="auto-calc-label">Auto</span>
+    </button>
     <button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()">
       <span class="theme-icon" id="theme-icon">☀️</span>
       <span id="theme-label">สว่าง</span>
@@ -1224,6 +1265,7 @@
 
   let usdtRate = 0, isManualRate = false;
   let dailySelected = new Set();
+  let autoCalcEnabled = true;
   let pendingSaveRecord = null;
   let isExportingGoogleSheet = false;
   let isExportingExcel = false;
@@ -1822,53 +1864,75 @@
   let lastEditedSide = "draw";
   let _isAutoSetting = false; // ป้องกัน loop
 
+  // ─── Auto Calc Toggle ─────────────────────────────────────────────
+  function toggleAutoCalc() {
+    autoCalcEnabled = !autoCalcEnabled;
+    const btn = document.getElementById("auto-calc-toggle-btn");
+    const lbl = document.getElementById("auto-calc-label");
+    if (autoCalcEnabled) {
+      btn.classList.add("on");
+      if (lbl) lbl.textContent = "Auto";
+    } else {
+      btn.classList.remove("on");
+      if (lbl) lbl.textContent = "Manual";
+    }
+    localStorage.setItem("calcmax_auto_calc", autoCalcEnabled ? "1" : "0");
+  }
+
   // ─── Events ───────────────────────────────────────────────────────
   drawAmtThb.addEventListener("input",()=>{
     if (_isAutoSetting) return;
     lastEditedSide="draw";
     cleanMoneyInput(drawAmtThb); syncFromThb(drawAmtThb,drawAmtUsdt);
-    forceAutoWin1Amount();
+    if (autoCalcEnabled) forceAutoWin1Amount();
   });
   drawAmtUsdt.addEventListener("input",()=>{
     if (_isAutoSetting) return;
     lastEditedSide="draw";
     cleanMoneyInput(drawAmtUsdt); syncFromUsdt(drawAmtUsdt,drawAmtThb);
-    forceAutoWin1Amount();
+    if (autoCalcEnabled) forceAutoWin1Amount();
   });
   win1AmtThb.addEventListener("input",()=>{
     if (_isAutoSetting) return;
     lastEditedSide="win1"; winCalcQuickMode=false;
     cleanMoneyInput(win1AmtThb); syncFromThb(win1AmtThb,win1AmtUsdt);
-    // ค่าน้ำติดลบ: ไม่ย้อนกลับแก้ฝั่ง draw (พิมพ์ได้ปกติ)
-    if (getDrawOdds()<1 || getWin1Odds()<1) { calculate(); updateNegOddsNotes(); }
-    else forceAutoDrawAmount();
+    if (autoCalcEnabled) {
+      if (getDrawOdds()<1 || getWin1Odds()<1) { calculate(); updateNegOddsNotes(); }
+      else forceAutoDrawAmount();
+    }
   });
   win1AmtUsdt.addEventListener("input",()=>{
     if (_isAutoSetting) return;
     lastEditedSide="win1"; winCalcQuickMode=false;
     cleanMoneyInput(win1AmtUsdt); syncFromUsdt(win1AmtUsdt,win1AmtThb);
-    if (getDrawOdds()<1 || getWin1Odds()<1) { calculate(); updateNegOddsNotes(); }
-    else forceAutoDrawAmount();
+    if (autoCalcEnabled) {
+      if (getDrawOdds()<1 || getWin1Odds()<1) { calculate(); updateNegOddsNotes(); }
+      else forceAutoDrawAmount();
+    }
   });
 
   drawOddsMain.addEventListener("input",()=>{
     drawOddsMain.value=drawOddsMain.value.replace(/[^\d]/g,"").slice(0,1);
     if (drawOddsMain.value.length===1) drawOddsDecimal.focus();
-    suggestWin1MinimumOdds();
-    if (lastEditedSide==="win1") forceAutoDrawAmount(); else forceAutoWin1Amount();
+    if (autoCalcEnabled) {
+      suggestWin1MinimumOdds();
+      if (lastEditedSide==="win1") forceAutoDrawAmount(); else forceAutoWin1Amount();
+    }
   });
   drawOddsDecimal.addEventListener("input",()=>{
     drawOddsDecimal.value=drawOddsDecimal.value.replace(/[^\d]/g,"").slice(0,2);
-    suggestWin1MinimumOdds();
-    if (lastEditedSide==="win1") forceAutoDrawAmount(); else forceAutoWin1Amount();
+    if (autoCalcEnabled) {
+      suggestWin1MinimumOdds();
+      if (lastEditedSide==="win1") forceAutoDrawAmount(); else forceAutoWin1Amount();
+    }
   });
 
-  drawWebName.addEventListener("input", calculate);
-  win1WebName.addEventListener("input", ()=>{ calculate(); suggestWin1MinimumOdds(); });
+  drawWebName.addEventListener("input", ()=>{ if (autoCalcEnabled) calculate(); });
+  win1WebName.addEventListener("input", ()=>{ if (autoCalcEnabled) { calculate(); suggestWin1MinimumOdds(); } });
 
   usdtRateInput.addEventListener("input",()=>{
     if (parseMoney(drawAmtThb)>0) syncFromThb(drawAmtThb,drawAmtUsdt);
-    forceAutoWin1Amount();
+    if (autoCalcEnabled) forceAutoWin1Amount();
   });
 
   const navOrder=[drawAmtThb,drawOddsMain,drawOddsDecimal,win1Odds];
@@ -1982,7 +2046,9 @@
 
   win1Odds.addEventListener("input", () => {
     cleanWin1Odds(win1Odds);
-    if (lastEditedSide==="win1") forceAutoDrawAmount(); else forceAutoWin1Amount();
+    if (autoCalcEnabled) {
+      if (lastEditedSide==="win1") forceAutoDrawAmount(); else forceAutoWin1Amount();
+    }
     if (oddsDropdown.classList.contains("open")) {
       const val = parseFloat(win1Odds.value) || 0;
       oddsDropdown.querySelectorAll(".odds-option").forEach(btn => {
@@ -1995,9 +2061,11 @@
 
   drawOddsDecimal.addEventListener("input", () => {
     drawOddsDecimal.value = drawOddsDecimal.value.replace(/[^\d]/g,"").slice(0,2);
-    suggestWin1MinimumOdds();
-    if (getDrawOdds()<1 || getWin1Odds()<1) { calculate(); updateNegOddsNotes(); }
-    else if (lastEditedSide==="win1") forceAutoDrawAmount(); else forceAutoWin1Amount();
+    if (autoCalcEnabled) {
+      suggestWin1MinimumOdds();
+      if (getDrawOdds()<1 || getWin1Odds()<1) { calculate(); updateNegOddsNotes(); }
+      else if (lastEditedSide==="win1") forceAutoDrawAmount(); else forceAutoWin1Amount();
+    }
     if (decDropdown.classList.contains("open")) {
       highlightDecVal();
       requestAnimationFrame(scrollDecToVal);
@@ -2530,6 +2598,14 @@
   window.addEventListener("DOMContentLoaded",()=>{
     loadRate(); calculate(); updateHistoryCount();
     calcPushSnapshot(); calcUpdateNavBtns();
+    // restore auto-calc preference
+    if (localStorage.getItem("calcmax_auto_calc") === "0") {
+      autoCalcEnabled = false;
+      const btn = document.getElementById("auto-calc-toggle-btn");
+      const lbl = document.getElementById("auto-calc-label");
+      if (btn) btn.classList.remove("on");
+      if (lbl) lbl.textContent = "Manual";
+    }
   });
 </script>
 
