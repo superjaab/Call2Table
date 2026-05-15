@@ -363,6 +363,9 @@
     #draw_odds_decimal::-webkit-inner-spin-button,
     #draw_odds_decimal::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
     #draw_odds_decimal { -moz-appearance: textfield; }
+    #draw_odds_main::-webkit-inner-spin-button,
+    #draw_odds_main::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    #draw_odds_main { -moz-appearance: textfield; }
 
     .odds-input {
       background: var(--surface2); border: 1.5px solid var(--border); border-radius: 8px;
@@ -1884,13 +1887,13 @@
     if (_isAutoSetting) return;
     lastEditedSide="draw";
     cleanMoneyInput(drawAmtThb); syncFromThb(drawAmtThb,drawAmtUsdt);
-    if (autoCalcEnabled) forceAutoWin1Amount();
+    if (autoCalcEnabled) forceAutoWin1Amount(); else calculate();
   });
   drawAmtUsdt.addEventListener("input",()=>{
     if (_isAutoSetting) return;
     lastEditedSide="draw";
     cleanMoneyInput(drawAmtUsdt); syncFromUsdt(drawAmtUsdt,drawAmtThb);
-    if (autoCalcEnabled) forceAutoWin1Amount();
+    if (autoCalcEnabled) forceAutoWin1Amount(); else calculate();
   });
   win1AmtThb.addEventListener("input",()=>{
     if (_isAutoSetting) return;
@@ -1899,7 +1902,7 @@
     if (autoCalcEnabled) {
       if (getDrawOdds()<1 || getWin1Odds()<1) { calculate(); updateNegOddsNotes(); }
       else forceAutoDrawAmount();
-    }
+    } else { calculate(); updateNegOddsNotes(); }
   });
   win1AmtUsdt.addEventListener("input",()=>{
     if (_isAutoSetting) return;
@@ -1908,7 +1911,7 @@
     if (autoCalcEnabled) {
       if (getDrawOdds()<1 || getWin1Odds()<1) { calculate(); updateNegOddsNotes(); }
       else forceAutoDrawAmount();
-    }
+    } else { calculate(); updateNegOddsNotes(); }
   });
 
   drawOddsMain.addEventListener("input",()=>{
@@ -1917,22 +1920,22 @@
     if (autoCalcEnabled) {
       suggestWin1MinimumOdds();
       if (lastEditedSide==="win1") forceAutoDrawAmount(); else forceAutoWin1Amount();
-    }
+    } else { suggestWin1MinimumOdds(); calculate(); }
   });
   drawOddsDecimal.addEventListener("input",()=>{
     drawOddsDecimal.value=drawOddsDecimal.value.replace(/[^\d]/g,"").slice(0,2);
     if (autoCalcEnabled) {
       suggestWin1MinimumOdds();
       if (lastEditedSide==="win1") forceAutoDrawAmount(); else forceAutoWin1Amount();
-    }
+    } else { suggestWin1MinimumOdds(); calculate(); }
   });
 
-  drawWebName.addEventListener("input", ()=>{ if (autoCalcEnabled) calculate(); });
-  win1WebName.addEventListener("input", ()=>{ if (autoCalcEnabled) { calculate(); suggestWin1MinimumOdds(); } });
+  drawWebName.addEventListener("input", ()=>{ calculate(); });
+  win1WebName.addEventListener("input", ()=>{ calculate(); suggestWin1MinimumOdds(); });
 
   usdtRateInput.addEventListener("input",()=>{
     if (parseMoney(drawAmtThb)>0) syncFromThb(drawAmtThb,drawAmtUsdt);
-    if (autoCalcEnabled) forceAutoWin1Amount();
+    if (autoCalcEnabled) forceAutoWin1Amount(); else calculate();
   });
 
   const navOrder=[drawAmtThb,drawOddsMain,drawOddsDecimal,win1Odds];
@@ -2048,7 +2051,7 @@
     cleanWin1Odds(win1Odds);
     if (autoCalcEnabled) {
       if (lastEditedSide==="win1") forceAutoDrawAmount(); else forceAutoWin1Amount();
-    }
+    } else { calculate(); }
     if (oddsDropdown.classList.contains("open")) {
       const val = parseFloat(win1Odds.value) || 0;
       oddsDropdown.querySelectorAll(".odds-option").forEach(btn => {
@@ -2065,7 +2068,7 @@
       suggestWin1MinimumOdds();
       if (getDrawOdds()<1 || getWin1Odds()<1) { calculate(); updateNegOddsNotes(); }
       else if (lastEditedSide==="win1") forceAutoDrawAmount(); else forceAutoWin1Amount();
-    }
+    } else { suggestWin1MinimumOdds(); calculate(); updateNegOddsNotes(); }
     if (decDropdown.classList.contains("open")) {
       highlightDecVal();
       requestAnimationFrame(scrollDecToVal);
